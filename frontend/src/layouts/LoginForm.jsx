@@ -20,7 +20,12 @@ function LoginLayout() {
           height={100}
           className="max-w-md w-full mx-auto box-border mb-8"
         />
-        <form>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            loginFormSubmit(e);
+          }}
+        >
           <label htmlFor="login-email" className="block my-1">
             <Mail className="inline mr-2" size={24} />
             Email address
@@ -45,10 +50,6 @@ function LoginLayout() {
           />
           <button
             type="submit"
-            onSubmit={(e) => {
-              e.preventDefault();
-              loginFormSubmit(e);
-            }}
             className="w-full bg-primary text-primary-foreground p-2 mt-6 rounded-md"
           >
             <LogIn className="inline mr-2" size={24} />
