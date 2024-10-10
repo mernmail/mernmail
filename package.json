@@ -1,0 +1,48 @@
+{
+  "name": "mernmail-backend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "rimraf dist/* && swc -d dist src --strip-leading-paths",
+    "build:frontend": "cd frontend && npm run build",
+    "cz": "cz",
+    "dev": "concurrently \"nodemon src/server.js\" \"cd frontend && npm run dev\"",
+    "lint": "npm run lint:backend && npm run lint:frontend",
+    "lint:fix": "npm run lint:backend-fix && npm run lint:frontend-fix",
+    "lint:backend": "eslint --no-error-on-unmatched-pattern src/**/*.js src/*.js",
+    "lint:backend-fix": "npm run lint:backend -- --fix",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:frontend-fix": "cd frontend && npm run lint:fix",
+    "prepare": "husky",
+    "postinstall": "cd frontend && npm install",
+    "start": "node dist/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "serve-static": "^1.16.2"
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "^19.5.0",
+    "@swc/cli": "^0.4.1-nightly.20240914",
+    "commitizen": "^4.3.1",
+    "commitlint": "^19.5.0",
+    "concurrently": "^9.0.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^9.12.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.3.3",
+    "rimraf": "^5.0.10"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
