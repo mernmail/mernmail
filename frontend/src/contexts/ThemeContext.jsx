@@ -4,10 +4,17 @@ import PropTypes from "prop-types";
 export const ThemeContext = createContext();
 
 const ThemeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(
+  const savedTheme = localStorage.getItem("theme");
+  const isSystemDark =
     window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-  );
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+  let initialDarkMode = isSystemDark;
+  if (savedTheme == "dark") {
+    initialDarkMode = true;
+  } else if (savedTheme == "light") {
+    initialDarkMode = false;
+  }
+  const [isDarkMode, setIsDarkMode] = useState(initialDarkMode);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -18,6 +25,7 @@ const ThemeProvider = ({ children }) => {
   }, [isDarkMode]);
 
   const toggleTheme = () => {
+    localStorage.setItem("theme", !isDarkMode ? "dark" : "light");
     setIsDarkMode(!isDarkMode);
   };
 
