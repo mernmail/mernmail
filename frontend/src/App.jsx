@@ -1,5 +1,6 @@
 import LoginForm from "@/layouts/LoginForm.jsx";
 import Loading from "@/layouts/Loading.jsx";
+import MainLayout from "@/layouts/MainLayout.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { load, checkAuth } from "@/slices/authSlice.js";
 import { useEffect } from "react";
@@ -26,7 +27,7 @@ function App() {
   } else if (auth === null) {
     return <LoginForm />;
   } else {
-    return "Logged in";
+    return <MainLayout />;
   }
 }
 
