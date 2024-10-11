@@ -10,7 +10,9 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(load);
+    setTimeout(() => {
+      dispatch(load);
+    }, 500);
 
     const interval = setInterval(() => {
       dispatch(checkAuth);
