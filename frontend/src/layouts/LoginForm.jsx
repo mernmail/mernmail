@@ -1,6 +1,6 @@
 import Logo from "@/components/Logo.jsx";
 import { Mail, Lock, LogIn } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "@/slices/authSlice.js";
 
@@ -9,6 +9,10 @@ function LoginLayout() {
   const [password, setPassword] = useState("");
   const error = useSelector((state) => state.auth.error);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    document.title = "Log in - MERNMail";
+  });
 
   async function loginFormSubmit() {
     dispatch(login(email, password));

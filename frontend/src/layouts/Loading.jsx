@@ -1,6 +1,11 @@
 import Icon from "@/components/Icon.jsx";
+import { useEffect } from "react";
 
 function LoginLayout() {
+  useEffect(() => {
+    document.title = "MERNMail";
+  });
+
   return (
     <div className="flex items-center justify-center h-screen">
       <Icon

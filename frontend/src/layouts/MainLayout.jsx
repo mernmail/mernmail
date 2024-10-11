@@ -10,12 +10,17 @@ import {
 } from "lucide-react";
 import { logout } from "@/slices/authSlice.js";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 function LoginLayout() {
   const email = useSelector((state) =>
     state.auth.auth ? state.auth.auth.email : "Unknown"
   );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    document.title = "MERNMail";
+  });
 
   return (
     <div className="flex flex-row flex-nowrap justify-between w-full py-2 px-3 text-lg bg-primary text-primary-foreground">
