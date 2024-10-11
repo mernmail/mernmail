@@ -1,22 +1,17 @@
 import Logo from "@/components/Logo.jsx";
 import { Mail, Lock, LogIn } from "lucide-react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "@/slices/authSlice.js";
 
 function LoginLayout() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const error = useSelector((state) => state.auth.error);
+  const dispatch = useDispatch();
 
   async function loginFormSubmit() {
-    const res = await fetch("/api/check", {
-      method: "GET",
-      headers: {
-        Authorization: "Basic " + btoa(email.replace(/:/g, "") + ":" + password)
-      }
-    });
-    const data = await res.json();
-    if (res.status == 401) {
-      alert("Can't authenticate! Reason: " + data.message);
-    }
+    dispatch(login(email, password));
   }
 
   return (
@@ -57,6 +52,13 @@ function LoginLayout() {
             required
             className="w-full bg-accent text-accent-foreground px-2 py-1 mb-2 rounded-md focus-visible:outline-primary focus-visible:outline-2 focus-visible:outline"
           />
+          {error ? (
+            <p className="text-red-500 block text-center">
+              Can&lsquo;t log in: {error}
+            </p>
+          ) : (
+            ""
+          )}
           <button
             type="submit"
             className="w-full bg-primary text-primary-foreground p-2 mt-6 rounded-md"
