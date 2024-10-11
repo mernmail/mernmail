@@ -4,12 +4,17 @@ require("dotenv").config({
 });
 const express = require("express");
 const serveStatic = require("serve-static");
+const authAndInitReceiveMiddleware = require("./middleware/authAndInitReceive.js");
+const checkRoute = require("./routes/check.js");
 
 const app = express();
 
-app.use(serveStatic(path.join(__dirname, "../frontend/dist")));
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+app.use("/api", authAndInitReceiveMiddleware);
+app.use("/api/check", checkRoute);
+app.use("/api", (req, res, next) => {
+  if (req.receiveDriver) req.receiveDriver.close();
+  next();
 });
+app.use(serveStatic(path.join(__dirname, "../frontend/dist")));
 
 module.exports = app;
