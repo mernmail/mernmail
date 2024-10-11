@@ -7,13 +7,13 @@ function LoginLayout() {
   const [password, setPassword] = useState("");
 
   async function loginFormSubmit() {
-    const res = fetch("/api/check", {
+    const res = await fetch("/api/check", {
       method: "GET",
       headers: {
         Authorization: "Basic " + btoa(email.replace(/:/g, "") + ":" + password)
       }
     });
-    const data = (await res).json();
+    const data = await res.json();
     if (res.status == 401) {
       alert("Can't authenticate! Reason: " + data.message);
     }
