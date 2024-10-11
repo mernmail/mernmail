@@ -35,6 +35,7 @@ function LoginLayout() {
             onChange={(e) => setEmail(e.target.value)}
             id="login-email"
             placeholder="john.smith@example.com"
+            required
             className="w-full bg-accent text-accent-foreground px-2 py-1 mb-2 rounded-md focus-visible:outline-primary focus-visible:outline-2 focus-visible:outline"
           />
           <label htmlFor="login-password" className="block my-1">
@@ -46,6 +47,7 @@ function LoginLayout() {
             onChange={(e) => setPassword(e.target.value)}
             id="login-password"
             placeholder="********"
+            required
             className="w-full bg-accent text-accent-foreground px-2 py-1 mb-2 rounded-md focus-visible:outline-primary focus-visible:outline-2 focus-visible:outline"
           />
           <button
