@@ -1,4 +1,5 @@
 import LoginForm from "@/layouts/LoginForm.jsx";
+import Loading from "@/layouts/Loading.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { load, checkAuth } from "@/slices/authSlice.js";
 import { useEffect } from "react";
@@ -19,7 +20,7 @@ function App() {
   }, [dispatch]);
 
   if (loading) {
-    return "Loading...";
+    return <Loading />;
   } else if (auth === null) {
     return <LoginForm />;
   } else {
