@@ -61,7 +61,7 @@ function LoginLayout() {
           )}
           <button
             type="submit"
-            className="w-full bg-primary text-primary-foreground p-2 mt-6 rounded-md"
+            className="w-full bg-primary text-primary-foreground p-2 mt-6 rounded-md hover:bg-primary/75 transition-colors"
           >
             <LogIn className="inline mr-2" size={24} />
             Log in
