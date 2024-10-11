@@ -6,10 +6,17 @@ function LoginLayout() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function loginFormSubmit() {
-    // TODO: send email address and password to the login form
-    alert("Email address: " + email);
-    password;
+  async function loginFormSubmit() {
+    const res = fetch("/api/check", {
+      method: "GET",
+      headers: {
+        Authorization: "Basic " + btoa(email.replace(/:/g, "") + ":" + password)
+      }
+    });
+    const data = (await res).json();
+    if (res.status == 401) {
+      alert("Can't authenticate! Reason: " + data.message);
+    }
   }
 
   return (
