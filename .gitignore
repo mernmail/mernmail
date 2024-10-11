@@ -8,7 +8,7 @@ node_modules/
 /dist/
 
 # Environment variables
-/.env
+.env
 
 # Editor directories and files
 *.swa-p
