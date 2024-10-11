@@ -47,7 +47,7 @@ function LoginLayout() {
         <input
           type="text"
           placeholder="Search..."
-          className="bg-inherit h-full w-full pl-2 pr-0 mb-2 rounded-md focus-visible:outline-primary-foreground focus-visible:outline-2 focus-visible:outline"
+          className="bg-inherit h-full w-full pl-2 pr-0 mb-2 rounded-md focus-visible:outline-accent-foreground focus-visible:outline-2 focus-visible:outline"
         />
         <Search
           width={32}
