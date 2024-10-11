@@ -8,12 +8,14 @@ import {
   User,
   Menu
 } from "lucide-react";
-import { useSelector } from "react-redux";
+import { logout } from "@/slices/authSlice.js";
+import { useDispatch, useSelector } from "react-redux";
 
 function LoginLayout() {
   const email = useSelector((state) =>
     state.auth.auth ? state.auth.auth.email : "Unknown"
   );
+  const dispatch = useDispatch();
 
   return (
     <div className="flex flex-row flex-nowrap justify-between w-full py-2 px-3 text-lg bg-primary text-primary-foreground">
@@ -60,7 +62,10 @@ function LoginLayout() {
           <title>Settings</title>
         </Settings>
         <span className="inline select-none align-middle">|</span>
-        <LogOut className="inline-block w-8 h-8 py-1 mx-0.5 rounded-sm cursor-pointer hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
+        <LogOut
+          onClick={() => dispatch(logout())}
+          className="inline-block w-8 h-8 py-1 mx-0.5 rounded-sm cursor-pointer hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
+        >
           <title>Log out</title>
         </LogOut>
         <span className="inline md:hidden select-none align-middle">|</span>

@@ -30,11 +30,16 @@ export const authSlice = createSlice({
           btoa(JSON.stringify(action.payload.auth))
         );
       }
+    },
+    logout: (state) => {
+      localStorage.removeItem("credentials");
+      state.auth = null;
     }
   }
 });
 
-//export const { load } = authSlice.actions;
+export const { logout } = authSlice.actions;
+
 export async function load(dispatch) {
   const state = {};
   let credentials = {};
