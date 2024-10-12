@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMailboxes } from "@/slices/mailboxesSlice.js";
 
 // TODO: get active mailbox ID
-const activeMailboxId = 0;
+const activeMailboxId = "INBOX";
 
 function EmailSidebar() {
   const { t } = useTranslation();
