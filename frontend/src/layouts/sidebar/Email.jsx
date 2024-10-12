@@ -64,6 +64,7 @@ function EmailSidebar() {
             let title = mailbox.name;
             let type = mailbox.type;
             const id = mailbox.id;
+            const level = mailbox.level;
             const newMessages = mailbox.new;
             let DisplayedIcon = Folder;
             if (type == "inbox") {
@@ -100,9 +101,9 @@ function EmailSidebar() {
                     alert(`Selected mailbox: ${id}`);
                   }}
                   title={title}
-                  className={`${activeMailboxId == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block w-full my-1 px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}
+                  className={`${activeMailboxId == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block my-1 ${level == 0 ? "ml-" + level * 4 + " rtl:ml-0 rtl:mr-" + level * 4 : ""} px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}
                 >
-                  <div className="flex flex-row w-full">
+                  <div className="flex flex-row w-auto">
                     <DisplayedIcon
                       className="shrink-0 inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
                       size={24}

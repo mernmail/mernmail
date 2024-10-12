@@ -21,40 +21,50 @@ module.exports = function init(email, password, callback) {
             return;
           }
           const resultMailboxes = [];
-          const recurseMailBoxes = (mailboxes, prefix) => {
+          const recurseMailBoxes = (mailboxes, prefix, level) => {
+            if (!level) level = 0;
             Object.keys(mailboxes).forEach((mailboxName) => {
               const currentPath =
                 (prefix ? prefix + mailboxes[mailboxName].delimiter : "") +
                 mailboxName;
-              if (mailboxes[mailboxName].attribs.indexOf("\\NOSELECT") == -1) {
-                let type = "normal";
-                if (currentPath == "INBOX") {
-                  type = "inbox";
-                } else {
-                  mailboxes[mailboxName].attribs.forEach((attrib) => {
-                    if (attrib == "\\Flagged") {
-                      type = "starred";
-                    } else if (attrib == "\\Important") {
-                      type = "important";
-                    } else if (attrib == "\\Sent") {
-                      type = "sent";
-                    } else if (attrib == "\\Drafts") {
-                      type = "drafts";
-                    } else if (attrib == "\\All") {
-                      type = "all";
-                    } else if (attrib == "\\Junk") {
-                      type = "spam";
-                    } else if (attrib == "\\Trash") {
-                      type = "trash";
-                    }
-                  });
-                }
-                resultMailboxes.push({
-                  id: currentPath,
-                  name: mailboxName,
-                  type: type,
-                  new: 0
+              const openable =
+                mailboxes[mailboxName].attribs.indexOf("\\NOSELECT") == -1;
+              let type = "normal";
+              if (currentPath == "INBOX") {
+                type = "inbox";
+              } else {
+                mailboxes[mailboxName].attribs.forEach((attrib) => {
+                  if (attrib == "\\Flagged") {
+                    type = "starred";
+                  } else if (attrib == "\\Important") {
+                    type = "important";
+                  } else if (attrib == "\\Sent") {
+                    type = "sent";
+                  } else if (attrib == "\\Drafts") {
+                    type = "drafts";
+                  } else if (attrib == "\\All") {
+                    type = "all";
+                  } else if (attrib == "\\Junk") {
+                    type = "spam";
+                  } else if (attrib == "\\Trash") {
+                    type = "trash";
+                  }
                 });
+              }
+              resultMailboxes.push({
+                id: currentPath,
+                name: mailboxName,
+                type: type,
+                openable: openable,
+                level: level,
+                new: 0
+              });
+              if (mailboxes[mailboxName].children) {
+                recurseMailBoxes(
+                  mailboxes[mailboxName].children,
+                  currentPath,
+                  level + 1
+                );
               }
             });
           };

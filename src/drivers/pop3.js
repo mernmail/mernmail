@@ -23,6 +23,8 @@ module.exports = function init(email, password, callback) {
               id: 0,
               name: "Inbox",
               type: "inbox",
+              openable: true,
+              level: 0,
               new: 0
             }
           ]);
