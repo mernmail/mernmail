@@ -13,7 +13,10 @@ function EmailSidebar() {
         }}
         className="w-full bg-primary text-primary-foreground p-2 mt-2 rounded-md hover:bg-primary/75 transition-colors"
       >
-        <MailPlus className="inline mr-2" size={24} />
+        <MailPlus
+          className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
+          size={24}
+        />
         {t("compose")}
       </button>
     </>

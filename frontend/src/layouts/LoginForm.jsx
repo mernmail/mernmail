@@ -36,7 +36,10 @@ function LoginLayout() {
           }}
         >
           <label htmlFor="login-email" className="block my-1">
-            <Mail className="inline mr-2" size={24} />
+            <Mail
+              className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
+              size={24}
+            />
             {t("emailaddress")}
           </label>
           <input
@@ -48,7 +51,10 @@ function LoginLayout() {
             className="w-full bg-accent text-accent-foreground px-2 py-1 mb-2 rounded-md focus:outline-primary focus:outline-2 focus:outline"
           />
           <label htmlFor="login-password" className="block my-1">
-            <Lock className="inline mr-2" size={24} />
+            <Lock
+              className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
+              size={24}
+            />
             {t("password")}
           </label>
           <input
@@ -70,7 +76,10 @@ function LoginLayout() {
             type="submit"
             className="w-full bg-primary text-primary-foreground p-2 mt-6 rounded-md hover:bg-primary/75 transition-colors"
           >
-            <LogIn className="inline mr-2" size={24} />
+            <LogIn
+              className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
+              size={24}
+            />
             {t("login")}
           </button>
         </form>
