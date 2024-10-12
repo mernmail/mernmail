@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import EmailSidebar from "@/layouts/sidebar/Email.jsx";
+import EmailActionButton from "@/layouts/action/Email.jsx";
 
 function LoginLayout() {
   const email = useSelector((state) =>
@@ -146,6 +147,8 @@ function LoginLayout() {
         </aside>
         <main className="overflow-auto grow p-2">Main content</main>
       </div>
+      {/* TODO: One action button only for now */}
+      <EmailActionButton />
     </div>
   );
 }
