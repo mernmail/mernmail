@@ -23,6 +23,7 @@ function LoginLayout() {
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="block w-full max-w-lg p-4">
+        <span className="sr-only">MERNMail logo</span>
         <Logo
           width={500}
           height={100}

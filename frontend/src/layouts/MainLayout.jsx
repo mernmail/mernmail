@@ -27,6 +27,7 @@ function LoginLayout() {
   return (
     <div className="flex flex-row flex-nowrap justify-between w-full py-2 px-3 text-lg bg-primary text-primary-foreground">
       <div className="whitespace-nowrap">
+        <span className="sr-only">MERNMail logo</span>
         <LogoMonochrome
           width={160}
           height={35}
@@ -34,14 +35,30 @@ function LoginLayout() {
         />
         <ul className="inline list-none">
           <li className="inline">
-            <Mail className="inline-block bg-primary-foreground text-primary w-9 h-8 px-1 py-1 mx-0.5 rounded-sm cursor-pointer hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
-              <title>{t("email")}</title>
-            </Mail>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+              className="inline-block"
+            >
+              <Mail className="inline-block bg-primary-foreground text-primary w-9 h-8 px-1 py-1 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
+                <title>{t("email")}</title>
+              </Mail>
+            </a>
           </li>
           <li className="inline">
-            <BookUser className="inline-block w-9 h-8 px-1 py-1 mx-0.5 rounded-sm cursor-pointer hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
-              <title>{t("addressbook")}</title>
-            </BookUser>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+              className="inline-block"
+            >
+              <BookUser className="inline-block w-9 h-8 px-1 py-1 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
+                <title>{t("addressbook")}</title>
+              </BookUser>
+            </a>
           </li>
         </ul>
       </div>
@@ -65,20 +82,42 @@ function LoginLayout() {
           {email}
         </span>
         <span className="hidden md:inline select-none align-middle">|</span>
-        <Settings className="inline-block w-8 h-8 py-1 mx-0.5 rounded-sm cursor-pointer hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
-          <title>{t("settings")}</title>
-        </Settings>
-        <span className="inline select-none align-middle">|</span>
-        <LogOut
-          onClick={() => dispatch(logout())}
-          className="inline-block w-8 h-8 py-1 mx-0.5 rounded-sm cursor-pointer hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+          }}
+          className="inline-block"
         >
-          <title>{t("logout")}</title>
-        </LogOut>
+          <Settings className="inline-block w-8 h-8 py-1 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
+            <title>{t("settings")}</title>
+          </Settings>
+        </a>
+        <span className="inline select-none align-middle">|</span>
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch(logout());
+          }}
+          className="inline-block"
+        >
+          <LogOut className="inline-block w-8 h-8 py-1 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
+            <title>{t("logout")}</title>
+          </LogOut>
+        </a>
         <span className="inline md:hidden select-none align-middle">|</span>
-        <Menu className="inline-block md:hidden w-8 h-8 py-1 mx-0.5 rounded-sm cursor-pointer hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
-          <title>{t("menu")}</title>
-        </Menu>
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+          }}
+          className="inline-block md:hidden"
+        >
+          <Menu className="inline-block md:hidden w-8 h-8 py-1 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
+            <title>{t("menu")}</title>
+          </Menu>
+        </a>
       </span>
     </div>
   );
