@@ -142,7 +142,7 @@ function LoginLayout() {
           </a>
           Sidebar
         </aside>
-        <main className="overflow-auto p-2">Main content</main>
+        <main className="overflow-auto grow p-2">Main content</main>
       </div>
     </div>
   );
