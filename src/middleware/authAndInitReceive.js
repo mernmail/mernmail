@@ -8,7 +8,7 @@ module.exports = function authAndInitReceiveMiddleware(req, res, next) {
   };
 
   const authTPair = (req.headers.authorization || "").split(" ");
-  if (authTPair[0] != "BasicMERNMail") {
+  if (authTPair[0] != "Basic" && authTPair[0] != "BasicMERNMail") {
     deny();
     return;
   }
