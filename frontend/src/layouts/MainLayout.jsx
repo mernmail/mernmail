@@ -126,7 +126,7 @@ function LoginLayout() {
       </header>
       <div className="h-full pt-12 md:flex md:flex-row">
         <aside
-          className={`bg-background w-full h-full overflow-auto absolute top-0 ${menuShown ? "left-0" : "left-full"} transition-[left] duration-1000 md:static md:w-72 md:border-r-2 md:border-r-border md:transition-none`}
+          className={`bg-background w-full h-full p-2 overflow-auto absolute top-0 ${menuShown ? "left-0" : "left-full"} transition-[left] duration-1000 md:static md:w-72 md:border-r-2 md:border-r-border md:transition-none`}
         >
           <a
             href="#"
@@ -136,13 +136,13 @@ function LoginLayout() {
             }}
             className="inline-block md:hidden float-right"
           >
-            <X className="inline-block w-8 h-8 py-1 m-2 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors">
+            <X className="inline-block w-8 h-8 py-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors">
               <title>{t("close")}</title>
             </X>
           </a>
           Sidebar
         </aside>
-        <main className="overflow-auto">Main content</main>
+        <main className="overflow-auto p-2">Main content</main>
       </div>
     </div>
   );
