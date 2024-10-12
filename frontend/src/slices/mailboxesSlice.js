@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import { verificationFailed } from "@/slices/authSlice.js";
 
 export const mailboxesSlice = createSlice({
@@ -7,7 +7,9 @@ export const mailboxesSlice = createSlice({
     loading: true,
     mailboxes: [],
     error: null,
-    currentMailbox: null
+    currentMailbox: null,
+    currentMailboxName: null,
+    currentMailboxType: "normal"
   },
   reducers: {
     setMailboxes: (state, action) => {
@@ -28,20 +30,44 @@ export const mailboxesSlice = createSlice({
       } catch (err) {
         // Hash URL parse error, use the first mailbox
       }
-      if (
-        state.currentMailbox === null &&
-        (state.mailboxes.length > 0 || mailboxName)
-      ) {
+      let initSelectedBox = current(state.mailboxes)[0];
+      const inbox = current(state.mailboxes).find(
+        (mailbox) => mailbox.type == "inbox"
+      );
+      if (inbox) initSelectedBox = inbox;
+      if (state.currentMailbox === null && (initSelectedBox || mailboxName)) {
         window.location.hash = encodeURI(
-          `#mailbox/${mailboxName || state.mailboxes[0].id}`
+          `#mailbox/${mailboxName || initSelectedBox.id}`
         );
-        state.currentMailbox = mailboxName || state.mailboxes[0].id;
+        state.currentMailbox = mailboxName || initSelectedBox.id;
+        let currentMailboxName = state.currentMailbox;
+        let currentMailboxType = "normal";
+        const currentMailboxObject = current(state.mailboxes).find(
+          (mailbox) => mailbox.id == state.currentMailbox
+        );
+        if (currentMailboxObject) {
+          currentMailboxName = currentMailboxObject.name;
+          currentMailboxType = currentMailboxObject.type;
+        }
+        state.currentMailboxName = currentMailboxName;
+        state.currentMailboxType = currentMailboxType;
       }
     },
     setCurrentMailbox: (state, action) => {
       if (action.payload !== undefined) {
         window.location.hash = encodeURI(`#mailbox/${action.payload}`);
         state.currentMailbox = action.payload;
+        let currentMailboxName = state.currentMailbox;
+        let currentMailboxType = "normal";
+        const currentMailboxObject = current(state.mailboxes).find(
+          (mailbox) => mailbox.id == state.currentMailbox
+        );
+        if (currentMailboxObject) {
+          currentMailboxName = currentMailboxObject.name;
+          currentMailboxType = currentMailboxObject.type;
+        }
+        state.currentMailboxName = currentMailboxName;
+        state.currentMailboxType = currentMailboxType;
       }
     }
   }

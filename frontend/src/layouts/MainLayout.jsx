@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import EmailSidebar from "@/layouts/sidebar/Email.jsx";
 import EmailActionButton from "@/layouts/action/Email.jsx";
+import EmailContent from "@/layouts/content/Email.jsx";
 
 function LoginLayout() {
   const email = useSelector((state) =>
@@ -145,7 +146,10 @@ function LoginLayout() {
           {/* TODO: One sidebar only for now */}
           <EmailSidebar />
         </aside>
-        <main className="overflow-auto grow p-2">Main content</main>
+        <main className="overflow-auto grow p-2">
+          {/* TODO: One main content block only for now */}
+          <EmailContent />
+        </main>
       </div>
       {/* TODO: One action button only for now */}
       <EmailActionButton />

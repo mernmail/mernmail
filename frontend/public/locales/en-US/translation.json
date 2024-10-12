@@ -22,5 +22,7 @@
     "all": "All",
     "spam": "Spam",
     "trash": "Trash",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "refresh": "Refresh",
+    "selectall": "Select all"
 }
