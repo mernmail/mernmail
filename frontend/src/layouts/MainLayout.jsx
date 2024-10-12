@@ -34,7 +34,7 @@ function LoginLayout() {
           <LogoMonochrome
             width={160}
             height={35}
-            className="inline mr-2 md:mr-4 h-6 md:h-8 w-auto"
+            className="inline mr-2 md:mr-4 rtl:mr-0 rtl:ml-2 rtl:md:ml-4 h-6 md:h-8 w-auto"
           />
           <ul className="inline list-none">
             <li className="inline">
@@ -69,7 +69,7 @@ function LoginLayout() {
           <input
             type="text"
             placeholder={t("search")}
-            className="bg-inherit h-full w-full pl-2 pr-0 mb-2 rounded-md focus-visible:outline-accent-foreground focus-visible:outline-2 focus-visible:outline"
+            className="bg-inherit h-full w-full pl-2 pr-0 rtl:pl-0 rtl:pr-2 mb-2 rounded-md focus-visible:outline-accent-foreground focus-visible:outline-2 focus-visible:outline"
           />
           <Search
             width={32}
@@ -81,7 +81,7 @@ function LoginLayout() {
           <User className="hidden md:inline-block w-8 h-8 py-1">
             <title>{t("user")}</title>
           </User>
-          <span className="hidden md:inline mr-1 text-base align-middle">
+          <span className="hidden md:inline mr-1 rtl:mr-0 rtl:ml-1 text-base align-middle">
             {email}
           </span>
           <span className="hidden md:inline select-none align-middle">|</span>
@@ -126,7 +126,7 @@ function LoginLayout() {
       </header>
       <div className="h-full pt-12 md:flex md:flex-row">
         <aside
-          className={`bg-background w-full h-full p-2 overflow-auto fixed top-0 ${menuShown ? "left-0" : "left-full"} transition-[left] duration-1000 md:static md:w-72 md:border-r-2 md:border-r-border md:transition-none`}
+          className={`bg-background w-full h-full p-2 overflow-auto fixed top-0 ${menuShown ? "left-0" : "left-full"} transition-[left] duration-1000 md:static md:w-72 md:border-r-2 rtl:md:border-r-0 rtl:md:border-l-2 md:border-border md:transition-none`}
         >
           <a
             href="#"
