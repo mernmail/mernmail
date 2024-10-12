@@ -10,9 +10,9 @@ function EmailActionButton() {
         e.preventDefault();
         alert("Compose pressed");
       }}
-      className="absolute md:hidden bottom-5 right-5 bg-primary text-primary-foreground p-4 mt-2 rounded-full hover:bg-primary/75 transition-colors"
+      className="absolute z-10 md:hidden bottom-5 right-5 rtl:right-auto rtl:left-5 bg-primary text-primary-foreground p-4 mt-2 rounded-full hover:bg-primary/75 transition-colors"
     >
-      <MailPlus className="inline rtl:mr-0 rtl:ml-2 align-top" size={24}>
+      <MailPlus className="inline align-top" size={24}>
         <title>{t("compose")}</title>
       </MailPlus>
     </button>

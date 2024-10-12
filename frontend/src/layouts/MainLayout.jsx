@@ -128,7 +128,7 @@ function LoginLayout() {
       </header>
       <div className="h-full pt-12 md:flex md:flex-row">
         <aside
-          className={`bg-background w-full h-full p-2 overflow-auto fixed top-0 ${menuShown ? "left-0" : "left-full"} transition-[left] duration-1000 md:static md:w-72 md:border-r-2 rtl:md:border-r-0 rtl:md:border-l-2 md:border-border md:transition-none`}
+          className={`bg-background w-full h-full p-2 overflow-auto z-20 fixed top-0 ${menuShown ? "left-0" : "left-full"} transition-[left] duration-1000 md:static md:w-72 md:border-r-2 rtl:md:border-r-0 rtl:md:border-l-2 md:border-border md:transition-none`}
         >
           <a
             href="#"
