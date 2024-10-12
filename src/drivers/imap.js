@@ -1,4 +1,5 @@
 const Imap = require("imap-node");
+const emailParser = require("mailparser").simpleParser;
 
 module.exports = function init(email, password, callback) {
   const imap = new Imap({
@@ -69,21 +70,113 @@ module.exports = function init(email, password, callback) {
             });
           };
           recurseMailBoxes(mailboxes, null);
-          const getMailboxStatuses = (callback, _id) => {
+          const getMailboxStatuses = (callback2, _id) => {
             if (!_id) _id = 0;
             if (_id >= resultMailboxes.length) {
-              callback();
+              callback2();
               return;
             }
             imap.status(resultMailboxes[_id].id, (err, box) => {
               if (!err) {
                 resultMailboxes[_id].new = box.messages.unseen;
               }
-              getMailboxStatuses(callback, _id + 1);
+              getMailboxStatuses(callback2, _id + 1);
             });
           };
           getMailboxStatuses(() => {
             callback(null, resultMailboxes);
+          });
+        });
+      },
+      openMailbox: (mailbox, callback) => {
+        imap.openBox(mailbox, (err) => {
+          if (err) {
+            callback(err);
+            return;
+          }
+          callback(null);
+        });
+      },
+      getAllMessages: (callback) => {
+        imap.search(["ALL"], (err, messages) => {
+          if (err) {
+            callback(err);
+            return;
+          }
+          const finalMessages = [];
+          const imapFetch = imap.fetch(messages, {
+            bodies: "HEADER.FIELDS (FROM SUBJECT)"
+          });
+          imapFetch.on("message", (msg, id) => {
+            let attributesSet = false;
+            let bodyParsed = false;
+            const finalAttributes = {
+              seen: false,
+              starred: false,
+              date: new Date(),
+              id: id,
+              subject: "Unknown email",
+              from: "Unknown"
+            };
+
+            msg.on("body", (bodyStream) => {
+              emailParser(bodyStream)
+                .then((parsed) => {
+                  const fromArray =
+                    parsed.from && parsed.from.value
+                      ? parsed.from.value || []
+                      : [];
+                  const fromArray2 = [];
+                  fromArray.forEach((fromObject) => {
+                    fromArray2.push(
+                      fromObject
+                        ? fromObject.name
+                          ? fromObject.name
+                          : fromObject.address
+                        : "Unknown"
+                    );
+                  });
+                  const from = fromArray2.join(", ");
+                  finalAttributes.from = from;
+                  finalAttributes.subject = parsed.subject;
+                  if (attributesSet) {
+                    finalMessages.push(finalAttributes);
+                    if (finalMessages.length == messages.length) {
+                      finalMessages.sort((a, b) => {
+                        return messages.indexOf(a.id) - messages.indexOf(b.id);
+                      });
+                      callback(null, finalMessages);
+                    }
+                  }
+                  bodyParsed = true;
+                })
+                .catch(() => {
+                  bodyParsed = true;
+                });
+            });
+            msg.on("attributes", (attributes) => {
+              attributes.flags.forEach((flag) => {
+                if (flag == "\\Seen") {
+                  finalAttributes.seen = true;
+                } else if (flag == "\\Flagged") {
+                  finalAttributes.starred = true;
+                }
+              });
+              finalAttributes.date = attributes.date;
+              if (bodyParsed) {
+                finalMessages.push(finalAttributes);
+                if (finalMessages.length == messages.length) {
+                  finalMessages.sort((a, b) => {
+                    return messages.indexOf(a.id) - messages.indexOf(b.id);
+                  });
+                  callback(null, finalMessages);
+                }
+              }
+              attributesSet = true;
+            });
+          });
+          imapFetch.on("error", (err) => {
+            callback(err);
           });
         });
       }

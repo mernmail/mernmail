@@ -1,9 +1,8 @@
 const Pop3Command = require("node-pop3");
+const emailParser = require("mailparser").simpleParser;
 
 module.exports = function init(email, password, callback) {
   const pop3 = new Pop3Command({
-    user: email,
-    password: password,
     host: process.env.EMAIL_RECV_HOST,
     port: process.env.EMAIL_RECV_PORT,
     tls: parseInt(process.env.EMAIL_RECV_TLS) > 0
@@ -12,25 +11,109 @@ module.exports = function init(email, password, callback) {
   pop3
     .connect()
     .then(() => {
-      const receiveObject = {
-        close: () => {
-          pop3.command("QUIT");
-        },
-        getMailboxes: (callback) => {
-          // POP3 supports only one mailbox.
-          callback(null, [
-            {
-              id: 0,
-              name: "Inbox",
-              type: "inbox",
-              openable: true,
-              level: 0,
-              new: 0
-            }
-          ]);
-        }
-      };
-      callback(null, receiveObject);
+      pop3
+        .command("USER", email)
+        .then(() => {
+          pop3
+            .command("PASS", password)
+            .then(() => {
+              const receiveObject = {
+                close: () => {
+                  pop3.command("QUIT");
+                },
+                getMailboxes: (callback) => {
+                  // POP3 supports only one mailbox.
+                  callback(null, [
+                    {
+                      id: "Inbox",
+                      name: "Inbox",
+                      type: "inbox",
+                      openable: true,
+                      level: 0,
+                      new: 0
+                    }
+                  ]);
+                },
+                openMailbox: (mailbox, callback) => {
+                  // POP3 supports only one mailbox.
+                  if (mailbox == "Inbox") {
+                    callback(null);
+                  } else {
+                    callback(new Error("The mailbox doesn't exist"));
+                  }
+                },
+                getAllMessages: (callback) => {
+                  pop3
+                    .command("LIST")
+                    .then((listArray) => {
+                      const listInfo = listArray[0];
+                      const listified = Pop3Command.listify(listInfo);
+                      const finalMessages = [];
+                      const getMessageContents = (callback2, _id) => {
+                        if (!_id) _id = 0;
+                        if (_id >= listified.length) {
+                          callback2();
+                          return;
+                        }
+                        pop3
+                          .TOP(parseInt(listified[_id][0]), 0)
+                          .then((header) => {
+                            const finalAttributes = {
+                              seen: false,
+                              starred: false,
+                              date: new Date(),
+                              id: parseInt(listified[_id][0]),
+                              subject: "Unknown email",
+                              from: "Unknown"
+                            };
+                            emailParser(header)
+                              .then((parsed) => {
+                                const fromArray =
+                                  parsed.from && parsed.from.value
+                                    ? parsed.from.value || []
+                                    : [];
+                                const fromArray2 = [];
+                                fromArray.forEach((fromObject) => {
+                                  fromArray2.push(
+                                    fromObject
+                                      ? fromObject.name
+                                        ? fromObject.name
+                                        : fromObject.address
+                                      : "Unknown"
+                                  );
+                                });
+                                const from = fromArray2.join(", ");
+                                finalAttributes.from = from;
+                                finalAttributes.subject = parsed.subject;
+                                finalMessages.push(finalAttributes);
+                                getMessageContents(callback2, _id + 1);
+                              })
+                              .catch(() => {
+                                getMessageContents(callback2, _id + 1);
+                              });
+                          })
+                          .catch((err) => {
+                            callback(err);
+                          });
+                      };
+                      getMessageContents(() => {
+                        callback(null, finalMessages);
+                      });
+                    })
+                    .catch((err) => {
+                      callback(err);
+                    });
+                }
+              };
+              callback(null, receiveObject);
+            })
+            .catch((err) => {
+              callback(err);
+            });
+        })
+        .catch((err) => {
+          callback(err);
+        });
     })
     .catch((err) => {
       callback(err);
