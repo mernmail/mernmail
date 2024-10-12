@@ -36,10 +36,10 @@ export const mailboxesSlice = createSlice({
       );
       if (inbox) initSelectedBox = inbox;
       if (initSelectedBox || mailboxName) {
-        window.location.hash = encodeURI(
-          `#mailbox/${mailboxName || initSelectedBox.id}`
-        );
-        state.currentMailbox = mailboxName || initSelectedBox.id;
+        const newCurrentMailboxId = mailboxName || initSelectedBox.id;
+        window.location.hash = encodeURI(`#mailbox/${newCurrentMailboxId}`);
+        if (state.currentMailbox != newCurrentMailboxId)
+          state.currentMailbox = newCurrentMailboxId;
         let currentMailboxName = state.currentMailbox;
         let currentMailboxType = "normal";
         const currentMailboxObject = current(state.mailboxes).find(
@@ -56,7 +56,8 @@ export const mailboxesSlice = createSlice({
     setCurrentMailbox: (state, action) => {
       if (action.payload !== undefined) {
         window.location.hash = encodeURI(`#mailbox/${action.payload}`);
-        state.currentMailbox = action.payload;
+        if (state.currentMailbox != action.payload)
+          state.currentMailbox = action.payload;
         let currentMailboxName = state.currentMailbox;
         let currentMailboxType = "normal";
         const currentMailboxObject = current(state.mailboxes).find(
