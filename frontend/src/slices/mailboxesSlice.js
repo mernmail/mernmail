@@ -35,7 +35,7 @@ export const mailboxesSlice = createSlice({
         (mailbox) => mailbox.type == "inbox"
       );
       if (inbox) initSelectedBox = inbox;
-      if (state.currentMailbox === null && (initSelectedBox || mailboxName)) {
+      if (initSelectedBox || mailboxName) {
         window.location.hash = encodeURI(
           `#mailbox/${mailboxName || initSelectedBox.id}`
         );

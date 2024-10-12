@@ -38,7 +38,7 @@ function EmailSidebar() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!loading) dispatch(initCurrentMailbox());
+    dispatch(initCurrentMailbox());
   }, [loading, dispatch]);
 
   if (loading) {
