@@ -9,5 +9,7 @@
     "search": "Wyszukaj...",
     "settings": "Ustawienia",
     "menu": "Menu",
-    "close": "Zamknij"
+    "close": "Zamknij",
+    "error": "Błąd",
+    "unexpectederror": "Wystąpił nieoczekiwany błąd."
 }

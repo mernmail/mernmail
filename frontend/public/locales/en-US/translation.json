@@ -9,5 +9,7 @@
     "search": "Search...",
     "settings": "Settings",
     "menu": "Menu",
-    "close": "Close"
+    "close": "Close",
+    "error": "Error",
+    "unexpectederror": "An unexpected error has occurred."
 }
