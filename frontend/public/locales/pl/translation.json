@@ -13,5 +13,13 @@
     "error": "Błąd",
     "unexpectederror": "Wystąpił nieoczekiwany błąd.",
     "cantlogin": "Nie można się zalogować:",
-    "compose": "Utwórz"
+    "compose": "Utwórz",
+    "inbox": "Skrzynka odbiorcza",
+    "starred": "Oznaczone gwiazdą",
+    "important": "Ważne",
+    "sent": "Wysłane",
+    "drafts": "Wersje robocze",
+    "all": "Wszystkie",
+    "spam": "Spam",
+    "trash": "Śmietnik"
 }

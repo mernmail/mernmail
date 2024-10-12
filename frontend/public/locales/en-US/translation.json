@@ -13,5 +13,13 @@
     "error": "Error",
     "unexpectederror": "An unexpected error has occurred.",
     "cantlogin": "Can't log in:",
-    "compose": "Compose"
+    "compose": "Compose",
+    "inbox": "Inbox",
+    "starred": "Starred",
+    "important": "Important",
+    "sent": "Sent",
+    "drafts": "Drafts",
+    "all": "All",
+    "spam": "Spam",
+    "trash": "Trash"
 }

@@ -13,7 +13,7 @@ import { logout } from "@/slices/authSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import EmailSidebar from "@/layouts/sidebar/Email";
+import EmailSidebar from "@/layouts/sidebar/Email.jsx";
 
 function LoginLayout() {
   const email = useSelector((state) =>
