@@ -11,5 +11,6 @@
     "menu": "Menu",
     "close": "Close",
     "error": "Error",
-    "unexpectederror": "An unexpected error has occurred."
+    "unexpectederror": "An unexpected error has occurred.",
+    "cantlogin": "Can't log in:"
 }

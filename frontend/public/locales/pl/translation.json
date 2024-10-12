@@ -11,5 +11,6 @@
     "menu": "Menu",
     "close": "Zamknij",
     "error": "Błąd",
-    "unexpectederror": "Wystąpił nieoczekiwany błąd."
+    "unexpectederror": "Wystąpił nieoczekiwany błąd.",
+    "cantlogin": "Nie można się zalogować:"
 }
