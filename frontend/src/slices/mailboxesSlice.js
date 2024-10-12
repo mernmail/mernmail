@@ -6,20 +6,49 @@ export const mailboxesSlice = createSlice({
   initialState: {
     loading: true,
     mailboxes: [],
-    error: null
+    error: null,
+    currentMailbox: null
   },
   reducers: {
     setMailboxes: (state, action) => {
       if (state.loading) state.loading = false;
-      if (action.payload.mailboxes !== undefined)
+      if (action.payload && action.payload.mailboxes !== undefined)
         state.mailboxes = action.payload.mailboxes;
-      if (action.payload.error !== undefined)
+      if (action.payload && action.payload.error !== undefined)
         state.error = action.payload.error;
+    },
+    initCurrentMailbox: (state) => {
+      let mailboxName;
+      try {
+        const mailboxMatch = decodeURI(window.location.hash).match(
+          /^#mailbox\/(.*)/
+        );
+        if (mailboxMatch) mailboxName = mailboxMatch[1];
+        //eslint-disable-next-line no-unused-vars
+      } catch (err) {
+        // Hash URL parse error, use the first mailbox
+      }
+      if (
+        state.currentMailbox === null &&
+        (state.mailboxes.length > 0 || mailboxName)
+      ) {
+        window.location.hash = encodeURI(
+          `#mailbox/${mailboxName || state.mailboxes[0].id}`
+        );
+        state.currentMailbox = mailboxName || state.mailboxes[0].id;
+      }
+    },
+    setCurrentMailbox: (state, action) => {
+      if (action.payload !== undefined) {
+        window.location.hash = encodeURI(`#mailbox/${action.payload}`);
+        state.currentMailbox = action.payload;
+      }
     }
   }
 });
 
-//export const { increment, decrement, incrementByAmount } = mailboxesSlice.actions;
+export const { initCurrentMailbox, setCurrentMailbox } = mailboxesSlice.actions;
+
 export async function setMailboxes(dispatch, getState) {
   const state = {};
   let credentials = getState().auth.auth;

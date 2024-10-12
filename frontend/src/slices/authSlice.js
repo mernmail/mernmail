@@ -10,9 +10,9 @@ export const authSlice = createSlice({
   reducers: {
     load: (state, action) => {
       if (state.loading) state.loading = false;
-      if (action.payload.error !== undefined)
+      if (action.payload && action.payload.error !== undefined)
         state.error = action.payload.error;
-      if (action.payload.auth !== undefined) {
+      if (action.payload && action.payload.auth !== undefined) {
         state.auth = action.payload.auth;
         if (!localStorage.getItem("credentials"))
           localStorage.setItem(
@@ -23,9 +23,9 @@ export const authSlice = createSlice({
     },
     login: (state, action) => {
       if (state.loading) state.loading = false;
-      if (action.payload.error !== undefined)
+      if (action.payload && action.payload.error !== undefined)
         state.error = action.payload.error;
-      if (action.payload.auth !== undefined) {
+      if (action.payload && action.payload.auth !== undefined) {
         state.auth = action.payload.auth;
         localStorage.setItem(
           "credentials",

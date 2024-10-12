@@ -13,22 +13,22 @@ import {
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { setMailboxes } from "@/slices/mailboxesSlice.js";
-
-// TODO: get active mailbox ID
-const activeMailboxId = "INBOX";
+import {
+  setMailboxes,
+  initCurrentMailbox,
+  setCurrentMailbox
+} from "@/slices/mailboxesSlice.js";
 
 function EmailSidebar() {
   const { t } = useTranslation();
   const loading = useSelector((state) => state.mailboxes.loading);
   const error = useSelector((state) => state.mailboxes.error);
   const mailboxes = useSelector((state) => state.mailboxes.mailboxes);
+  const currentMailbox = useSelector((state) => state.mailboxes.currentMailbox);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setTimeout(() => {
-      dispatch(setMailboxes);
-    }, 500);
+    dispatch(setMailboxes);
 
     const interval = setInterval(() => {
       dispatch(setMailboxes);
@@ -36,6 +36,10 @@ function EmailSidebar() {
 
     return () => clearInterval(interval);
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!loading) dispatch(initCurrentMailbox());
+  }, [loading, dispatch]);
 
   if (loading) {
     return <p className="text-center">{t("loading")}</p>;
@@ -66,6 +70,7 @@ function EmailSidebar() {
             const id = mailbox.id;
             const level = mailbox.level;
             const newMessages = mailbox.new;
+            const openable = mailbox.openable;
             let DisplayedIcon = Folder;
             if (type == "inbox") {
               title = t("inbox");
@@ -98,10 +103,10 @@ function EmailSidebar() {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    alert(`Selected mailbox: ${id}`);
+                    if (openable) dispatch(setCurrentMailbox(id));
                   }}
                   title={title}
-                  className={`${activeMailboxId == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block my-1 ${level == 0 ? "ml-" + level * 4 + " rtl:ml-0 rtl:mr-" + level * 4 : ""} px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}
+                  className={`${currentMailbox == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block my-1 ${level == 0 ? "ml-" + level * 4 + " rtl:ml-0 rtl:mr-" + level * 4 : ""} px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}
                 >
                   <div className="flex flex-row w-auto">
                     <DisplayedIcon
