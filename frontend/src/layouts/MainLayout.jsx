@@ -43,9 +43,9 @@ function LoginLayout() {
                 onClick={(e) => {
                   e.preventDefault();
                 }}
-                className="inline-block"
+                className="inline-block align-middle bg-primary-foreground text-primary px-1 py-1 w-9 h-8 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
               >
-                <Mail className="inline-block bg-primary-foreground text-primary w-9 h-8 px-1 py-1 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
+                <Mail className="inline-block w-full align-top">
                   <title>{t("email")}</title>
                 </Mail>
               </a>
@@ -56,9 +56,9 @@ function LoginLayout() {
                 onClick={(e) => {
                   e.preventDefault();
                 }}
-                className="inline-block"
+                className="inline-block align-middle px-1 py-1 w-9 h-8 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
               >
-                <BookUser className="inline-block w-9 h-8 px-1 py-1 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
+                <BookUser className="inline-block w-full align-top">
                   <title>{t("addressbook")}</title>
                 </BookUser>
               </a>
@@ -90,9 +90,9 @@ function LoginLayout() {
             onClick={(e) => {
               e.preventDefault();
             }}
-            className="inline-block"
+            className="inline-block w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
           >
-            <Settings className="inline-block w-8 h-8 py-1 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
+            <Settings className="inline-block w-full align-top">
               <title>{t("settings")}</title>
             </Settings>
           </a>
@@ -103,9 +103,9 @@ function LoginLayout() {
               e.preventDefault();
               dispatch(logout());
             }}
-            className="inline-block"
+            className="inline-block w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
           >
-            <LogOut className="inline-block w-8 h-8 py-1 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
+            <LogOut className="inline-block w-full align-top">
               <title>{t("logout")}</title>
             </LogOut>
           </a>
@@ -116,9 +116,9 @@ function LoginLayout() {
               e.preventDefault();
               setMenuShown(!menuShown);
             }}
-            className="inline-block md:hidden"
+            className="inline-block md:hidden w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
           >
-            <Menu className="inline-block md:hidden w-8 h-8 py-1 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
+            <Menu className="inline-block w-full align-top">
               <title>{t("menu")}</title>
             </Menu>
           </a>
