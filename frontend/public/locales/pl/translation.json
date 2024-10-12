@@ -12,5 +12,6 @@
     "close": "Zamknij",
     "error": "Błąd",
     "unexpectederror": "Wystąpił nieoczekiwany błąd.",
-    "cantlogin": "Nie można się zalogować:"
+    "cantlogin": "Nie można się zalogować:",
+    "compose": "Utwórz"
 }

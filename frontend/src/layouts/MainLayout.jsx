@@ -13,6 +13,7 @@ import { logout } from "@/slices/authSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import EmailSidebar from "@/layouts/sidebar/Email";
 
 function LoginLayout() {
   const email = useSelector((state) =>
@@ -140,7 +141,8 @@ function LoginLayout() {
               <title>{t("close")}</title>
             </X>
           </a>
-          Sidebar
+          {/* TODO: One sidebar only for now */}
+          <EmailSidebar />
         </aside>
         <main className="overflow-auto grow p-2">Main content</main>
       </div>

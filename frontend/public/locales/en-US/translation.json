@@ -12,5 +12,6 @@
     "close": "Close",
     "error": "Error",
     "unexpectederror": "An unexpected error has occurred.",
-    "cantlogin": "Can't log in:"
+    "cantlogin": "Can't log in:",
+    "compose": "Compose"
 }
