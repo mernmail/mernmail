@@ -14,7 +14,7 @@ function LoginLayout() {
 
   useEffect(() => {
     document.title = t("login") + " - MERNMail";
-  });
+  }, [t]);
 
   async function loginFormSubmit() {
     dispatch(login(email, password));
