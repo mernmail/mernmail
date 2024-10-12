@@ -56,7 +56,7 @@ function LoginLayout() {
                 onClick={(e) => {
                   e.preventDefault();
                 }}
-                className="inline-block align-middle px-1 py-1 w-9 h-8 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
+                className="inline-block align-middle text-inherit px-1 py-1 w-9 h-8 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
               >
                 <BookUser className="inline-block w-full align-top">
                   <title>{t("addressbook")}</title>
@@ -69,7 +69,7 @@ function LoginLayout() {
           <input
             type="text"
             placeholder={t("search")}
-            className="bg-inherit h-full w-full pl-2 pr-0 rtl:pl-0 rtl:pr-2 mb-2 rounded-md focus-visible:outline-accent-foreground focus-visible:outline-2 focus-visible:outline"
+            className="bg-inherit h-full w-full pl-2 pr-0 rtl:pl-0 rtl:pr-2 mb-2 rounded-md focus:outline-accent-foreground focus:outline-2 focus:outline"
           />
           <Search
             width={32}
@@ -90,7 +90,7 @@ function LoginLayout() {
             onClick={(e) => {
               e.preventDefault();
             }}
-            className="inline-block w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
+            className="inline-block text-inherit w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
           >
             <Settings className="inline-block w-full align-top">
               <title>{t("settings")}</title>
@@ -103,7 +103,7 @@ function LoginLayout() {
               e.preventDefault();
               dispatch(logout());
             }}
-            className="inline-block w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
+            className="inline-block text-inherit w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
           >
             <LogOut className="inline-block w-full align-top">
               <title>{t("logout")}</title>
@@ -116,7 +116,7 @@ function LoginLayout() {
               e.preventDefault();
               setMenuShown(!menuShown);
             }}
-            className="inline-block md:hidden w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
+            className="inline-block md:hidden text-inherit w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
           >
             <Menu className="inline-block w-full align-top">
               <title>{t("menu")}</title>

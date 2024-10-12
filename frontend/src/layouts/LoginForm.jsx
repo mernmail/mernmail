@@ -45,7 +45,7 @@ function LoginLayout() {
             id="login-email"
             placeholder="john.smith@example.com"
             required
-            className="w-full bg-accent text-accent-foreground px-2 py-1 mb-2 rounded-md focus-visible:outline-primary focus-visible:outline-2 focus-visible:outline"
+            className="w-full bg-accent text-accent-foreground px-2 py-1 mb-2 rounded-md focus:outline-primary focus:outline-2 focus:outline"
           />
           <label htmlFor="login-password" className="block my-1">
             <Lock className="inline mr-2" size={24} />
@@ -57,7 +57,7 @@ function LoginLayout() {
             id="login-password"
             placeholder="********"
             required
-            className="w-full bg-accent text-accent-foreground px-2 py-1 mb-2 rounded-md focus-visible:outline-primary focus-visible:outline-2 focus-visible:outline"
+            className="w-full bg-accent text-accent-foreground px-2 py-1 mb-2 rounded-md focus:outline-primary focus:outline-2 focus:outline"
           />
           {error ? (
             <p className="text-red-500 block text-center">
