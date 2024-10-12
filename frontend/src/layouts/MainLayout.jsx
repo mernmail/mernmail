@@ -136,7 +136,9 @@ function LoginLayout() {
             }}
             className="inline-block md:hidden float-right"
           >
-            <X className="inline-block w-8 h-8 py-1 m-2 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"></X>
+            <X className="inline-block w-8 h-8 py-1 m-2 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors">
+              <title>{t("close")}</title>
+            </X>
           </a>
           Sidebar
         </aside>
