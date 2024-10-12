@@ -37,11 +37,16 @@ export const authSlice = createSlice({
       if (state.loading) state.loading = false;
       localStorage.removeItem("credentials");
       state.auth = null;
+    },
+    verificationFailed: (state) => {
+      if (state.loading) state.loading = false;
+      state.error = null;
+      state.auth = null;
     }
   }
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, verificationFailed } = authSlice.actions;
 
 export async function load(dispatch) {
   const state = {};

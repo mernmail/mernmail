@@ -6,11 +6,13 @@ const express = require("express");
 const serveStatic = require("serve-static");
 const authAndInitReceiveMiddleware = require("./middleware/authAndInitReceive.js");
 const checkRoute = require("./routes/check.js");
+const receiveRoute = require("./routes/receive.js");
 
 const app = express();
 
 app.use("/api", authAndInitReceiveMiddleware);
 app.use("/api/check", checkRoute);
+app.use("/api/receive", receiveRoute);
 app.use("/api", (req, res, next) => {
   if (req.receiveDriver) req.receiveDriver.close();
   next();

@@ -15,6 +15,17 @@ module.exports = function init(email, password, callback) {
       const receiveObject = {
         close: () => {
           pop3.command("QUIT");
+        },
+        getMailboxes: (callback) => {
+          // POP3 supports only one mailbox.
+          callback(null, [
+            {
+              id: 0,
+              name: "Inbox",
+              type: "inbox",
+              new: 0
+            }
+          ]);
         }
       };
       callback(null, receiveObject);
