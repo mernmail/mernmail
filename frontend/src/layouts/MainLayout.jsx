@@ -11,12 +11,14 @@ import {
 import { logout } from "@/slices/authSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 function LoginLayout() {
   const email = useSelector((state) =>
     state.auth.auth ? state.auth.auth.email : "Unknown"
   );
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
     document.title = "MERNMail";
@@ -33,12 +35,12 @@ function LoginLayout() {
         <ul className="inline list-none">
           <li className="inline">
             <Mail className="inline-block bg-primary-foreground text-primary w-9 h-8 px-1 py-1 mx-0.5 rounded-sm cursor-pointer hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
-              <title>Email</title>
+              <title>{t("email")}</title>
             </Mail>
           </li>
           <li className="inline">
             <BookUser className="inline-block w-9 h-8 px-1 py-1 mx-0.5 rounded-sm cursor-pointer hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
-              <title>Address book</title>
+              <title>{t("addressbook")}</title>
             </BookUser>
           </li>
         </ul>
@@ -46,7 +48,7 @@ function LoginLayout() {
       <form className="grow max-w-80 bg-accent text-base rounded-md hidden md:flex flex-row flex-nowrap">
         <input
           type="text"
-          placeholder="Search..."
+          placeholder={t("search")}
           className="bg-inherit h-full w-full pl-2 pr-0 mb-2 rounded-md focus-visible:outline-accent-foreground focus-visible:outline-2 focus-visible:outline"
         />
         <Search
@@ -57,25 +59,25 @@ function LoginLayout() {
       </form>
       <span className="self-center whitespace-nowrap text-right">
         <User className="hidden md:inline-block w-8 h-8 py-1">
-          <title>User</title>
+          <title>{t("user")}</title>
         </User>
         <span className="hidden md:inline mr-1 text-base align-middle">
           {email}
         </span>
         <span className="hidden md:inline select-none align-middle">|</span>
         <Settings className="inline-block w-8 h-8 py-1 mx-0.5 rounded-sm cursor-pointer hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
-          <title>Settings</title>
+          <title>{t("settings")}</title>
         </Settings>
         <span className="inline select-none align-middle">|</span>
         <LogOut
           onClick={() => dispatch(logout())}
           className="inline-block w-8 h-8 py-1 mx-0.5 rounded-sm cursor-pointer hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
         >
-          <title>Log out</title>
+          <title>{t("logout")}</title>
         </LogOut>
         <span className="inline md:hidden select-none align-middle">|</span>
         <Menu className="inline-block md:hidden w-8 h-8 py-1 mx-0.5 rounded-sm cursor-pointer hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors">
-          <title>Menu</title>
+          <title>{t("menu")}</title>
         </Menu>
       </span>
     </div>

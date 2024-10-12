@@ -3,15 +3,17 @@ import { Mail, Lock, LogIn } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "@/slices/authSlice.js";
+import { useTranslation } from "react-i18next";
 
 function LoginLayout() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const error = useSelector((state) => state.auth.error);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
-    document.title = "Log in - MERNMail";
+    document.title = t("login") + " - MERNMail";
   });
 
   async function loginFormSubmit() {
@@ -34,7 +36,7 @@ function LoginLayout() {
         >
           <label htmlFor="login-email" className="block my-1">
             <Mail className="inline mr-2" size={24} />
-            Email address
+            {t("emailaddress")}
           </label>
           <input
             type="email"
@@ -46,7 +48,7 @@ function LoginLayout() {
           />
           <label htmlFor="login-password" className="block my-1">
             <Lock className="inline mr-2" size={24} />
-            Password
+            {t("password")}
           </label>
           <input
             type="password"
@@ -68,7 +70,7 @@ function LoginLayout() {
             className="w-full bg-primary text-primary-foreground p-2 mt-6 rounded-md hover:bg-primary/75 transition-colors"
           >
             <LogIn className="inline mr-2" size={24} />
-            Log in
+            {t("login")}
           </button>
         </form>
       </div>

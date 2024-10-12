@@ -1,0 +1,12 @@
+{
+    "emailaddress": "Adres e-mail",
+    "password": "Hasło",
+    "login": "Zaloguj się",
+    "email": "Poczta elektroniczna",
+    "addressbook": "Książka adresowa",
+    "user": "Użytkownik",
+    "logout": "Wyloguj się",
+    "search": "Wyszukaj...",
+    "settings": "Ustawienia",
+    "menu": "Menu"
+}
