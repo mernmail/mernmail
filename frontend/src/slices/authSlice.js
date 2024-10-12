@@ -10,8 +10,9 @@ export const authSlice = createSlice({
   reducers: {
     load: (state, action) => {
       state.loading = false;
-      if (action.payload.error) state.error = action.payload.error;
-      if (action.payload.auth) {
+      if (action.payload.error !== undefined)
+        state.error = action.payload.error;
+      if (action.payload.auth !== undefined) {
         state.auth = action.payload.auth;
         if (!localStorage.getItem("credentials"))
           localStorage.setItem(
@@ -22,8 +23,9 @@ export const authSlice = createSlice({
     },
     login: (state, action) => {
       state.loading = false;
-      if (action.payload.error) state.error = action.payload.error;
-      if (action.payload.auth) {
+      if (action.payload.error !== undefined)
+        state.error = action.payload.error;
+      if (action.payload.auth !== undefined) {
         state.auth = action.payload.auth;
         localStorage.setItem(
           "credentials",
@@ -55,7 +57,7 @@ export async function load(dispatch) {
       headers: {
         Authorization:
           credentials.email && credentials.password
-            ? "Basic " +
+            ? "BasicMERNMail " +
               btoa(
                 credentials.email.replace(/:/g, "") + ":" + credentials.password
               )
@@ -87,7 +89,7 @@ export function login(email, password) {
         headers: {
           Authorization:
             credentials.email && credentials.password
-              ? "Basic " +
+              ? "BasicMERNMail " +
                 btoa(
                   credentials.email.replace(/:/g, "") +
                     ":" +
@@ -125,7 +127,7 @@ export async function checkAuth(dispatch, getState) {
       headers: {
         Authorization:
           credentials.email && credentials.password
-            ? "Basic " +
+            ? "BasicMERNMail " +
               btoa(
                 credentials.email.replace(/:/g, "") + ":" + credentials.password
               )
@@ -138,7 +140,7 @@ export async function checkAuth(dispatch, getState) {
           ? { email: credentials.email, password: credentials.password }
           : {};
     } else {
-      state.auth = "";
+      state.auth = null;
     }
     // eslint-disable-next-line no-unused-vars
   } catch (err) {
