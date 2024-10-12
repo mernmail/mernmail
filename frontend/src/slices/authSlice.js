@@ -9,7 +9,7 @@ export const authSlice = createSlice({
   },
   reducers: {
     load: (state, action) => {
-      state.loading = false;
+      if (state.loading) state.loading = false;
       if (action.payload.error !== undefined)
         state.error = action.payload.error;
       if (action.payload.auth !== undefined) {
@@ -22,7 +22,7 @@ export const authSlice = createSlice({
       }
     },
     login: (state, action) => {
-      state.loading = false;
+      if (state.loading) state.loading = false;
       if (action.payload.error !== undefined)
         state.error = action.payload.error;
       if (action.payload.auth !== undefined) {
@@ -34,6 +34,7 @@ export const authSlice = createSlice({
       }
     },
     logout: (state) => {
+      if (state.loading) state.loading = false;
       localStorage.removeItem("credentials");
       state.auth = null;
     }
