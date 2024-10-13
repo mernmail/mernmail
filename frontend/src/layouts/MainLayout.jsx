@@ -14,9 +14,9 @@ import { showMenu, hideMenu } from "@/slices/menuSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import EmailSidebar from "@/layouts/sidebar/Email.jsx";
-import EmailActionButton from "@/layouts/action/Email.jsx";
-import EmailContent from "@/layouts/content/Email.jsx";
+import Sidebar from "@/components/Sidebar.jsx";
+import ActionButton from "@/components/ActionButton.jsx";
+import Content from "@/components/Content.jsx";
 
 function LoginLayout() {
   const email = useSelector((state) =>
@@ -144,16 +144,13 @@ function LoginLayout() {
               <title>{t("close")}</title>
             </X>
           </a>
-          {/* TODO: One sidebar only for now */}
-          <EmailSidebar />
+          <Sidebar />
         </aside>
         <main className="overflow-auto grow p-2">
-          {/* TODO: One main content block only for now */}
-          <EmailContent />
+          <Content />
         </main>
       </div>
-      {/* TODO: One action button only for now */}
-      <EmailActionButton />
+      <ActionButton />
     </div>
   );
 }
