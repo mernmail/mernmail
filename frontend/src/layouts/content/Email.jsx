@@ -55,7 +55,7 @@ function EmailContent() {
   } else if (error) {
     return (
       <p className="text-red-500 block text-center">
-        {t("cantloadmailbox")} {error}
+        {t("cantloadmailbox", { error: error })}
       </p>
     );
   } else {
@@ -66,8 +66,9 @@ function EmailContent() {
             {title}
           </h1>
           <p className="md:text-xl text-foreground/50 content-center whitespace-nowrap shrink-0">
-            {messages.length}{" "}
-            {t(messages.length == 1 ? "1message" : "nummessages")}
+            {t(messages.length == 1 ? "1message" : "nummessages", {
+              count: messages.length
+            })}
           </p>
         </div>
         <ul className="mx-0.5 list-none">

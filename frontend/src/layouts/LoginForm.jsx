@@ -67,7 +67,7 @@ function LoginLayout() {
           />
           {error ? (
             <p className="text-red-500 block text-center">
-              {t("cantlogin")} {error}
+              {t("cantlogin", { error: error })}
             </p>
           ) : (
             ""
