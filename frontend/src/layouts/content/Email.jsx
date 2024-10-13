@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { RefreshCw, Search } from "lucide-react";
+import { RefreshCw, Search, Star } from "lucide-react";
 import { useEffect } from "react";
 import { setMessages, resetLoading } from "@/slices/messagesSlice.js";
 
@@ -48,7 +48,7 @@ function EmailContent() {
 
       return () => clearInterval(interval);
     }
-  }, [mailboxesLoading, mailboxId]);
+  }, [mailboxesLoading, mailboxId, dispatch]);
 
   if (loading) {
     return <p className="text-center">{t("loading")}</p>;
@@ -109,6 +109,53 @@ function EmailContent() {
                 className="inline w-6 h-6 align-top"
               />
             </a>
+          </li>
+        </ul>
+        <ul className="list-none border-border border-t-2">
+          <li className="block border-border border-b-2 pl-0.5 pr-2 rtl:pl-2 rtl:pr-0.5">
+            <div className="flex flex-row">
+              <div className="shrink-0">
+                <input
+                  type="checkbox"
+                  className="w-6 h-6 mx-1.5 my-1 inline-block align-middle"
+                  title={t("select")}
+                />
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}
+                  title={t("star")}
+                  className="inline-block align-middle shrink-0 w-8 h-8 p-1 mx-0.5 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                >
+                  <Star
+                    width={24}
+                    height={24}
+                    className="inline w-6 h-6 align-top"
+                  />
+                </a>
+              </div>
+              <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis self-center px-1">
+                John Smith
+              </p>
+              <p className="whitespace-nowrap grow self-center px-1 overflow-hidden text-ellipsis">
+                The example message
+              </p>
+              <p className="whitespace-nowrap self-center">
+                {t("datetime", {
+                  val: new Date(),
+                  formatParams: {
+                    val: {
+                      day: "numeric",
+                      year: "numeric",
+                      month: "numeric",
+                      hour: "numeric",
+                      minute: "numeric"
+                    }
+                  }
+                })}
+              </p>
+            </div>
           </li>
         </ul>
       </>

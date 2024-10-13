@@ -27,5 +27,8 @@
     "selectall": "Wybierz wszystko",
     "1message": "wiadomość",
     "nummessages": "wiadomości",
-    "cantloadmailbox": "Nie można załadować skrzynki pocztowej:"
+    "cantloadmailbox": "Nie można załadować skrzynki pocztowej:",
+    "select": "Wybierz",
+    "star": "Oznacz gwiazdą",
+    "datetime": "{{val, datetime}}"
 }

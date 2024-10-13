@@ -27,5 +27,8 @@
     "selectall": "Select all",
     "1message": "message",
     "nummessages": "messages",
-    "cantloadmailbox": "Can't load a mailbox:"
+    "cantloadmailbox": "Can't load a mailbox:",
+    "select": "Select",
+    "star": "Star",
+    "datetime": "{{val, datetime}}"
 }
