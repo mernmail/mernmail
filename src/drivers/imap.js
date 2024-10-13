@@ -111,7 +111,7 @@ module.exports = function init(email, password, callback) {
           const imapFetch = imap.fetch(messages, {
             bodies: "HEADER.FIELDS (FROM TO SUBJECT MESSAGE-ID IN-REPLY-TO)"
           });
-          imapFetch.on("message", (msg, id) => {
+          imapFetch.on("message", (msg) => {
             let attributesSet = false;
             let bodyParsed = false;
             const finalAttributes = {
@@ -119,7 +119,7 @@ module.exports = function init(email, password, callback) {
               starred: false,
               answered: false,
               date: new Date(),
-              id: id,
+              id: -1,
               subject: "Unknown email",
               from: "Unknown",
               to: "Unknown",
@@ -199,6 +199,7 @@ module.exports = function init(email, password, callback) {
                   finalAttributes.answered = true;
                 }
               });
+              finalAttributes.id = attributes.uid;
               finalAttributes.date = attributes.date;
               if (bodyParsed) {
                 finalMessages.push(finalAttributes);
@@ -226,6 +227,135 @@ module.exports = function init(email, password, callback) {
           imapFetch.on("error", (err) => {
             callback(err);
           });
+        });
+      },
+      getMessage: (message, callback) => {
+        const messageId = parseInt(message);
+        if (isNaN(messageId)) {
+          callback(new Error("Message ID parse error"));
+          return;
+        }
+        const messages = [];
+        const findReply = (replyId, callback2) => {
+          imap.search([["HEADER", "MESSAGE-ID", replyId]], (err, messages) => {
+            if (err) {
+              callback2(false);
+              return;
+            }
+            if (messages.length > 0) {
+              callback2(messages[0]);
+            } else {
+              callback2(false);
+            }
+          });
+        };
+        const getOneMessage = (messageId, callback2) => {
+          const imapFetch = imap.fetch(messageId, {
+            bodies: ""
+          });
+          imapFetch.on("message", (msg) => {
+            let attributesSet = false;
+            let bodyParsed = false;
+            const finalAttributes = {
+              seen: false,
+              starred: false,
+              answered: false,
+              date: new Date(),
+              id: -1,
+              subject: "Unknown email",
+              from: [{ name: "Unknown", address: "unknown@example.com" }],
+              to: [{ name: "Unknown", address: "unknown@example.com" }],
+              body: ""
+            };
+
+            msg.on("body", (bodyStream) => {
+              emailParser(bodyStream)
+                .then((parsed) => {
+                  const fromArray =
+                    parsed.from && parsed.from.value
+                      ? parsed.from.value || []
+                      : [];
+                  const from = [];
+                  fromArray.forEach((fromObject) => {
+                    from.push(
+                      fromObject
+                        ? { name: fromObject.name, address: fromObject.address }
+                        : { name: "Unknown", address: "unknown@example.com" }
+                    );
+                  });
+                  finalAttributes.from = from;
+                  const toArray =
+                    parsed.to && parsed.to.value ? parsed.to.value || [] : [];
+                  const to = [];
+                  toArray.forEach((toObject) => {
+                    to.push(
+                      toObject
+                        ? { name: toObject.name, address: toObject.address }
+                        : { name: "Unknown", address: "unknown@example.com" }
+                    );
+                  });
+                  finalAttributes.to = to;
+                  finalAttributes.subject = parsed.subject;
+                  if (parsed.textAsHtml) {
+                    finalAttributes.body = parsed.textAsHtml;
+                  } else {
+                    finalAttributes.body = `<html><head></head><body><pre>${String(parsed.text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre></body></html>`;
+                  }
+                  if (attributesSet) {
+                    messages.unshift(finalAttributes);
+                    if (parsed.replyTo) {
+                      findReply(parsed.replyTo, (message) => {
+                        if (!message) {
+                          callback2();
+                        } else {
+                          getOneMessage(message, callback2);
+                        }
+                      });
+                    } else {
+                      callback2();
+                    }
+                  }
+                  bodyParsed = true;
+                })
+                .catch((err) => {
+                  callback(err);
+                });
+            });
+            msg.on("attributes", (attributes) => {
+              attributes.flags.forEach((flag) => {
+                if (flag == "\\Seen") {
+                  finalAttributes.seen = true;
+                } else if (flag == "\\Flagged") {
+                  finalAttributes.starred = true;
+                } else if (flag == "\\Answered") {
+                  finalAttributes.answered = true;
+                }
+              });
+              finalAttributes.date = attributes.date;
+              finalAttributes.id = attributes.uid;
+              if (bodyParsed) {
+                messages.unshift(finalAttributes);
+                if (finalAttributes.replyTo) {
+                  findReply(finalAttributes.replyTo, (message) => {
+                    if (!message) {
+                      callback2();
+                    } else {
+                      getOneMessage(message, callback2);
+                    }
+                  });
+                } else {
+                  callback2();
+                }
+              }
+              attributesSet = true;
+            });
+          });
+          imapFetch.on("error", (err) => {
+            callback(err);
+          });
+        };
+        getOneMessage(messageId, () => {
+          callback(null, messages);
         });
       }
     };

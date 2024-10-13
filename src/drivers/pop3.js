@@ -137,6 +137,89 @@ module.exports = function init(email, password, callback) {
                     .catch((err) => {
                       callback(err);
                     });
+                },
+                getMessage: (message, callback) => {
+                  const messageId = parseInt(message);
+                  if (isNaN(messageId)) {
+                    callback(new Error("Message ID parse error"));
+                    return;
+                  }
+                  const messages = [];
+                  pop3
+                    .command("RETR", messageId)
+                    .then((retrObject) => {
+                      const retrStream = retrObject[2];
+                      const finalAttributes = {
+                        seen: false,
+                        starred: false,
+                        answered: false,
+                        date: new Date(),
+                        id: message,
+                        subject: "Unknown email",
+                        from: [
+                          { name: "Unknown", address: "unknown@example.com" }
+                        ],
+                        to: [
+                          { name: "Unknown", address: "unknown@example.com" }
+                        ],
+                        body: ""
+                      };
+                      emailParser(retrStream)
+                        .then((parsed) => {
+                          const fromArray =
+                            parsed.from && parsed.from.value
+                              ? parsed.from.value || []
+                              : [];
+                          const from = [];
+                          fromArray.forEach((fromObject) => {
+                            from.push(
+                              fromObject
+                                ? {
+                                    name: fromObject.name,
+                                    address: fromObject.address
+                                  }
+                                : {
+                                    name: "Unknown",
+                                    address: "unknown@example.com"
+                                  }
+                            );
+                          });
+                          finalAttributes.from = from;
+                          const toArray =
+                            parsed.to && parsed.to.value
+                              ? parsed.to.value || []
+                              : [];
+                          const to = [];
+                          toArray.forEach((toObject) => {
+                            to.push(
+                              toObject
+                                ? {
+                                    name: toObject.name,
+                                    address: toObject.address
+                                  }
+                                : {
+                                    name: "Unknown",
+                                    address: "unknown@example.com"
+                                  }
+                            );
+                          });
+                          finalAttributes.to = to;
+                          finalAttributes.subject = parsed.subject;
+                          if (parsed.textAsHtml) {
+                            finalAttributes.body = parsed.textAsHtml;
+                          } else {
+                            finalAttributes.body = `<html><head></head><body><pre>${String(parsed.text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre></body></html>`;
+                          }
+                          messages.unshift(finalAttributes);
+                          callback(null, messages);
+                        })
+                        .catch((err) => {
+                          callback(err);
+                        });
+                    })
+                    .catch((err) => {
+                      callback(err);
+                    });
                 }
               };
               callback(null, receiveObject);
