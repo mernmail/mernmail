@@ -30,5 +30,6 @@
     "cantloadmailbox": "Nie można załadować skrzynki pocztowej: {{error}}",
     "select": "Wybierz",
     "star": "Oznacz gwiazdą",
-    "datetime": "{{val, datetime}}"
+    "datetime": "{{val, datetime}}",
+    "nomessages": "Brak wiadomości"
 }

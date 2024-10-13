@@ -113,53 +113,57 @@ function EmailContent() {
             </a>
           </li>
         </ul>
-        <ul className="list-none border-border border-t-2">
-          <li className="block border-border border-b-2 px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5">
-            <div className="flex flex-col md:flex-row">
-              <div className="shrink-0">
-                <input
-                  type="checkbox"
-                  className="w-6 h-6 mx-1.5 my-1 inline-block align-middle"
-                  title={t("select")}
-                />
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
-                  title={t("star")}
-                  className="inline-block align-middle shrink-0 w-8 h-8 p-1 mx-0.5 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
-                >
-                  <Star
-                    width={24}
-                    height={24}
-                    className="inline w-6 h-6 align-top"
+        {messages.length > 0 ? (
+          <ul className="list-none border-border border-t-2">
+            <li className="block border-border border-b-2 px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5">
+              <div className="flex flex-col md:flex-row">
+                <div className="shrink-0">
+                  <input
+                    type="checkbox"
+                    className="w-6 h-6 mx-1.5 my-1 inline-block align-middle"
+                    title={t("select")}
                   />
-                </a>
-              </div>
-              <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis md:self-center px-1">
-                John Smith
-              </p>
-              <p className="whitespace-nowrap grow md:self-center px-1 overflow-hidden text-ellipsis">
-                The example message
-              </p>
-              <p className="whitespace-nowrap px-1 md:self-center">
-                {t("datetime", {
-                  val: new Date(),
-                  formatParams: {
-                    val: {
-                      day: "numeric",
-                      year: "numeric",
-                      month: "numeric",
-                      hour: "numeric",
-                      minute: "numeric"
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                    title={t("star")}
+                    className="inline-block align-middle shrink-0 w-8 h-8 p-1 mx-0.5 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                  >
+                    <Star
+                      width={24}
+                      height={24}
+                      className="inline w-6 h-6 align-top"
+                    />
+                  </a>
+                </div>
+                <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis md:self-center px-1">
+                  John Smith
+                </p>
+                <p className="whitespace-nowrap grow md:self-center px-1 overflow-hidden text-ellipsis">
+                  The example message
+                </p>
+                <p className="whitespace-nowrap px-1 md:self-center">
+                  {t("datetime", {
+                    val: new Date(),
+                    formatParams: {
+                      val: {
+                        day: "numeric",
+                        year: "numeric",
+                        month: "numeric",
+                        hour: "numeric",
+                        minute: "numeric"
+                      }
                     }
-                  }
-                })}
-              </p>
-            </div>
-          </li>
-        </ul>
+                  })}
+                </p>
+              </div>
+            </li>
+          </ul>
+        ) : (
+          <p className="text-center">{t("nomessages")}</p>
+        )}
       </>
     );
   }

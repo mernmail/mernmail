@@ -30,5 +30,6 @@
     "cantloadmailbox": "Can't load a mailbox: {{error}}",
     "select": "Select",
     "star": "Star",
-    "datetime": "{{val, datetime}}"
+    "datetime": "{{val, datetime}}",
+    "nomessages": "No messages"
 }
