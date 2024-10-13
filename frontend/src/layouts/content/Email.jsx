@@ -1,11 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { RefreshCw, Reply, Search, Star } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setMessages, resetLoading } from "@/slices/messagesSlice.js";
 
 function EmailContent() {
   const { t } = useTranslation();
+  const [refresh, setRefresh] = useState(false);
   const mailboxId = useSelector((state) => state.mailboxes.currentMailbox);
   const messages = useSelector((state) => state.messages.messages);
   const loading = useSelector((state) => state.messages.loading);
@@ -56,6 +57,23 @@ function EmailContent() {
     }
   }, [mailboxesLoading, mailboxId, dispatch]);
 
+  useEffect(() => {
+    if (refresh) {
+      if (loading) {
+        const controller = AbortController ? new AbortController() : undefined;
+        const signal = controller ? controller.signal : undefined;
+
+        dispatch(setMessages(signal));
+
+        return () => {
+          if (controller) controller.abort();
+        };
+      } else {
+        setRefresh(false);
+      }
+    }
+  }, [refresh, loading, dispatch]);
+
   if (loading) {
     return <p className="text-center">{t("loading")}</p>;
   } else if (error) {
@@ -90,7 +108,8 @@ function EmailContent() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                dispatch(setMessages);
+                dispatch(resetLoading());
+                setRefresh(true);
               }}
               title={t("refresh")}
               className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"

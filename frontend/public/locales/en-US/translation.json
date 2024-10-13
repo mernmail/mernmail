@@ -32,5 +32,6 @@
     "star": "Star",
     "datetime": "{{val, datetime}}",
     "nomessages": "No messages",
-    "nospam": "There is no spam, woohoo!"
+    "nospam": "There is no spam, woohoo!",
+    "reload": "Reload"
 }

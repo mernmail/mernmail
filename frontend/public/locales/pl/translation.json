@@ -32,5 +32,6 @@
     "star": "Oznacz gwiazdą",
     "datetime": "{{val, datetime}}",
     "nomessages": "Brak wiadomości",
-    "nospam": "Hurra, nie ma spamu!"
+    "nospam": "Hurra, nie ma spamu!",
+    "reload": "Załaduj ponownie"
 }
