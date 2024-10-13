@@ -26,5 +26,6 @@
     "refresh": "Refresh",
     "selectall": "Select all",
     "1message": "message",
-    "nummessages": "messages"
+    "nummessages": "messages",
+    "cantloadmailbox": "Can't load a mailbox:"
 }

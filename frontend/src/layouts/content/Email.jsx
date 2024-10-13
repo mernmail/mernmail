@@ -9,6 +9,7 @@ function EmailContent() {
   const mailboxId = useSelector((state) => state.mailboxes.currentMailbox);
   const messages = useSelector((state) => state.messages.messages);
   const loading = useSelector((state) => state.messages.loading);
+  const error = useSelector((state) => state.messages.error);
   const mailboxesLoading = useSelector((state) => state.mailboxes.loading);
   const dispatch = useDispatch();
   const titleSelected = useSelector(
@@ -51,6 +52,12 @@ function EmailContent() {
 
   if (loading) {
     return <p className="text-center">{t("loading")}</p>;
+  } else if (error) {
+    return (
+      <p className="text-red-500 block text-center">
+        {t("cantloadmailbox")} {error}
+      </p>
+    );
   } else {
     return (
       <>

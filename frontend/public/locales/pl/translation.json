@@ -26,5 +26,6 @@
     "refresh": "Odśwież",
     "selectall": "Wybierz wszystko",
     "1message": "wiadomość",
-    "nummessages": "wiadomości"
+    "nummessages": "wiadomości",
+    "cantloadmailbox": "Nie można załadować skrzynki pocztowej:"
 }
