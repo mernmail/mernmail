@@ -5,6 +5,7 @@ router.get("/mailboxes", (req, res) => {
   req.receiveDriver.getMailboxes((err, mailboxes) => {
     if (err) {
       res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
       return;
     }
     res.json({ mailboxes: mailboxes });
@@ -17,11 +18,13 @@ router.get("/mailbox/:mailbox*", (req, res) => {
   req.receiveDriver.openMailbox(mailbox, (err) => {
     if (err) {
       res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
       return;
     }
     req.receiveDriver.getAllMessages((err, messages) => {
       if (err) {
         res.status(500).json({ message: err.message });
+        req.receiveDriver.close();
         return;
       }
       res.json({ messages: messages });
@@ -41,11 +44,13 @@ router.get("/message/:message*", (req, res, next) => {
   req.receiveDriver.openMailbox(mailbox, (err) => {
     if (err) {
       res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
       return;
     }
     req.receiveDriver.getMessage(messageId, (err, messages) => {
       if (err) {
         res.status(500).json({ message: err.message });
+        req.receiveDriver.close();
         return;
       }
       res.json({ messages: messages });
