@@ -22,7 +22,7 @@ export const mailboxesSlice = createSlice({
     initCurrentMailbox: (state) => {
       let mailboxName;
       try {
-        const mailboxMatch = decodeURI(window.location.hash).match(
+        const mailboxMatch = decodeURI(document.location.hash).match(
           /^#mailbox\/(.*)/
         );
         if (mailboxMatch) mailboxName = mailboxMatch[1];
@@ -37,13 +37,15 @@ export const mailboxesSlice = createSlice({
       if (inbox) initSelectedBox = inbox;
       if (initSelectedBox || mailboxName) {
         const newCurrentMailboxId = mailboxName || initSelectedBox.id;
-        window.location.hash = encodeURI(`#mailbox/${newCurrentMailboxId}`);
+        document.location.hash = encodeURI(`#mailbox/${newCurrentMailboxId}`);
       }
     },
     setCurrentMailboxFromURL: (state) => {
       let mailboxName = null;
       try {
-        const mailboxMatch = window.location.hash.match(/^#mailbox\/(.*)/);
+        const mailboxMatch = decodeURI(document.location.hash).match(
+          /^#mailbox\/(.*)/
+        );
         if (mailboxMatch) mailboxName = mailboxMatch[1];
         //eslint-disable-next-line no-unused-vars
       } catch (err) {
