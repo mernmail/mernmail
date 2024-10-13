@@ -38,26 +38,20 @@ export const mailboxesSlice = createSlice({
       if (initSelectedBox || mailboxName) {
         const newCurrentMailboxId = mailboxName || initSelectedBox.id;
         window.location.hash = encodeURI(`#mailbox/${newCurrentMailboxId}`);
-        if (state.currentMailbox != newCurrentMailboxId)
-          state.currentMailbox = newCurrentMailboxId;
-        let currentMailboxName = state.currentMailbox;
-        let currentMailboxType = "normal";
-        const currentMailboxObject = current(state.mailboxes).find(
-          (mailbox) => mailbox.id == state.currentMailbox
-        );
-        if (currentMailboxObject) {
-          currentMailboxName = currentMailboxObject.name;
-          currentMailboxType = currentMailboxObject.type;
-        }
-        state.currentMailboxName = currentMailboxName;
-        state.currentMailboxType = currentMailboxType;
       }
     },
-    setCurrentMailbox: (state, action) => {
-      if (action.payload !== undefined) {
-        window.location.hash = encodeURI(`#mailbox/${action.payload}`);
-        if (state.currentMailbox != action.payload)
-          state.currentMailbox = action.payload;
+    setCurrentMailboxFromURL: (state) => {
+      let mailboxName = null;
+      try {
+        const mailboxMatch = window.location.hash.match(/^#mailbox\/(.*)/);
+        if (mailboxMatch) mailboxName = mailboxMatch[1];
+        //eslint-disable-next-line no-unused-vars
+      } catch (err) {
+        // Hash URL parse error, use the first mailbox
+      }
+      if (mailboxName) {
+        if (state.currentMailbox != mailboxName)
+          state.currentMailbox = mailboxName;
         let currentMailboxName = state.currentMailbox;
         let currentMailboxType = "normal";
         const currentMailboxObject = current(state.mailboxes).find(
@@ -74,7 +68,8 @@ export const mailboxesSlice = createSlice({
   }
 });
 
-export const { initCurrentMailbox, setCurrentMailbox } = mailboxesSlice.actions;
+export const { initCurrentMailbox, setCurrentMailboxFromURL } =
+  mailboxesSlice.actions;
 
 export async function setMailboxes(dispatch, getState) {
   const state = {};

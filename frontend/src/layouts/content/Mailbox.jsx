@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RefreshCw, Reply, Search, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { setMessages, resetLoading } from "@/slices/messagesSlice.js";
-import { setView } from "@/slices/viewSlice.js";
 
 function EmailContent() {
   const { t } = useTranslation();
@@ -127,7 +126,7 @@ function EmailContent() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                dispatch(setView("search"));
+                document.location.hash = "#search";
               }}
               title={t("search")}
               className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"

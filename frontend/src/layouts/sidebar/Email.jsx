@@ -16,10 +16,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setMailboxes,
   initCurrentMailbox,
-  setCurrentMailbox
+  setCurrentMailboxFromURL
 } from "@/slices/mailboxesSlice.js";
 import { hideMenu } from "@/slices/menuSlice.js";
-import { setView } from "@/slices/viewSlice.js";
 
 function EmailSidebar() {
   const { t } = useTranslation();
@@ -41,8 +40,26 @@ function EmailSidebar() {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(initCurrentMailbox());
-  }, [loading, dispatch]);
+    if (view == "mailbox") {
+      const onBackButtonEvent = () => {
+        setTimeout(() => {
+          dispatch(setCurrentMailboxFromURL());
+        }, 0);
+      };
+
+      window.addEventListener("popstate", onBackButtonEvent);
+      return () => {
+        window.removeEventListener("popstate", onBackButtonEvent);
+      };
+    }
+  }, [view, dispatch]);
+
+  useEffect(() => {
+    if (view == "mailbox") {
+      dispatch(initCurrentMailbox());
+      dispatch(setCurrentMailboxFromURL());
+    }
+  }, [view, loading, dispatch]);
 
   if (loading) {
     return <p className="text-center">{t("loading")}</p>;
@@ -108,8 +125,7 @@ function EmailSidebar() {
                     e.preventDefault();
                     if (openable) {
                       dispatch(hideMenu());
-                      dispatch(setView("mailbox"));
-                      dispatch(setCurrentMailbox(id));
+                      document.location.hash = `#mailbox/${id}`;
                     }
                   }}
                   title={title}

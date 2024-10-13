@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import Sidebar from "@/components/Sidebar.jsx";
 import ActionButton from "@/components/ActionButton.jsx";
 import Content from "@/components/Content.jsx";
+import { setView } from "@/slices/viewSlice.js";
 
 function LoginLayout() {
   const email = useSelector((state) =>
@@ -29,6 +30,30 @@ function LoginLayout() {
   useEffect(() => {
     document.title = "MERNMail";
   }, [t]);
+
+  useEffect(() => {
+    const onBackButtonEvent = () => {
+      let view = "mailbox";
+      try {
+        const initialHash = document.location.hash;
+        const viewMatch = decodeURI(initialHash).match(/#([^/]+)/);
+        if (viewMatch) {
+          view = viewMatch[1];
+        }
+        // eslint-disable-next-line no-unused-vars
+      } catch (err) {
+        // Leave the view default
+      }
+      setTimeout(() => {
+        dispatch(setView(view));
+      }, 0);
+    };
+
+    window.addEventListener("popstate", onBackButtonEvent);
+    return () => {
+      window.removeEventListener("popstate", onBackButtonEvent);
+    };
+  }, [dispatch]);
 
   return (
     <div className="block w-full h-screen relative">
