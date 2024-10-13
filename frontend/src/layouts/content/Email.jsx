@@ -58,7 +58,7 @@ function EmailContent() {
           <h1 className="text-3xl md:text-4xl mb-1 md:mb-0 font-bold content-center whitespace-nowrap grow overflow-hidden text-ellipsis">
             {title}
           </h1>
-          <p className="md:text-xl text-foreground/50 content-center">
+          <p className="md:text-xl text-foreground/50 content-center whitespace-nowrap shrink-0">
             {messages.length}{" "}
             {t(messages.length == 1 ? "1message" : "nummessages")}
           </p>
