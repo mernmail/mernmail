@@ -168,11 +168,11 @@ function EmailContent() {
                             />
                           </a>
                         </div>
-                        <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis md:self-center px-1">
+                        <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis md:self-center px-1 md:max-w-96">
                           {address}
                         </p>
                         <p
-                          className={`whitespace-nowrap grow ${!seen ? "font-bold" : ""} md:self-center px-1 overflow-hidden text-ellipsis`}
+                          className={`whitespace-nowrap grow ${!seen ? "font-bold" : "opacity-70"} md:self-center px-1 overflow-hidden text-ellipsis`}
                         >
                           {answered ? (
                             <Reply
