@@ -67,6 +67,7 @@ module.exports = function init(email, password, callback) {
                               id: parseInt(listified[_id][0]),
                               subject: "Unknown email",
                               from: "Unknown",
+                              to: "Unknown",
                               messageId: null
                             };
                             emailParser(header)
@@ -87,6 +88,22 @@ module.exports = function init(email, password, callback) {
                                 });
                                 const from = fromArray2.join(", ");
                                 finalAttributes.from = from;
+                                const toArray =
+                                  parsed.to && parsed.to.value
+                                    ? parsed.to.value || []
+                                    : [];
+                                const toArray2 = [];
+                                toArray.forEach((toObject) => {
+                                  toArray2.push(
+                                    toObject
+                                      ? toObject.name
+                                        ? toObject.name
+                                        : toObject.address
+                                      : "Unknown"
+                                  );
+                                });
+                                const to = toArray2.join(", ");
+                                finalAttributes.to = to;
                                 finalAttributes.subject = parsed.subject;
                                 finalAttributes.messageId = parsed.messageId;
                                 if (parsed.inReplyTo)

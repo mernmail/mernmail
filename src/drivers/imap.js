@@ -109,7 +109,7 @@ module.exports = function init(email, password, callback) {
             return;
           }
           const imapFetch = imap.fetch(messages, {
-            bodies: "HEADER.FIELDS (FROM SUBJECT MESSAGE-ID IN-REPLY-TO)"
+            bodies: "HEADER.FIELDS (FROM TO SUBJECT MESSAGE-ID IN-REPLY-TO)"
           });
           imapFetch.on("message", (msg, id) => {
             let attributesSet = false;
@@ -122,6 +122,7 @@ module.exports = function init(email, password, callback) {
               id: id,
               subject: "Unknown email",
               from: "Unknown",
+              to: "Unknown",
               messageId: null
             };
             const replyIds = [];
@@ -129,7 +130,6 @@ module.exports = function init(email, password, callback) {
             msg.on("body", (bodyStream) => {
               emailParser(bodyStream)
                 .then((parsed) => {
-                  console.log(parsed);
                   const fromArray =
                     parsed.from && parsed.from.value
                       ? parsed.from.value || []
@@ -146,6 +146,20 @@ module.exports = function init(email, password, callback) {
                   });
                   const from = fromArray2.join(", ");
                   finalAttributes.from = from;
+                  const toArray =
+                    parsed.to && parsed.to.value ? parsed.to.value || [] : [];
+                  const toArray2 = [];
+                  toArray.forEach((toObject) => {
+                    toArray2.push(
+                      toObject
+                        ? toObject.name
+                          ? toObject.name
+                          : toObject.address
+                        : "Unknown"
+                    );
+                  });
+                  const to = toArray2.join(", ");
+                  finalAttributes.to = to;
                   finalAttributes.subject = parsed.subject;
                   finalAttributes.messageId = parsed.messageId;
                   if (parsed.inReplyTo) replyIds.push(parsed.inReplyTo);

@@ -126,7 +126,7 @@ function EmailContent() {
               .reverse()
               .map((message) => {
                 const subject = message.subject;
-                const from = message.from;
+                const address = type == "sent" ? message.to : message.from;
                 const date = new Date(message.date);
                 const id = message.id;
                 const starred = message.starred;
@@ -169,7 +169,7 @@ function EmailContent() {
                           </a>
                         </div>
                         <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis md:self-center px-1">
-                          {from}
+                          {address}
                         </p>
                         <p
                           className={`whitespace-nowrap grow ${!seen ? "font-bold" : ""} md:self-center px-1 overflow-hidden text-ellipsis`}
