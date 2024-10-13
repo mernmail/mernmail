@@ -49,6 +49,7 @@ module.exports = function init(email, password, callback) {
                       const listInfo = listArray[0];
                       const listified = Pop3Command.listify(listInfo);
                       const finalMessages = [];
+                      const replyIds = [];
                       const getMessageContents = (callback2, _id) => {
                         if (!_id) _id = 0;
                         if (_id >= listified.length) {
@@ -61,10 +62,12 @@ module.exports = function init(email, password, callback) {
                             const finalAttributes = {
                               seen: false,
                               starred: false,
+                              answered: false,
                               date: new Date(),
                               id: parseInt(listified[_id][0]),
                               subject: "Unknown email",
-                              from: "Unknown"
+                              from: "Unknown",
+                              messageId: null
                             };
                             emailParser(header)
                               .then((parsed) => {
@@ -85,6 +88,9 @@ module.exports = function init(email, password, callback) {
                                 const from = fromArray2.join(", ");
                                 finalAttributes.from = from;
                                 finalAttributes.subject = parsed.subject;
+                                finalAttributes.messageId = parsed.messageId;
+                                if (parsed.inReplyTo)
+                                  replyIds.push(parsed.inReplyTo);
                                 finalMessages.push(finalAttributes);
                                 getMessageContents(callback2, _id + 1);
                               })
@@ -97,7 +103,15 @@ module.exports = function init(email, password, callback) {
                           });
                       };
                       getMessageContents(() => {
-                        callback(null, finalMessages);
+                        const realFinalMessages = finalMessages
+                          .filter((msg) => {
+                            return replyIds.indexOf(msg.messageId) == -1;
+                          })
+                          .map((msg) => {
+                            msg.messageId = undefined;
+                            return msg;
+                          });
+                        callback(null, realFinalMessages);
                       });
                     })
                     .catch((err) => {

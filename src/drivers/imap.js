@@ -109,7 +109,7 @@ module.exports = function init(email, password, callback) {
             return;
           }
           const imapFetch = imap.fetch(messages, {
-            bodies: "HEADER.FIELDS (FROM SUBJECT)"
+            bodies: "HEADER.FIELDS (FROM SUBJECT MESSAGE-ID IN-REPLY-TO)"
           });
           imapFetch.on("message", (msg, id) => {
             let attributesSet = false;
@@ -117,15 +117,19 @@ module.exports = function init(email, password, callback) {
             const finalAttributes = {
               seen: false,
               starred: false,
+              answered: false,
               date: new Date(),
               id: id,
               subject: "Unknown email",
-              from: "Unknown"
+              from: "Unknown",
+              messageId: null
             };
+            const replyIds = [];
 
             msg.on("body", (bodyStream) => {
               emailParser(bodyStream)
                 .then((parsed) => {
+                  console.log(parsed);
                   const fromArray =
                     parsed.from && parsed.from.value
                       ? parsed.from.value || []
@@ -143,13 +147,23 @@ module.exports = function init(email, password, callback) {
                   const from = fromArray2.join(", ");
                   finalAttributes.from = from;
                   finalAttributes.subject = parsed.subject;
+                  finalAttributes.messageId = parsed.messageId;
+                  if (parsed.inReplyTo) replyIds.push(parsed.inReplyTo);
                   if (attributesSet) {
                     finalMessages.push(finalAttributes);
                     if (finalMessages.length == messages.length) {
                       finalMessages.sort((a, b) => {
                         return messages.indexOf(a.id) - messages.indexOf(b.id);
                       });
-                      callback(null, finalMessages);
+                      const realFinalMessages = finalMessages
+                        .filter((msg) => {
+                          return replyIds.indexOf(msg.messageId) == -1;
+                        })
+                        .map((msg) => {
+                          msg.messageId = undefined;
+                          return msg;
+                        });
+                      callback(null, realFinalMessages);
                     }
                   }
                   bodyParsed = true;
@@ -164,6 +178,8 @@ module.exports = function init(email, password, callback) {
                   finalAttributes.seen = true;
                 } else if (flag == "\\Flagged") {
                   finalAttributes.starred = true;
+                } else if (flag == "\\Answered") {
+                  finalAttributes.answered = true;
                 }
               });
               finalAttributes.date = attributes.date;
@@ -173,7 +189,15 @@ module.exports = function init(email, password, callback) {
                   finalMessages.sort((a, b) => {
                     return messages.indexOf(a.id) - messages.indexOf(b.id);
                   });
-                  callback(null, finalMessages);
+                  const realFinalMessages = finalMessages
+                    .filter((msg) => {
+                      return replyIds.indexOf(msg.messageId) == -1;
+                    })
+                    .map((msg) => {
+                      msg.messageId = undefined;
+                      return msg;
+                    });
+                  callback(null, realFinalMessages);
                 }
               }
               attributesSet = true;

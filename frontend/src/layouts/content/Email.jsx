@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { RefreshCw, Search, Star } from "lucide-react";
+import { RefreshCw, Reply, Search, Star } from "lucide-react";
 import { useEffect } from "react";
 import { setMessages, resetLoading } from "@/slices/messagesSlice.js";
 
@@ -121,78 +121,91 @@ function EmailContent() {
         </ul>
         {messages.length > 0 ? (
           <ul className="list-none border-border border-t-2">
-            {messages.map((message) => {
-              const subject = message.subject;
-              const from = message.from;
-              const date = new Date(message.date);
-              const id = message.id;
-              const starred = message.starred;
-              const seen = message.seen;
-              return (
-                <li className="block border-border border-b-2" key={id}>
-                  <div
-                    onClick={() => {
-                      // TODO: open a message
-                      alert(`Message ${id} to open`);
-                    }}
-                    className="block bg-background px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5 text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors cursor-pointer"
-                  >
-                    <div className="flex flex-col md:flex-row">
-                      <div className="shrink-0">
-                        <input
-                          type="checkbox"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                          className="w-6 h-6 mx-1.5 my-1 inline-block align-middle"
-                          title={t("select")}
-                        />
-                        <a
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                          }}
-                          title={t("star")}
-                          className="inline-block align-middle shrink-0 w-8 h-8 p-1 mx-0.5 rounded-sm bg-inherit text-inherit hover:bg-accent/60 hover:text-accent-foreground transition-colors"
-                        >
-                          <Star
-                            width={24}
-                            height={24}
-                            fill={starred ? "#ffff00" : "none"}
-                            className="inline w-6 h-6 align-top"
+            {messages
+              .slice()
+              .reverse()
+              .map((message) => {
+                const subject = message.subject;
+                const from = message.from;
+                const date = new Date(message.date);
+                const id = message.id;
+                const starred = message.starred;
+                const seen = message.seen;
+                const answered = message.answered;
+                return (
+                  <li className="block border-border border-b-2" key={id}>
+                    <div
+                      onClick={() => {
+                        // TODO: open a message
+                        alert(`Message ${id} to open`);
+                      }}
+                      className="block bg-background px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5 text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors cursor-pointer"
+                    >
+                      <div className="flex flex-col md:flex-row">
+                        <div className="shrink-0">
+                          <input
+                            type="checkbox"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
+                            className="w-6 h-6 mx-1.5 my-1 inline-block align-middle"
+                            title={t("select")}
                           />
-                        </a>
-                      </div>
-                      <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis md:self-center px-1">
-                        {from}
-                      </p>
-                      <p
-                        className={`whitespace-nowrap grow ${!seen ? "font-bold" : ""} md:self-center px-1 overflow-hidden text-ellipsis`}
-                      >
-                        {subject}
-                      </p>
-                      <p
-                        className={`whitespace-nowrap px-1 ${!seen ? "font-bold" : ""} md:self-center`}
-                      >
-                        {t("datetime", {
-                          val: date,
-                          formatParams: {
-                            val: {
-                              day: "numeric",
-                              year: "numeric",
-                              month: "numeric",
-                              hour: "numeric",
-                              minute: "numeric"
+                          <a
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }}
+                            title={t("star")}
+                            className="inline-block align-middle shrink-0 w-8 h-8 p-1 mx-0.5 rounded-sm bg-inherit text-inherit hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                          >
+                            <Star
+                              width={24}
+                              height={24}
+                              fill={starred ? "#ffff00" : "none"}
+                              className="inline w-6 h-6 align-top"
+                            />
+                          </a>
+                        </div>
+                        <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis md:self-center px-1">
+                          {from}
+                        </p>
+                        <p
+                          className={`whitespace-nowrap grow ${!seen ? "font-bold" : ""} md:self-center px-1 overflow-hidden text-ellipsis`}
+                        >
+                          {answered ? (
+                            <Reply
+                              width={24}
+                              height={24}
+                              className="inline w-6 h-6 mr-2 rtl:mr-0 rtl:ml-2 align-top"
+                            />
+                          ) : (
+                            ""
+                          )}
+                          {subject}
+                        </p>
+                        <p
+                          className={`whitespace-nowrap px-1 ${!seen ? "font-bold" : ""} md:self-center`}
+                        >
+                          {t("datetime", {
+                            val: date,
+                            formatParams: {
+                              val: {
+                                day: "numeric",
+                                year: "numeric",
+                                month: "numeric",
+                                hour: "numeric",
+                                minute: "numeric"
+                              }
                             }
-                          }
-                        })}
-                      </p>
+                          })}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              );
-            })}
+                  </li>
+                );
+              })}
           </ul>
         ) : (
           <p className="text-center">{t("nomessages")}</p>
