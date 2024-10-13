@@ -104,6 +104,10 @@ module.exports = function init(email, password, callback) {
             return;
           }
           const finalMessages = [];
+          if (messages.length == 0) {
+            callback(null, []);
+            return;
+          }
           const imapFetch = imap.fetch(messages, {
             bodies: "HEADER.FIELDS (FROM SUBJECT)"
           });
