@@ -74,6 +74,10 @@ function EmailContent() {
     }
   }, [refresh, loading, dispatch]);
 
+  useEffect(() => {
+    document.title = title + " - MERNMail";
+  }, [title]);
+
   if (loading) {
     return <p className="text-center">{t("loading")}</p>;
   } else if (error) {
