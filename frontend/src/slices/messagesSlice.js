@@ -24,10 +24,9 @@ export const messagesSlice = createSlice({
   }
 });
 
-//export const { initCurrentMailbox, setCurrentMailbox } = messagesSlice.actions;
+export const { resetLoading } = messagesSlice.actions;
 
 export async function setMessages(dispatch, getState) {
-  dispatch(messagesSlice.actions.resetLoading());
   const state = {};
   let credentials = getState().auth.auth;
   if (credentials === null) {

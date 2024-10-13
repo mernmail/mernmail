@@ -2,12 +2,12 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { RefreshCw, Search } from "lucide-react";
 import { useEffect } from "react";
-import { setMessages } from "@/slices/messagesSlice.js";
+import { setMessages, resetLoading } from "@/slices/messagesSlice.js";
 
 function EmailContent() {
   const { t } = useTranslation();
   const mailboxId = useSelector((state) => state.mailboxes.currentMailbox);
-  //const messages = useSelector((state) => state.messages.messages);
+  const messages = useSelector((state) => state.messages.messages);
   const loading = useSelector((state) => state.messages.loading);
   const mailboxesLoading = useSelector((state) => state.mailboxes.loading);
   const dispatch = useDispatch();
@@ -38,7 +38,14 @@ function EmailContent() {
 
   useEffect(() => {
     if (!mailboxesLoading) {
+      dispatch(resetLoading());
       dispatch(setMessages);
+
+      const interval = setInterval(() => {
+        dispatch(setMessages);
+      }, 10000);
+
+      return () => clearInterval(interval);
     }
   }, [mailboxesLoading, mailboxId]);
 
@@ -52,7 +59,8 @@ function EmailContent() {
             {title}
           </h1>
           <p className="md:text-xl text-foreground/50 content-center">
-            X messages
+            {messages.length}{" "}
+            {t(messages.length == 1 ? "1message" : "nummessages")}
           </p>
         </div>
         <ul className="mx-0.5 list-none">

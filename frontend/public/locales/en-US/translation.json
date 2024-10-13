@@ -24,5 +24,7 @@
     "trash": "Trash",
     "loading": "Loading...",
     "refresh": "Refresh",
-    "selectall": "Select all"
+    "selectall": "Select all",
+    "1message": "message",
+    "nummessages": "messages"
 }
