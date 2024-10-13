@@ -18,6 +18,7 @@ import {
   initCurrentMailbox,
   setCurrentMailbox
 } from "@/slices/mailboxesSlice.js";
+import { hideMenu } from "@/slices/menuSlice.js";
 
 function EmailSidebar() {
   const { t } = useTranslation();
@@ -103,7 +104,10 @@ function EmailSidebar() {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    if (openable) dispatch(setCurrentMailbox(id));
+                    if (openable) {
+                      dispatch(hideMenu());
+                      dispatch(setCurrentMailbox(id));
+                    }
                   }}
                   title={title}
                   className={`${currentMailbox == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block my-1 ${level == 0 ? "ml-" + level * 4 + " rtl:ml-0 rtl:mr-" + level * 4 : ""} px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}

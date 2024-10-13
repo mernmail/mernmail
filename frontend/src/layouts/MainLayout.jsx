@@ -10,8 +10,9 @@ import {
   X
 } from "lucide-react";
 import { logout } from "@/slices/authSlice.js";
+import { showMenu, hideMenu } from "@/slices/menuSlice.js";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import EmailSidebar from "@/layouts/sidebar/Email.jsx";
 import EmailActionButton from "@/layouts/action/Email.jsx";
@@ -21,8 +22,8 @@ function LoginLayout() {
   const email = useSelector((state) =>
     state.auth.auth ? state.auth.auth.email : "Unknown"
   );
+  const menuShown = useSelector((state) => state.menu.shown);
   const dispatch = useDispatch();
-  const [menuShown, setMenuShown] = useState(false);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -117,7 +118,7 @@ function LoginLayout() {
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              setMenuShown(!menuShown);
+              dispatch(showMenu());
             }}
             className="inline-block md:hidden text-inherit w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
           >
@@ -135,7 +136,7 @@ function LoginLayout() {
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              setMenuShown(!menuShown);
+              dispatch(hideMenu());
             }}
             className="inline-block md:hidden float-right"
           >
