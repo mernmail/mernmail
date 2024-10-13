@@ -114,8 +114,8 @@ function EmailContent() {
           </li>
         </ul>
         <ul className="list-none border-border border-t-2">
-          <li className="block border-border border-b-2 pl-0.5 pr-2 rtl:pl-2 rtl:pr-0.5">
-            <div className="flex flex-row">
+          <li className="block border-border border-b-2 px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5">
+            <div className="flex flex-col md:flex-row">
               <div className="shrink-0">
                 <input
                   type="checkbox"
@@ -137,13 +137,13 @@ function EmailContent() {
                   />
                 </a>
               </div>
-              <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis self-center px-1">
+              <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis md:self-center px-1">
                 John Smith
               </p>
-              <p className="whitespace-nowrap grow self-center px-1 overflow-hidden text-ellipsis">
+              <p className="whitespace-nowrap grow md:self-center px-1 overflow-hidden text-ellipsis">
                 The example message
               </p>
-              <p className="whitespace-nowrap self-center">
+              <p className="whitespace-nowrap px-1 md:self-center">
                 {t("datetime", {
                   val: new Date(),
                   formatParams: {
