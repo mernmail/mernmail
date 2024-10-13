@@ -1,10 +1,16 @@
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RefreshCw, Search } from "lucide-react";
+import { useEffect } from "react";
+import { setMessages } from "@/slices/messagesSlice.js";
 
 function EmailContent() {
   const { t } = useTranslation();
   const mailboxId = useSelector((state) => state.mailboxes.currentMailbox);
+  //const messages = useSelector((state) => state.messages.messages);
+  const loading = useSelector((state) => state.messages.loading);
+  const mailboxesLoading = useSelector((state) => state.mailboxes.loading);
+  const dispatch = useDispatch();
   const titleSelected = useSelector(
     (state) => state.mailboxes.currentMailboxName
   );
@@ -29,7 +35,14 @@ function EmailContent() {
   } else {
     title = titleSelected;
   }
-  if (mailboxId === null) {
+
+  useEffect(() => {
+    if (!mailboxesLoading) {
+      dispatch(setMessages);
+    }
+  }, [mailboxesLoading, mailboxId]);
+
+  if (loading) {
     return <p className="text-center">{t("loading")}</p>;
   } else {
     return (
