@@ -169,6 +169,9 @@ module.exports = function init(email, password, callback) {
                       finalMessages.sort((a, b) => {
                         return messages.indexOf(a.id) - messages.indexOf(b.id);
                       });
+                      finalMessages.sort((a, b) => {
+                        return a.date - b.date;
+                      });
                       const realFinalMessages = finalMessages
                         .filter((msg) => {
                           return replyIds.indexOf(msg.messageId) == -1;
@@ -202,6 +205,9 @@ module.exports = function init(email, password, callback) {
                 if (finalMessages.length == messages.length) {
                   finalMessages.sort((a, b) => {
                     return messages.indexOf(a.id) - messages.indexOf(b.id);
+                  });
+                  finalMessages.sort((a, b) => {
+                    return a.date - b.date;
                   });
                   const realFinalMessages = finalMessages
                     .filter((msg) => {

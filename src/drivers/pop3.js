@@ -120,6 +120,9 @@ module.exports = function init(email, password, callback) {
                           });
                       };
                       getMessageContents(() => {
+                        finalMessages.sort((a, b) => {
+                          return a.date - b.date;
+                        });
                         const realFinalMessages = finalMessages
                           .filter((msg) => {
                             return replyIds.indexOf(msg.messageId) == -1;
