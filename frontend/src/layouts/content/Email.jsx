@@ -84,6 +84,7 @@ function EmailContent() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
+                dispatch(setMessages);
               }}
               title={t("refresh")}
               className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
