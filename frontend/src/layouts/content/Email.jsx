@@ -121,51 +121,78 @@ function EmailContent() {
         </ul>
         {messages.length > 0 ? (
           <ul className="list-none border-border border-t-2">
-            <li className="block border-border border-b-2 px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5">
-              <div className="flex flex-col md:flex-row">
-                <div className="shrink-0">
-                  <input
-                    type="checkbox"
-                    className="w-6 h-6 mx-1.5 my-1 inline-block align-middle"
-                    title={t("select")}
-                  />
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
+            {messages.map((message) => {
+              const subject = message.subject;
+              const from = message.from;
+              const date = new Date(message.date);
+              const id = message.id;
+              const starred = message.starred;
+              const seen = message.seen;
+              return (
+                <li className="block border-border border-b-2" key={id}>
+                  <div
+                    onClick={() => {
+                      // TODO: open a message
+                      alert(`Message ${id} to open`);
                     }}
-                    title={t("star")}
-                    className="inline-block align-middle shrink-0 w-8 h-8 p-1 mx-0.5 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                    className="block bg-background px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5 text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors cursor-pointer"
                   >
-                    <Star
-                      width={24}
-                      height={24}
-                      className="inline w-6 h-6 align-top"
-                    />
-                  </a>
-                </div>
-                <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis md:self-center px-1">
-                  John Smith
-                </p>
-                <p className="whitespace-nowrap grow md:self-center px-1 overflow-hidden text-ellipsis">
-                  The example message
-                </p>
-                <p className="whitespace-nowrap px-1 md:self-center">
-                  {t("datetime", {
-                    val: new Date(),
-                    formatParams: {
-                      val: {
-                        day: "numeric",
-                        year: "numeric",
-                        month: "numeric",
-                        hour: "numeric",
-                        minute: "numeric"
-                      }
-                    }
-                  })}
-                </p>
-              </div>
-            </li>
+                    <div className="flex flex-col md:flex-row">
+                      <div className="shrink-0">
+                        <input
+                          type="checkbox"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                          className="w-6 h-6 mx-1.5 my-1 inline-block align-middle"
+                          title={t("select")}
+                        />
+                        <a
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                          title={t("star")}
+                          className="inline-block align-middle shrink-0 w-8 h-8 p-1 mx-0.5 rounded-sm bg-inherit text-inherit hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                        >
+                          <Star
+                            width={24}
+                            height={24}
+                            fill={starred ? "#ffff00" : "none"}
+                            className="inline w-6 h-6 align-top"
+                          />
+                        </a>
+                      </div>
+                      <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis md:self-center px-1">
+                        {from}
+                      </p>
+                      <p
+                        className={`whitespace-nowrap grow ${!seen ? "font-bold" : ""} md:self-center px-1 overflow-hidden text-ellipsis`}
+                      >
+                        {subject}
+                      </p>
+                      <p
+                        className={`whitespace-nowrap px-1 ${!seen ? "font-bold" : ""} md:self-center`}
+                      >
+                        {t("datetime", {
+                          val: date,
+                          formatParams: {
+                            val: {
+                              day: "numeric",
+                              year: "numeric",
+                              month: "numeric",
+                              hour: "numeric",
+                              minute: "numeric"
+                            }
+                          }
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <p className="text-center">{t("nomessages")}</p>
