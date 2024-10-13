@@ -31,5 +31,6 @@
     "select": "Select",
     "star": "Star",
     "datetime": "{{val, datetime}}",
-    "nomessages": "No messages"
+    "nomessages": "No messages",
+    "nospam": "There is no spam, woohoo!"
 }

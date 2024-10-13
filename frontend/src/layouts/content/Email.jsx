@@ -208,7 +208,9 @@ function EmailContent() {
               })}
           </ul>
         ) : (
-          <p className="text-center">{t("nomessages")}</p>
+          <p className="text-center">
+            {t(type == "spam" ? "nospam" : "nomessages")}
+          </p>
         )}
       </>
     );

@@ -31,5 +31,6 @@
     "select": "Wybierz",
     "star": "Oznacz gwiazdą",
     "datetime": "{{val, datetime}}",
-    "nomessages": "Brak wiadomości"
+    "nomessages": "Brak wiadomości",
+    "nospam": "Hurra, nie ma spamu!"
 }
