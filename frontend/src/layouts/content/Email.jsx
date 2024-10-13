@@ -39,14 +39,20 @@ function EmailContent() {
 
   useEffect(() => {
     if (!mailboxesLoading) {
+      const controller = AbortController ? new AbortController() : undefined;
+      const signal = controller ? controller.signal : undefined;
+
       dispatch(resetLoading());
-      dispatch(setMessages);
+      dispatch(setMessages(signal));
 
       const interval = setInterval(() => {
-        dispatch(setMessages);
+        dispatch(setMessages(signal));
       }, 10000);
 
-      return () => clearInterval(interval);
+      return () => {
+        if (controller) controller.abort();
+        clearInterval(interval);
+      };
     }
   }, [mailboxesLoading, mailboxId, dispatch]);
 

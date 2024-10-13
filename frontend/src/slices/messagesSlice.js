@@ -26,46 +26,53 @@ export const messagesSlice = createSlice({
 
 export const { resetLoading } = messagesSlice.actions;
 
-export async function setMessages(dispatch, getState) {
-  const state = {};
-  let credentials = getState().auth.auth;
-  if (credentials === null) {
-    return;
-  }
-  let currentMailbox = getState().mailboxes.currentMailbox;
-  if (currentMailbox === null) {
-    return;
-  }
-  currentMailbox = currentMailbox
-    .replace(/(?:^|[/\\])\.\.(?=[/\\])/g, "")
-    .replace(/^[/\\]+/g, "")
-    .replace(/[/\\]+$/g, ""); // Sanitize the current mailbox ID
-  try {
-    const res = await fetch(`/api/receive/mailbox/${currentMailbox}`, {
-      method: "GET",
-      headers: {
-        Authorization:
-          credentials.email && credentials.password
-            ? "BasicMERNMail " +
-              btoa(
-                credentials.email.replace(/:/g, "") + ":" + credentials.password
-              )
-            : undefined
-      }
-    });
-    const data = await res.json();
-    if (res.status == 200) {
-      state.messages = data.messages;
-    } else {
-      if (res.status == 401) {
-        dispatch(verificationFailed());
-      }
-      state.error = data.message;
+export function setMessages(signal) {
+  return async (dispatch, getState) => {
+    const state = {};
+    let credentials = getState().auth.auth;
+    if (credentials === null) {
+      return;
     }
-  } catch (err) {
-    state.errored = err.message;
-  }
-  dispatch(messagesSlice.actions.setMessages(state));
+    let currentMailbox = getState().mailboxes.currentMailbox;
+    if (currentMailbox === null) {
+      return;
+    }
+    currentMailbox = currentMailbox
+      .replace(/(?:^|[/\\])\.\.(?=[/\\])/g, "")
+      .replace(/^[/\\]+/g, "")
+      .replace(/[/\\]+$/g, ""); // Sanitize the current mailbox ID
+    let aborted = false;
+    try {
+      const res = await fetch(`/api/receive/mailbox/${currentMailbox}`, {
+        method: "GET",
+        headers: {
+          Authorization:
+            credentials.email && credentials.password
+              ? "BasicMERNMail " +
+                btoa(
+                  credentials.email.replace(/:/g, "") +
+                    ":" +
+                    credentials.password
+                )
+              : undefined
+        },
+        signal: signal
+      });
+      const data = await res.json();
+      if (res.status == 200) {
+        state.messages = data.messages;
+      } else {
+        if (res.status == 401) {
+          dispatch(verificationFailed());
+        }
+        state.error = data.message;
+      }
+    } catch (err) {
+      if (err.name == "AbortError") aborted = true;
+      state.errored = err.message;
+    }
+    if (!aborted) dispatch(messagesSlice.actions.setMessages(state));
+  };
 }
 
 export default messagesSlice.reducer;
