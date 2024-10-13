@@ -19,9 +19,11 @@ import {
   setCurrentMailbox
 } from "@/slices/mailboxesSlice.js";
 import { hideMenu } from "@/slices/menuSlice.js";
+import { setView } from "@/slices/viewSlice.js";
 
 function EmailSidebar() {
   const { t } = useTranslation();
+  const view = useSelector((state) => state.view.view);
   const loading = useSelector((state) => state.mailboxes.loading);
   const error = useSelector((state) => state.mailboxes.error);
   const mailboxes = useSelector((state) => state.mailboxes.mailboxes);
@@ -106,11 +108,12 @@ function EmailSidebar() {
                     e.preventDefault();
                     if (openable) {
                       dispatch(hideMenu());
+                      dispatch(setView("mailbox"));
                       dispatch(setCurrentMailbox(id));
                     }
                   }}
                   title={title}
-                  className={`${currentMailbox == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block my-1 ${level == 0 ? "ml-" + level * 4 + " rtl:ml-0 rtl:mr-" + level * 4 : ""} px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}
+                  className={`${view == "mailbox" && currentMailbox == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block my-1 ${level == 0 ? "ml-" + level * 4 + " rtl:ml-0 rtl:mr-" + level * 4 : ""} px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}
                 >
                   <div className="flex flex-row w-auto">
                     <DisplayedIcon
