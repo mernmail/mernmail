@@ -40,7 +40,10 @@ function EmailContent() {
 
   useEffect(() => {
     if (!mailboxesLoading) {
-      const controller = AbortController ? new AbortController() : undefined;
+      const controller =
+        typeof window.AbortController != "undefined"
+          ? new AbortController()
+          : undefined;
       const signal = controller ? controller.signal : undefined;
 
       dispatch(resetLoading());
@@ -60,7 +63,10 @@ function EmailContent() {
   useEffect(() => {
     if (refresh) {
       if (loading) {
-        const controller = AbortController ? new AbortController() : undefined;
+        const controller =
+          typeof window.AbortController != "undefined"
+            ? new AbortController()
+            : undefined;
         const signal = controller ? controller.signal : undefined;
 
         dispatch(setMessages(signal));

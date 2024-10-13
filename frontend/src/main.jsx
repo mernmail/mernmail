@@ -1,3 +1,4 @@
+import "abortcontroller-polyfill/dist/polyfill-patch-fetch";
 import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";

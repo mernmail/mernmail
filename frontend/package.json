@@ -13,6 +13,7 @@
   "dependencies": {
     "@fontsource/inter": "^5.1.0",
     "@reduxjs/toolkit": "^2.2.8",
+    "abortcontroller-polyfill": "^1.7.5",
     "i18next": "^23.15.2",
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-http-backend": "^2.6.2",
@@ -30,6 +31,7 @@
     "@eslint/js": "^9.11.1",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-legacy": "^5.4.2",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.11.1",
@@ -44,5 +46,10 @@
     "tailwindcss": "^3.4.13",
     "vite": "^5.4.8"
   },
+  "browserslist": [
+    "chrome 55",
+    "firefox 52",
+    "safari 11"
+  ],
   "proxy": "http://localhost:3000/"
 }

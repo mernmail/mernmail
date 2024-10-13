@@ -1,9 +1,15 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import { defineConfig } from 'vite';
 
+import react from '@vitejs/plugin-react-swc';
+import legacy from '@vitejs/plugin-legacy';
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    legacy({
+      targets: ['firefox >= 52', 'chrome >= 55', 'safari >= 11'],
+    })
+  ],
   resolve: {
     alias: {
       "@": "/src"
@@ -17,4 +23,4 @@ export default defineConfig({
       }
     }
   }
-})
+});
