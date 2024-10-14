@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RefreshCw, Reply, Search, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { setMessages, resetLoading } from "@/slices/messagesSlice.js";
+import { setMailboxes } from "@/slices/mailboxesSlice";
 
 function EmailContent() {
   const { t } = useTranslation();
@@ -118,6 +119,7 @@ function EmailContent() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
+                dispatch(setMailboxes);
                 dispatch(resetLoading());
                 setRefresh(true);
               }}

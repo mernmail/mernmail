@@ -74,7 +74,7 @@ export const { initCurrentMailbox, setCurrentMailboxFromURL } =
   mailboxesSlice.actions;
 
 export async function setMailboxes(dispatch, getState) {
-  const state = {};
+  const state = { error: null };
   let email = getState().auth.email;
   if (email === null) {
     return;

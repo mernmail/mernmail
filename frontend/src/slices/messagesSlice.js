@@ -28,7 +28,7 @@ export const { resetLoading } = messagesSlice.actions;
 
 export function setMessages(signal) {
   return async (dispatch, getState) => {
-    const state = {};
+    const state = { error: null };
     let email = getState().auth.email;
     if (email === null) {
       return;

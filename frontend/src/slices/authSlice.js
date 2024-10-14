@@ -32,7 +32,7 @@ export const { verificationFailed } = authSlice.actions;
 
 export function login(email, password) {
   return async (dispatch) => {
-    const state = {};
+    const state = { error: null };
     try {
       const res = await fetch("/api/login", {
         method: "POST",
@@ -48,7 +48,6 @@ export function login(email, password) {
       const data = await res.json();
       if (res.status == 200) {
         state.email = email;
-        state.error = null;
       } else {
         state.error = data.message;
       }
@@ -60,7 +59,7 @@ export function login(email, password) {
 }
 
 export async function checkAuth(dispatch) {
-  const state = {};
+  const state = { error: null };
   try {
     const res = await fetch("/api/check", {
       method: "GET",
