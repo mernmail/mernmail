@@ -146,9 +146,8 @@ module.exports = function init(email, password, callback) {
                   }
                   const messages = [];
                   pop3
-                    .command("RETR", messageId)
-                    .then((retrObject) => {
-                      const retrStream = retrObject[2];
+                    .RETR(messageId)
+                    .then((retrStream) => {
                       const finalAttributes = {
                         seen: false,
                         starred: false,
