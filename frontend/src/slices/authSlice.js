@@ -5,111 +5,49 @@ export const authSlice = createSlice({
   initialState: {
     loading: true,
     error: null,
-    auth: null
+    email: null
   },
   reducers: {
-    load: (state, action) => {
-      if (state.loading) state.loading = false;
-      if (action.payload && action.payload.error !== undefined)
-        state.error = action.payload.error;
-      if (action.payload && action.payload.auth !== undefined) {
-        state.auth = action.payload.auth;
-        if (!localStorage.getItem("credentials"))
-          localStorage.setItem(
-            "credentials",
-            btoa(JSON.stringify(action.payload.auth))
-          );
-      }
-    },
     login: (state, action) => {
       if (state.loading) state.loading = false;
       if (action.payload && action.payload.error !== undefined)
         state.error = action.payload.error;
-      if (action.payload && action.payload.auth !== undefined) {
-        state.auth = action.payload.auth;
-        localStorage.setItem(
-          "credentials",
-          btoa(JSON.stringify(action.payload.auth))
-        );
+      if (action.payload && action.payload.email !== undefined) {
+        state.email = action.payload.email;
       }
     },
     logout: (state) => {
       if (state.loading) state.loading = false;
-      localStorage.removeItem("credentials");
-      state.auth = null;
+      state.email = null;
     },
     verificationFailed: (state) => {
       if (state.loading) state.loading = false;
       state.error = null;
-      state.auth = null;
+      state.email = null;
     }
   }
 });
 
-export const { logout, verificationFailed } = authSlice.actions;
-
-export async function load(dispatch) {
-  const state = {};
-  let credentials = {};
-  try {
-    credentials = JSON.parse(atob(localStorage.getItem("credentials")));
-    // eslint-disable-next-line no-unused-vars
-  } catch (err) {
-    // Use empty credentials
-  }
-  try {
-    const res = await fetch("/api/check", {
-      method: "GET",
-      headers: {
-        Authorization:
-          credentials.email && credentials.password
-            ? "BasicMERNMail " +
-              btoa(
-                credentials.email.replace(/:/g, "") + ":" + credentials.password
-              )
-            : undefined
-      }
-    });
-    if (res.status == 200) {
-      state.auth =
-        credentials.email && credentials.password
-          ? { email: credentials.email, password: credentials.password }
-          : {};
-    }
-  } catch (err) {
-    state.error = err.message;
-  }
-  dispatch(authSlice.actions.load(state));
-}
+export const { verificationFailed } = authSlice.actions;
 
 export function login(email, password) {
   return async (dispatch) => {
     const state = {};
-    let credentials = {
-      email: email,
-      password: password
-    };
     try {
-      const res = await fetch("/api/check", {
-        method: "GET",
+      const res = await fetch("/api/login", {
+        method: "POST",
         headers: {
-          Authorization:
-            credentials.email && credentials.password
-              ? "BasicMERNMail " +
-                btoa(
-                  credentials.email.replace(/:/g, "") +
-                    ":" +
-                    credentials.password
-                )
-              : undefined
-        }
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password
+        }),
+        credentials: "include"
       });
       const data = await res.json();
       if (res.status == 200) {
-        state.auth =
-          credentials.email && credentials.password
-            ? { email: credentials.email, password: credentials.password }
-            : {};
+        state.email = email;
         state.error = null;
       } else {
         state.error = data.message;
@@ -121,38 +59,38 @@ export function login(email, password) {
   };
 }
 
-export async function checkAuth(dispatch, getState) {
+export async function checkAuth(dispatch) {
   const state = {};
-  let credentials = getState().auth.auth;
-  if (credentials === null) {
-    return;
-  }
   try {
     const res = await fetch("/api/check", {
       method: "GET",
-      headers: {
-        Authorization:
-          credentials.email && credentials.password
-            ? "BasicMERNMail " +
-              btoa(
-                credentials.email.replace(/:/g, "") + ":" + credentials.password
-              )
-            : undefined
-      }
+      credentials: "include"
     });
     if (res.status == 200) {
-      state.auth =
-        credentials.email && credentials.password
-          ? { email: credentials.email, password: credentials.password }
-          : {};
-    } else {
-      state.auth = null;
+      const data = await res.json();
+      state.email = data.email;
     }
+  } catch (err) {
+    state.error = err.message;
+  }
+  dispatch(authSlice.actions.login(state));
+}
+
+export async function logout(dispatch) {
+  try {
+    await fetch("/api/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({}),
+      credentials: "include"
+    });
     // eslint-disable-next-line no-unused-vars
   } catch (err) {
-    // Don't display the message
+    // Logout failed
   }
-  dispatch(authSlice.actions.load(state));
+  dispatch(authSlice.actions.logout());
 }
 
 export default authSlice.reducer;

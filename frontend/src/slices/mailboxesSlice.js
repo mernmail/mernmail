@@ -75,22 +75,14 @@ export const { initCurrentMailbox, setCurrentMailboxFromURL } =
 
 export async function setMailboxes(dispatch, getState) {
   const state = {};
-  let credentials = getState().auth.auth;
-  if (credentials === null) {
+  let email = getState().auth.email;
+  if (email === null) {
     return;
   }
   try {
     const res = await fetch("/api/receive/mailboxes", {
       method: "GET",
-      headers: {
-        Authorization:
-          credentials.email && credentials.password
-            ? "BasicMERNMail " +
-              btoa(
-                credentials.email.replace(/:/g, "") + ":" + credentials.password
-              )
-            : undefined
-      }
+      credentials: "include"
     });
     const data = await res.json();
     if (res.status == 200) {

@@ -2,17 +2,17 @@ import LoginForm from "@/layouts/LoginForm.jsx";
 import Loading from "@/layouts/Loading.jsx";
 import MainLayout from "@/layouts/MainLayout.jsx";
 import { useSelector, useDispatch } from "react-redux";
-import { load, checkAuth } from "@/slices/authSlice.js";
+import { checkAuth } from "@/slices/authSlice.js";
 import { useEffect } from "react";
 
 function App() {
   const loading = useSelector((state) => state.auth.loading);
-  const auth = useSelector((state) => state.auth.auth);
+  const email = useSelector((state) => state.auth.email);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setTimeout(() => {
-      dispatch(load);
+      dispatch(checkAuth);
     }, 500);
 
     const interval = setInterval(() => {
@@ -24,7 +24,7 @@ function App() {
 
   if (loading) {
     return <Loading />;
-  } else if (auth === null) {
+  } else if (email === null) {
     return <LoginForm />;
   } else {
     return <MainLayout />;

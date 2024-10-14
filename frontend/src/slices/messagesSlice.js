@@ -29,8 +29,8 @@ export const { resetLoading } = messagesSlice.actions;
 export function setMessages(signal) {
   return async (dispatch, getState) => {
     const state = {};
-    let credentials = getState().auth.auth;
-    if (credentials === null) {
+    let email = getState().auth.email;
+    if (email === null) {
       return;
     }
     let currentMailbox = getState().mailboxes.currentMailbox;
@@ -45,17 +45,7 @@ export function setMessages(signal) {
     try {
       const res = await fetch(`/api/receive/mailbox/${currentMailbox}`, {
         method: "GET",
-        headers: {
-          Authorization:
-            credentials.email && credentials.password
-              ? "BasicMERNMail " +
-                btoa(
-                  credentials.email.replace(/:/g, "") +
-                    ":" +
-                    credentials.password
-                )
-              : undefined
-        },
+        credentials: "include",
         signal: signal
       });
       const data = await res.json();

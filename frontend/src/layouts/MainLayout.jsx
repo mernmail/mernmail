@@ -20,9 +20,7 @@ import Content from "@/components/Content.jsx";
 import { setView } from "@/slices/viewSlice.js";
 
 function LoginLayout() {
-  const email = useSelector((state) =>
-    state.auth.auth ? state.auth.auth.email : "Unknown"
-  );
+  const email = useSelector((state) => state.auth.email);
   const menuShown = useSelector((state) => state.menu.shown);
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -135,7 +133,7 @@ function LoginLayout() {
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              dispatch(logout());
+              dispatch(logout);
             }}
             className="inline-block text-inherit w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
           >
