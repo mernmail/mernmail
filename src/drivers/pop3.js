@@ -224,11 +224,12 @@ module.exports = function init(email, password, callback) {
                             attachmentHash,
                             data.content,
                             user,
-                            (err, attachmentId) => {
+                            (err, attachmentId, size) => {
                               if (!err) {
                                 finalAttributes.attachments.push({
                                   filename: data.filename || attachmentId,
-                                  size: data.size,
+                                  contentType: data.contentType,
+                                  size: size,
                                   id: attachmentId
                                 });
                               }

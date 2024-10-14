@@ -20,13 +20,19 @@ function saveAttachment(attachmentHash, attachmentStream, user, callback) {
       userAttachmentDirectory,
       sanitizedAttachmentHash
     );
-    fs.access(pathToTheAttachment, fs.constants.F_OK, (err) => {
+    fs.stat(pathToTheAttachment, (err, stats) => {
       if (err) {
         if (err.code == "ENOENT") {
           try {
             const fileStream = fs.createWriteStream(pathToTheAttachment);
-            fileStream.on("close", () => {
-              callback(null, sanitizedAttachmentHash);
+            fileStream.on("finish", () => {
+              fs.stat(pathToTheAttachment, (err, stats) => {
+                if (err) {
+                  callback(err);
+                } else {
+                  callback(null, sanitizedAttachmentHash, stats.size);
+                }
+              });
             });
             fileStream.on("error", () => {
               callback(err);
@@ -39,7 +45,7 @@ function saveAttachment(attachmentHash, attachmentStream, user, callback) {
           callback(err);
         }
       } else {
-        callback(null, sanitizedAttachmentHash);
+        callback(null, sanitizedAttachmentHash, stats.size);
       }
     });
   });
