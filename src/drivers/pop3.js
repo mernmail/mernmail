@@ -167,6 +167,8 @@ module.exports = function init(email, password, callback) {
                         body: "",
                         attachments: []
                       };
+                      let messageDate = null;
+
                       const parser = new MailParser();
                       parser.on("headers", (headers) => {
                         const fromArray =
@@ -208,6 +210,7 @@ module.exports = function init(email, password, callback) {
                         });
                         finalAttributes.to = to;
                         finalAttributes.subject = headers.get("subject");
+                        messageDate = headers.get("date");
                       });
                       parser.on("data", (data) => {
                         if (data.type === "text") {
@@ -217,8 +220,22 @@ module.exports = function init(email, password, callback) {
                             finalAttributes.body = `<!DOCTYPE html><html><head></head><body><pre>${String(data.text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre></body></html>`;
                           }
                         } else if (data.type === "attachment") {
+                          let stringifiedHeaders = null;
+                          try {
+                            if (data.headers)
+                              stringifiedHeaders = JSON.stringify([
+                                ...data.headers
+                              ]);
+                            // eslint-disable-next-line no-unused-vars
+                          } catch (err) {
+                            // Don't stringify headers
+                          }
                           const attachmentHash = sha256(
-                            String(data.checksum) + String(data.contentId)
+                            String(data.checksum) +
+                              String(data.contentId) +
+                              String(finalAttributes.attachments.length) +
+                              String(messageDate) +
+                              String(stringifiedHeaders)
                           );
                           saveAttachment(
                             attachmentHash,
