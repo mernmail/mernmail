@@ -62,7 +62,7 @@ module.exports = function init(email, password, callback) {
                           .TOP(parseInt(listified[_id][0]), 0)
                           .then((header) => {
                             const finalAttributes = {
-                              seen: false,
+                              seen: true,
                               starred: false,
                               answered: false,
                               date: new Date(),
@@ -152,7 +152,7 @@ module.exports = function init(email, password, callback) {
                     .then((retrObject) => {
                       const retrStream = retrObject[2];
                       const finalAttributes = {
-                        seen: false,
+                        seen: true,
                         starred: false,
                         answered: false,
                         date: new Date(),
