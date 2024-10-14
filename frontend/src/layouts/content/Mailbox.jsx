@@ -96,7 +96,7 @@ function EmailContent() {
     return (
       <>
         <div className="flex flex-col md:flex-row mt-2 mb-2">
-          <h1 className="text-3xl md:text-4xl mb-1 md:mb-0 font-bold content-center whitespace-nowrap grow overflow-hidden text-ellipsis">
+          <h1 className="text-3xl md:text-4xl mb-0.5 pb-0.5 md:mb-0 md:pb-1 font-bold content-center whitespace-nowrap grow overflow-hidden text-ellipsis">
             {title}
           </h1>
           <p className="md:text-xl text-foreground/50 content-center whitespace-nowrap shrink-0">
