@@ -35,20 +35,4 @@ module.exports = function authAndInitReceiveMiddleware(req, res, next) {
         res.status(500).json({ message: err.message });
       });
   });
-  /*if (email && password) {
-    initReceiveDriver(email, password, (err, driver) => {
-      if (err) {
-        deny(err.message);
-      } else {
-        req.credentials = {
-          email: email,
-          password: password
-        };
-        req.receiveDriver = driver;
-        next();
-      }
-    });
-  } else {
-    deny();
-  }*/
 };
