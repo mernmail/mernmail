@@ -47,15 +47,19 @@ router.get("/message/:message*", (req, res, next) => {
       req.receiveDriver.close();
       return;
     }
-    req.receiveDriver.getMessage(messageId, (err, messages) => {
-      if (err) {
-        res.status(500).json({ message: err.message });
+    req.receiveDriver.getMessage(
+      messageId,
+      req.credentials.email,
+      (err, messages) => {
+        if (err) {
+          res.status(500).json({ message: err.message });
+          req.receiveDriver.close();
+          return;
+        }
+        res.json({ messages: messages });
         req.receiveDriver.close();
-        return;
       }
-      res.json({ messages: messages });
-      req.receiveDriver.close();
-    });
+    );
   });
 });
 

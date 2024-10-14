@@ -10,5 +10,8 @@ node_modules/
 # Environment variables
 .env
 
+# Default email attachments directory
+/attachments/
+
 # Editor directories and files
 *.swa-p

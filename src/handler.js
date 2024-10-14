@@ -1,7 +1,17 @@
+const fs = require("fs");
 const path = require("path");
 require("dotenv").config({
   path: path.join(__dirname, "../.env")
 });
+if (!process.env.ATTACHMENTS_PATH) {
+  process.env.ATTACHMENTS_PATH = path.join(__dirname, "..", "attachments");
+  try {
+    fs.mkdirSync(process.env.ATTACHMENTS_PATH);
+    // eslint-disable-next-line no-unused-vars
+  } catch (err) {
+    // Error while creating the default attachments directory
+  }
+}
 const express = require("express");
 const serveStatic = require("serve-static");
 const authAndInitReceiveMiddleware = require("./middleware/authAndInitReceive.js");

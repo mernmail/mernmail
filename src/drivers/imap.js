@@ -1,5 +1,7 @@
 const Imap = require("imap-node");
-const emailParser = require("mailparser").simpleParser;
+const { simpleParser, MailParser } = require("mailparser");
+const sha256 = require("../utils/sha256.js");
+const { saveAttachment } = require("../utils/attachments.js");
 
 module.exports = function init(email, password, callback) {
   const imap = new Imap({
@@ -128,7 +130,7 @@ module.exports = function init(email, password, callback) {
             const replyIds = [];
 
             msg.on("body", (bodyStream) => {
-              emailParser(bodyStream)
+              simpleParser(bodyStream)
                 .then((parsed) => {
                   const fromArray =
                     parsed.from && parsed.from.value
@@ -229,7 +231,7 @@ module.exports = function init(email, password, callback) {
           });
         });
       },
-      getMessage: (message, callback) => {
+      getMessage: (message, user, callback) => {
         const messageId = parseInt(message);
         if (isNaN(messageId)) {
           callback(new Error("Message ID parse error"));
@@ -265,61 +267,89 @@ module.exports = function init(email, password, callback) {
               subject: "Unknown email",
               from: [{ name: "Unknown", address: "unknown@example.com" }],
               to: [{ name: "Unknown", address: "unknown@example.com" }],
-              body: ""
+              body: "",
+              attachments: []
             };
+            let replyTo = null;
 
             msg.on("body", (bodyStream) => {
-              emailParser(bodyStream)
-                .then((parsed) => {
-                  const fromArray =
-                    parsed.from && parsed.from.value
-                      ? parsed.from.value || []
-                      : [];
-                  const from = [];
-                  fromArray.forEach((fromObject) => {
-                    from.push(
-                      fromObject
-                        ? { name: fromObject.name, address: fromObject.address }
-                        : { name: "Unknown", address: "unknown@example.com" }
-                    );
-                  });
-                  finalAttributes.from = from;
-                  const toArray =
-                    parsed.to && parsed.to.value ? parsed.to.value || [] : [];
-                  const to = [];
-                  toArray.forEach((toObject) => {
-                    to.push(
-                      toObject
-                        ? { name: toObject.name, address: toObject.address }
-                        : { name: "Unknown", address: "unknown@example.com" }
-                    );
-                  });
-                  finalAttributes.to = to;
-                  finalAttributes.subject = parsed.subject;
-                  if (parsed.textAsHtml) {
-                    finalAttributes.body = parsed.textAsHtml;
-                  } else {
-                    finalAttributes.body = `<html><head></head><body><pre>${String(parsed.text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre></body></html>`;
-                  }
-                  if (attributesSet) {
-                    messages.unshift(finalAttributes);
-                    if (parsed.replyTo) {
-                      findReply(parsed.replyTo, (message) => {
-                        if (!message) {
-                          callback2();
-                        } else {
-                          getOneMessage(message, callback2);
-                        }
-                      });
-                    } else {
-                      callback2();
-                    }
-                  }
-                  bodyParsed = true;
-                })
-                .catch((err) => {
-                  callback(err);
+              const parser = new MailParser();
+              parser.on("headers", (headers) => {
+                const fromArray =
+                  headers.get("from") && headers.get("from").value
+                    ? headers.get("from").value || []
+                    : [];
+                const from = [];
+                fromArray.forEach((fromObject) => {
+                  from.push(
+                    fromObject
+                      ? { name: fromObject.name, address: fromObject.address }
+                      : { name: "Unknown", address: "unknown@example.com" }
+                  );
                 });
+                finalAttributes.from = from;
+                const toArray =
+                  headers.get("to") && headers.get("to").value
+                    ? headers.get("to").value || []
+                    : [];
+                const to = [];
+                toArray.forEach((toObject) => {
+                  to.push(
+                    toObject
+                      ? { name: toObject.name, address: toObject.address }
+                      : { name: "Unknown", address: "unknown@example.com" }
+                  );
+                });
+                finalAttributes.to = to;
+                finalAttributes.subject = headers.get("subject");
+                replyTo = headers.get("in-reply-to");
+              });
+              parser.on("data", (data) => {
+                if (data.type === "text") {
+                  if (data.html) {
+                    finalAttributes.body = data.html;
+                  } else {
+                    finalAttributes.body = `<!DOCTYPE html><html><head></head><body><pre>${String(data.text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre></body></html>`;
+                  }
+                } else if (data.type === "attachment") {
+                  const attachmentHash = sha256(
+                    String(data.checksum) + String(data.contentId)
+                  );
+                  saveAttachment(
+                    attachmentHash,
+                    data.content,
+                    user,
+                    (err, attachmentId) => {
+                      if (!err) {
+                        finalAttributes.attachments.push({
+                          filename: data.filename || attachmentId,
+                          size: data.size,
+                          id: attachmentId
+                        });
+                      }
+                      data.release();
+                    }
+                  );
+                }
+              });
+              parser.on("end", () => {
+                if (attributesSet) {
+                  messages.unshift(finalAttributes);
+                  if (replyTo) {
+                    findReply(replyTo, (message) => {
+                      if (!message) {
+                        callback2();
+                      } else {
+                        getOneMessage(message, callback2);
+                      }
+                    });
+                  } else {
+                    callback2();
+                  }
+                }
+                bodyParsed = true;
+              });
+              bodyStream.pipe(parser);
             });
             msg.on("attributes", (attributes) => {
               attributes.flags.forEach((flag) => {
@@ -335,8 +365,8 @@ module.exports = function init(email, password, callback) {
               finalAttributes.id = attributes.uid;
               if (bodyParsed) {
                 messages.unshift(finalAttributes);
-                if (finalAttributes.replyTo) {
-                  findReply(finalAttributes.replyTo, (message) => {
+                if (replyTo) {
+                  findReply(replyTo, (message) => {
                     if (!message) {
                       callback2();
                     } else {
