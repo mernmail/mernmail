@@ -45,5 +45,6 @@
     "replyall": "Reply to all",
     "forward": "Forward",
     "attachments": "Attachments",
-    "cantloadmessage": "Can't load a message: {{error}}"
+    "cantloadmessage": "Can't load a message: {{error}}",
+    "markasread": "Mark as read"
 }

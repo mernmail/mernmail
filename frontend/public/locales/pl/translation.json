@@ -45,5 +45,6 @@
     "replyall": "Odpowiedz wszystkim",
     "forward": "Przekaż dalej",
     "attachments": "Załączniki",
-    "cantloadmessage": "Nie można załadować wiadomości: {{error}}"
+    "cantloadmessage": "Nie można załadować wiadomości: {{error}}",
+    "markasread": "Oznacz jako przeczytane"
 }

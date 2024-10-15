@@ -1,6 +1,16 @@
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { RefreshCw, Reply, Search, Star } from "lucide-react";
+import {
+  RefreshCw,
+  Reply,
+  Search,
+  Star,
+  Trash,
+  Ban,
+  FolderInput,
+  Mail,
+  MailOpen
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { setMessages, resetLoading } from "@/slices/messagesSlice.js";
 import { setMailboxes } from "@/slices/mailboxesSlice";
@@ -8,6 +18,22 @@ import { setMailboxes } from "@/slices/mailboxesSlice";
 function EmailContent() {
   const { t } = useTranslation();
   const [refresh, setRefresh] = useState(false);
+  const [selectedMessages, setSelectedMessages] = useState({});
+  const [selectedAll, setSelectedAll] = useState(false);
+  const [selectedAny, setSelectedAny] = useState(false);
+  const hasMoreThanOneMailbox = useSelector(
+    (state) => state.mailboxes.mailboxes.length > 1
+  );
+  const hasSpamMailbox = useSelector((state) =>
+    Boolean(
+      state.mailboxes.mailboxes.find((mailbox) => {
+        return mailbox.type == "spam";
+      })
+    )
+  );
+  const canMarkAsUnread = useSelector(
+    (state) => state.capabilities.receiveCapabilities.markAsUnread
+  );
   const mailboxId = useSelector((state) => state.mailboxes.currentMailbox);
   const messages = useSelector((state) => state.messages.messages);
   const loading = useSelector((state) => state.messages.loading);
@@ -87,6 +113,19 @@ function EmailContent() {
     if (!mailboxesLoading) document.title = title + " - MERNMail";
   }, [title, mailboxesLoading]);
 
+  useEffect(() => {
+    setSelectedAll(
+      messages &&
+        messages.length > 0 &&
+        messages.every((message) => selectedMessages[message.id])
+    );
+    setSelectedAny(
+      messages &&
+        messages.length > 0 &&
+        messages.find((message) => selectedMessages[message.id])
+    );
+  }, [selectedMessages, messages]);
+
   if (loading) {
     return <p className="text-center">{t("loading")}</p>;
   } else if (error) {
@@ -112,8 +151,18 @@ function EmailContent() {
           <li className="inline-block mx-0.5">
             <input
               type="checkbox"
+              onChange={() => {
+                const currentSelectedAll = selectedAll;
+                const newSelectedMessages = {};
+                messages.forEach((message) => {
+                  newSelectedMessages[message.id] = !currentSelectedAll;
+                });
+                setSelectedMessages(newSelectedMessages);
+              }}
               className="w-6 h-6 inline-block m-1 align-middle"
               title={t("selectall")}
+              readOnly={false}
+              checked={selectedAll}
             />
           </li>
           <li className="inline-block mx-0.5">
@@ -151,6 +200,106 @@ function EmailContent() {
               />
             </a>
           </li>
+          {selectedAny ? (
+            <>
+              {hasSpamMailbox ? (
+                <li className="inline-block mx-0.5">
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                    title={t("markasspam")}
+                    className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                  >
+                    <Ban
+                      width={24}
+                      height={24}
+                      className="inline w-6 h-6 align-top"
+                    />
+                  </a>
+                </li>
+              ) : (
+                ""
+              )}
+              <li className="inline-block mx-0.5">
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}
+                  title={t("delete")}
+                  className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                >
+                  <Trash
+                    width={24}
+                    height={24}
+                    className="inline w-6 h-6 align-top"
+                  />
+                </a>
+              </li>
+              {canMarkAsUnread ? (
+                <>
+                  <li className="inline-block mx-0.5">
+                    <a
+                      href="#"
+                      onClick={async (e) => {
+                        e.preventDefault();
+                      }}
+                      title={t("markasunread")}
+                      className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                    >
+                      <Mail
+                        width={24}
+                        height={24}
+                        className="inline w-6 h-6 align-top"
+                      />
+                    </a>
+                  </li>
+                  <li className="inline-block mx-0.5">
+                    <a
+                      href="#"
+                      onClick={async (e) => {
+                        e.preventDefault();
+                      }}
+                      title={t("markasread")}
+                      className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                    >
+                      <MailOpen
+                        width={24}
+                        height={24}
+                        className="inline w-6 h-6 align-top"
+                      />
+                    </a>
+                  </li>
+                </>
+              ) : (
+                ""
+              )}
+              {hasMoreThanOneMailbox ? (
+                <li className="inline-block mx-0.5">
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                    title={t("move")}
+                    className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                  >
+                    <FolderInput
+                      width={24}
+                      height={24}
+                      className="inline w-6 h-6 align-top"
+                    />
+                  </a>
+                </li>
+              ) : (
+                ""
+              )}
+            </>
+          ) : (
+            ""
+          )}
         </ul>
         {messages.length > 0 ? (
           <ul className="list-none border-border border-t-2">
@@ -180,6 +329,15 @@ function EmailContent() {
                             onClick={(e) => {
                               e.stopPropagation();
                             }}
+                            onChange={() => {
+                              const newSelectedMessages = Object.assign(
+                                {},
+                                selectedMessages
+                              );
+                              newSelectedMessages[id] = !selectedMessages[id];
+                              setSelectedMessages(newSelectedMessages);
+                            }}
+                            checked={selectedMessages[id] || false}
                             className="w-6 h-6 mx-1.5 my-1 inline-block align-middle"
                             title={t("select")}
                           />
