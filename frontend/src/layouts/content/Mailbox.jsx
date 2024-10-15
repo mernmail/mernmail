@@ -213,8 +213,33 @@ function EmailContent() {
                 <li className="inline-block mx-0.5">
                   <a
                     href="#"
-                    onClick={(e) => {
+                    onClick={async (e) => {
                       e.preventDefault();
+                      const messages = getSelectedMessages();
+                      try {
+                        const res = await fetch(
+                          `/api/receive/spam/${mailboxId}`,
+                          {
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                              messages: messages
+                            }),
+                            credentials: "include"
+                          }
+                        );
+                        if (res.status == 200) {
+                          const data = await res.json();
+                          document.location.hash = encodeURI(
+                            `#mailbox/${data.spamMailbox}`
+                          );
+                        }
+                        // eslint-disable-next-line no-unused-vars
+                      } catch (err) {
+                        // Can't set the message as unread
+                      }
                     }}
                     title={t("markasspam")}
                     className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"

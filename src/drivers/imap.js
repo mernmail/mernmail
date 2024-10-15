@@ -436,6 +436,49 @@ module.exports = function init(email, password, callback) {
             callback(null);
           }
         });
+      },
+      findSpamMailbox: (callback) => {
+        imap.getBoxes((err, mailboxes) => {
+          if (err) {
+            callback(err);
+            return;
+          }
+
+          const findSpamMailbox = (mailboxes) => {
+            const attribute = "\\Junk";
+            return Object.keys(mailboxes).reduce((result, mailboxName) => {
+              const mailbox = mailboxes[mailboxName];
+              if (
+                mailbox.attribs.indexOf("\\NOSELECT") == -1 &&
+                mailbox.attribs.indexOf(attribute) != -1
+              ) {
+                return mailboxName;
+              }
+              if (mailbox.children) {
+                const childResult = findSpamMailbox(mailbox.children);
+                if (childResult) {
+                  return `${mailboxName}${mailbox.delimiter}${childResult}`;
+                }
+              }
+              return result;
+            }, null);
+          };
+
+          callback(err, findSpamMailbox(mailboxes));
+        });
+      },
+      moveMessages: (messages, newMailbox, callback) => {
+        try {
+          imap.move(messages, newMailbox, (err) => {
+            if (err) {
+              callback(err);
+            } else {
+              callback(null);
+            }
+          });
+        } catch (err) {
+          callback(err);
+        }
       }
     };
     callback(null, receiveObject);

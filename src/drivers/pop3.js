@@ -277,6 +277,17 @@ module.exports = function init(email, password, callback) {
                 },
                 markMessagesAsRead: (messages, callback) => {
                   callback(new Error("POP3 doesn't support read/unread flags"));
+                },
+                findSpamMailbox: (callback) => {
+                  // POP3 supports only one mailbox.
+                  callback(null, null);
+                },
+                moveMessages: (messages, newMailbox, callback) => {
+                  callback(
+                    new Error(
+                      "POP3 doesn't support moving messages between mailboxes"
+                    )
+                  );
                 }
               };
               callback(null, receiveObject);

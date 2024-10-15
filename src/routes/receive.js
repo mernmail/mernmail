@@ -84,7 +84,13 @@ router.get("/capabilities", (req, res) => {
 });
 
 router.post("/unread/:mailbox*", (req, res) => {
-  if (!req.body || !req.body.messages || req.body.messages.length === 0) {
+  if (
+    !req.body ||
+    !req.body.messages ||
+    (!Array.isArray(req.body.messages) &&
+      typeof req.body.messages != "string") ||
+    req.body.messages.length === 0
+  ) {
     res
       .status(400)
       .json({ message: "You need to provide messages to mark as unread" });
@@ -110,10 +116,16 @@ router.post("/unread/:mailbox*", (req, res) => {
 });
 
 router.post("/read/:mailbox*", (req, res) => {
-  if (!req.body || !req.body.messages || req.body.messages.length === 0) {
+  if (
+    !req.body ||
+    !req.body.messages ||
+    (!Array.isArray(req.body.messages) &&
+      typeof req.body.messages != "string") ||
+    req.body.messages.length === 0
+  ) {
     res
       .status(400)
-      .json({ message: "You need to provide messages to mark as unread" });
+      .json({ message: "You need to provide messages to mark as read" });
     return;
   }
   const mailbox = req.params.mailbox + req.params[0];
@@ -129,8 +141,60 @@ router.post("/read/:mailbox*", (req, res) => {
         req.receiveDriver.close();
         return;
       }
-      res.json({ message: "Marked messages as unread successfully" });
+      res.json({ message: "Marked messages as read successfully" });
       req.receiveDriver.close();
+    });
+  });
+});
+
+router.post("/spam/:mailbox*", (req, res) => {
+  if (
+    !req.body ||
+    !req.body.messages ||
+    (!Array.isArray(req.body.messages) &&
+      typeof req.body.messages != "string") ||
+    req.body.messages.length === 0
+  ) {
+    res
+      .status(400)
+      .json({ message: "You need to provide messages to mark as spam" });
+    return;
+  }
+  const mailbox = req.params.mailbox + req.params[0];
+  req.receiveDriver.openMailbox(mailbox, (err) => {
+    if (err) {
+      res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
+      return;
+    }
+    req.receiveDriver.findSpamMailbox((err, spamMailbox) => {
+      if (err) {
+        res.status(500).json({ message: err.message });
+        req.receiveDriver.close();
+        return;
+      } else if (!spamMailbox) {
+        res.status(500).json({ message: "Spam mailbox not found" });
+        req.receiveDriver.close();
+        return;
+      } else if (spamMailbox == mailbox) {
+        res
+          .status(400)
+          .json({ message: "Spam mailbox is the same as the source mailbox" });
+        req.receiveDriver.close();
+        return;
+      }
+      req.receiveDriver.moveMessages(req.body.messages, spamMailbox, (err) => {
+        if (err) {
+          res.status(500).json({ message: err.message });
+          req.receiveDriver.close();
+          return;
+        }
+        res.json({
+          message: "Marked messages as spam successfully",
+          spamMailbox: spamMailbox
+        });
+        req.receiveDriver.close();
+      });
     });
   });
 });
