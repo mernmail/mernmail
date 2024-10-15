@@ -9,7 +9,7 @@ import {
   ReplyAll,
   Trash
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import DOMPurify from "dompurify";
 import { filesize } from "filesize";
@@ -21,7 +21,6 @@ import download from "downloadjs";
 function MessageContent() {
   const iframeRef = useRef({});
 
-  const [iframeHeight, setIframeHeight] = useState("0px");
   const { t } = useTranslation();
   const view = useSelector((state) => state.view.view);
   const messageData = useSelector((state) => state.message.messageData);
@@ -80,17 +79,17 @@ function MessageContent() {
     return () => {
       const body = iframeRefContents.contentWindow.document.body;
       const html = iframeRefContents.contentWindow.document.documentElement;
-      setIframeHeight(Math.max(body.offsetHeight, html.offsetHeight) + "px");
+      iframeRefContents.height = Math.max(body.offsetHeight, html.offsetHeight);
     };
   };
 
-  const resizeOnIframeLoadAllRefs = () => {
-    Object.keys(iframeRef.current).forEach((refKey) => {
-      resizeOnIframeLoad(iframeRef.current[refKey])();
-    });
-  };
-
   useEffect(() => {
+    const resizeOnIframeLoadAllRefs = () => {
+      Object.keys(iframeRef.current).forEach((refKey) => {
+        resizeOnIframeLoad(iframeRef.current[refKey])();
+      });
+    };
+
     window.addEventListener("resize", resizeOnIframeLoadAllRefs);
 
     return () => {
@@ -99,10 +98,10 @@ function MessageContent() {
   }, []);
 
   useEffect(() => {
-    if (messagesToRender.length > 0)
+    if (messageData.length > 0)
       document.title =
-        messagesToRender[messagesToRender.length - 1].subject + " - MERNMail";
-  }, [messagesToRender]);
+        messageData[messageData.length - 1].subject + " - MERNMail";
+  }, [messageData]);
 
   useEffect(() => {
     if (view == "message") {
@@ -396,8 +395,6 @@ function MessageContent() {
                   srcDoc={DOMPurify.sanitize(body, {
                     WHOLE_DOCUMENT: true
                   })}
-                  width="100%"
-                  height={iframeHeight}
                 />
                 {realAttachments && realAttachments.length > 0 ? (
                   <>
