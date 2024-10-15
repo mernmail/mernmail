@@ -228,7 +228,11 @@ function MessageContent() {
           ) : (
             ""
           )}
-          {messagesToRender[messagesToRender.length - 1].subject}
+          {messagesToRender[messagesToRender.length - 1].subject !==
+            undefined &&
+          messagesToRender[messagesToRender.length - 1].subject !== null
+            ? messagesToRender[messagesToRender.length - 1].subject
+            : t("nosubject")}
         </h1>
         <ul className="mx-0.5 list-none">
           <li className="inline-block mx-0.5">

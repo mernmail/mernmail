@@ -548,7 +548,9 @@ function EmailContent() {
                           ) : (
                             ""
                           )}
-                          {subject}
+                          {subject !== undefined && subject !== null
+                            ? subject
+                            : t("nosubject")}
                         </p>
                         <p
                           className={`whitespace-nowrap px-1 ${!seen ? "font-bold" : ""} md:self-center`}
