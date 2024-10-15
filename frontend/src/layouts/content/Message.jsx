@@ -80,7 +80,7 @@ function MessageContent() {
       const body = iframeRefContents.contentWindow.document.body;
       const html = iframeRefContents.contentWindow.document.documentElement;
       iframeRefContents.height =
-        Math.max(body.offsetHeight, html.offsetHeight) + 5 + "px";
+        Math.max(body.offsetHeight, html.offsetHeight) + "px";
     };
   };
 
@@ -390,7 +390,7 @@ function MessageContent() {
                       )();
                       processLinksOnIframeLoad(iframeRef.current[id])();
                       resizeOnIframeLoad(iframeRef.current[id])();
-                    }, 0);
+                    }, 10);
                   }}
                   className="bg-white w-full rounded-lg mb-2"
                   srcDoc={DOMPurify.sanitize(body, {
