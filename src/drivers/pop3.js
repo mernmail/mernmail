@@ -150,7 +150,7 @@ module.exports = function init(email, password, callback) {
                   pop3
                     .command("RETR", messageId)
                     .then((retrObject) => {
-                      const retrStream = retrObject[2];
+                      const retrStream = retrObject[1];
                       const finalAttributes = {
                         seen: true,
                         starred: false,
