@@ -186,7 +186,7 @@ function MessageContent() {
                   // Hash URL parse error, invalid URL
                 }
 
-                document.location.hash = `#mailbox/${mailboxName}`;
+                document.location.hash = encodeURI(`#mailbox/${mailboxName}`);
               }}
               title={t("back")}
               className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"

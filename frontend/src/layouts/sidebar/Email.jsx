@@ -125,7 +125,7 @@ function EmailSidebar() {
                     e.preventDefault();
                     if (openable) {
                       dispatch(hideMenu());
-                      document.location.hash = `#mailbox/${id}`;
+                      document.location.hash = encodeURI(`#mailbox/${id}`);
                     }
                   }}
                   title={title}

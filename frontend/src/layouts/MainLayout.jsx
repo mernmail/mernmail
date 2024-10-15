@@ -75,7 +75,7 @@ function LoginLayout() {
                     document.location.hash &&
                     !document.location.hash.match(/^#mailbox(?=$|\/)/)
                   )
-                    document.location.hash = "#mailbox";
+                    document.location.hash = encodeURI("#mailbox");
                 }}
                 className="inline-block align-middle bg-primary-foreground text-primary px-1 py-1 w-9 h-8 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
               >

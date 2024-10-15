@@ -139,7 +139,7 @@ function EmailContent() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                document.location.hash = "#search";
+                document.location.hash = encodeURI("#search");
               }}
               title={t("search")}
               className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
