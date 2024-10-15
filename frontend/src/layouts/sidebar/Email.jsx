@@ -40,7 +40,7 @@ function EmailSidebar() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (view == "mailbox") {
+    if (view == "mailbox" || view == "message") {
       const onBackButtonEvent = () => {
         setTimeout(() => {
           dispatch(setCurrentMailboxFromURL());
@@ -55,8 +55,8 @@ function EmailSidebar() {
   }, [view, dispatch]);
 
   useEffect(() => {
-    if (view == "mailbox") {
-      dispatch(initCurrentMailbox());
+    if (view == "mailbox" || view == "message") {
+      if (view == "mailbox") dispatch(initCurrentMailbox());
       dispatch(setCurrentMailboxFromURL());
     }
   }, [view, loading, dispatch]);
@@ -129,7 +129,7 @@ function EmailSidebar() {
                     }
                   }}
                   title={title}
-                  className={`${view == "mailbox" && currentMailbox == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block my-1 ${level == 0 ? "ml-" + level * 4 + " rtl:ml-0 rtl:mr-" + level * 4 : ""} px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}
+                  className={`${(view == "mailbox" || view == "message") && currentMailbox == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block my-1 ${level == 0 ? "ml-" + level * 4 + " rtl:ml-0 rtl:mr-" + level * 4 : ""} px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}
                 >
                   <div className="flex flex-row w-auto">
                     <DisplayedIcon

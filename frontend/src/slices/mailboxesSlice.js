@@ -51,6 +51,15 @@ export const mailboxesSlice = createSlice({
       } catch (err) {
         // Hash URL parse error, use the first mailbox
       }
+      try {
+        const messageMatch = decodeURI(document.location.hash).match(
+          /^#message\/((?:(?!\/[^/]*$).)+)\/.+/
+        );
+        if (messageMatch) mailboxName = messageMatch[1];
+        //eslint-disable-next-line no-unused-vars
+      } catch (err) {
+        // Hash URL parse error, use the first mailbox
+      }
       if (mailboxName) {
         if (state.currentMailbox != mailboxName)
           state.currentMailbox = mailboxName;
