@@ -70,12 +70,46 @@ function MessageContent() {
     };
   };
 
-  const processLinksOnIframeLoad = (iframeRefContents) => {
+  const processLinksAndFormsOnIframeLoad = (iframeRefContents) => {
     return () => {
       const aElements =
         iframeRefContents.contentWindow.document.querySelectorAll("a");
       aElements.forEach((aElement) => {
-        aElement.target = "_parent";
+        const currentHashURL =
+          document.location.origin + document.location.pathname + "#";
+        if (
+          !aElement.href ||
+          aElement.href.slice(0, 1) == "#" ||
+          aElement.href.slice(0, currentHashURL.length) == currentHashURL
+        ) {
+          // Prevent changing the URL
+          aElement.addEventListener("click", (e) => {
+            e.preventDefault();
+          });
+          aElement.target = "_self";
+        } else {
+          aElement.target = "_parent";
+        }
+      });
+
+      const formElements =
+        iframeRefContents.contentWindow.document.querySelectorAll("form");
+      formElements.forEach((formElement) => {
+        const currentHashURL =
+          document.location.origin + document.location.pathname + "#";
+        if (
+          !formElement.action ||
+          formElement.action.slice(0, 1) == "#" ||
+          formElement.action.slice(0, currentHashURL.length) == currentHashURL
+        ) {
+          // Prevent form submitting
+          formElement.addEventListener("submit", (e) => {
+            e.preventDefault();
+          });
+          formElement.target = "_self";
+        } else {
+          formElement.target = "_parent";
+        }
       });
     };
   };
@@ -412,7 +446,7 @@ function MessageContent() {
                         iframeRef.current[id],
                         attachments
                       )();
-                      processLinksOnIframeLoad(iframeRef.current[id])();
+                      processLinksAndFormsOnIframeLoad(iframeRef.current[id])();
                       resizeOnIframeLoad(iframeRef.current[id])();
                     }, 0);
                   }}
