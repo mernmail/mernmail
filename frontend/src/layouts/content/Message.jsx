@@ -17,7 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadMessage, resetLoading } from "@/slices/messageSlice.js";
 
 function MessageContent() {
-  const iframeRef = useRef();
+  const iframeRef = useRef({});
+
   const [iframeHeight, setIframeHeight] = useState("0px");
   const { t } = useTranslation();
   const view = useSelector((state) => state.view.view);
@@ -26,12 +27,6 @@ function MessageContent() {
   const error = useSelector((state) => state.message.error);
   const dispatch = useDispatch();
   const messagesToRender = [...messageData.messages];
-
-  const onIframeLoad = () => {
-    const body = iframeRef.current.contentWindow.document.body;
-    const html = iframeRef.current.contentWindow.document.documentElement;
-    setIframeHeight(Math.max(body.offsetHeight, html.offsetHeight) + "px");
-  };
 
   useEffect(() => {
     const controller =
@@ -48,11 +43,25 @@ function MessageContent() {
     };
   }, [dispatch]);
 
+  const onIframeLoad = (iframeRefContents) => {
+    return () => {
+      const body = iframeRefContents.contentWindow.document.body;
+      const html = iframeRefContents.contentWindow.document.documentElement;
+      setIframeHeight(Math.max(body.offsetHeight, html.offsetHeight) + "px");
+    };
+  };
+
+  const onIframeLoadAllRefs = () => {
+    Object.keys(iframeRef.current).forEach((refKey) => {
+      onIframeLoad(iframeRef.current[refKey])();
+    });
+  };
+
   useEffect(() => {
-    window.addEventListener("resize", onIframeLoad);
+    window.addEventListener("resize", onIframeLoadAllRefs);
 
     return () => {
-      window.removeEventListener("resize", onIframeLoad);
+      window.removeEventListener("resize", onIframeLoadAllRefs);
     };
   }, []);
 
@@ -219,6 +228,7 @@ function MessageContent() {
                   .join("")
                   .toUpperCase()
               : firstFrom.address[0].toUpperCase();
+
             return (
               <div className="border-b-2 border-border" key={id}>
                 <div className="flex flex-col lg:flex-row mb-2">
@@ -331,8 +341,10 @@ function MessageContent() {
                   </ul>
                 </div>
                 <iframe
-                  ref={iframeRef}
-                  onLoad={onIframeLoad}
+                  ref={(el) => (iframeRef.current[id] = el)}
+                  onLoad={() => {
+                    setTimeout(onIframeLoad(iframeRef.current[id]), 0);
+                  }}
                   className="bg-white w-full rounded-lg mb-2"
                   srcDoc={DOMPurify.sanitize(body, {
                     WHOLE_DOCUMENT: true
