@@ -378,12 +378,14 @@ function EmailContent() {
                       className="block bg-background px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5 text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors cursor-pointer"
                     >
                       <div className="flex flex-col md:flex-row">
-                        <div className="shrink-0">
+                        <div
+                          className="shrink-0"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
                           <input
                             type="checkbox"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                            }}
                             onChange={() => {
                               const newSelectedMessages = Object.assign(
                                 {},
@@ -401,7 +403,6 @@ function EmailContent() {
                               href="#"
                               onClick={(e) => {
                                 e.preventDefault();
-                                e.stopPropagation();
                               }}
                               title={t("star")}
                               className="inline-block align-middle shrink-0 w-8 h-8 p-1 mx-0.5 rounded-sm bg-inherit text-inherit hover:bg-accent/60 hover:text-accent-foreground transition-colors"
