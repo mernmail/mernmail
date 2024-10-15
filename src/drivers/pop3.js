@@ -20,6 +20,10 @@ module.exports = function init(email, password, callback) {
             .command("PASS", password)
             .then(() => {
               const receiveObject = {
+                capabilities: {
+                  markAsUnread: false,
+                  multipleMailboxes: false
+                },
                 close: () => {
                   pop3.command("QUIT");
                 },

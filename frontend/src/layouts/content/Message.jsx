@@ -20,9 +20,21 @@ import download from "downloadjs";
 
 function MessageContent() {
   const iframeRef = useRef({});
-
   const { t } = useTranslation();
   const view = useSelector((state) => state.view.view);
+  const hasMoreThanOneMailbox = useSelector(
+    (state) => state.mailboxes.mailboxes.length > 1
+  );
+  const hasSpamMailbox = useSelector((state) =>
+    Boolean(
+      state.mailboxes.mailboxes.find((mailbox) => {
+        return mailbox.type == "spam";
+      })
+    )
+  );
+  const canMarkAsUnread = useSelector(
+    (state) => state.capabilities.receiveCapabilities.markAsUnread
+  );
   const messageData = useSelector((state) => state.message.messageData);
   const loading = useSelector((state) => state.message.loading);
   const error = useSelector((state) => state.message.error);
@@ -232,22 +244,26 @@ function MessageContent() {
               />
             </a>
           </li>
-          <li className="inline-block mx-0.5">
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-              title={t("markasspam")}
-              className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
-            >
-              <Ban
-                width={24}
-                height={24}
-                className="inline w-6 h-6 align-top"
-              />
-            </a>
-          </li>
+          {hasSpamMailbox ? (
+            <li className="inline-block mx-0.5">
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+                title={t("markasspam")}
+                className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+              >
+                <Ban
+                  width={24}
+                  height={24}
+                  className="inline w-6 h-6 align-top"
+                />
+              </a>
+            </li>
+          ) : (
+            ""
+          )}
           <li className="inline-block mx-0.5">
             <a
               href="#"
@@ -264,38 +280,46 @@ function MessageContent() {
               />
             </a>
           </li>
-          <li className="inline-block mx-0.5">
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-              title={t("markasunread")}
-              className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
-            >
-              <Mail
-                width={24}
-                height={24}
-                className="inline w-6 h-6 align-top"
-              />
-            </a>
-          </li>
-          <li className="inline-block mx-0.5">
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-              title={t("move")}
-              className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
-            >
-              <FolderInput
-                width={24}
-                height={24}
-                className="inline w-6 h-6 align-top"
-              />
-            </a>
-          </li>
+          {canMarkAsUnread ? (
+            <li className="inline-block mx-0.5">
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+                title={t("markasunread")}
+                className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+              >
+                <Mail
+                  width={24}
+                  height={24}
+                  className="inline w-6 h-6 align-top"
+                />
+              </a>
+            </li>
+          ) : (
+            ""
+          )}
+          {hasMoreThanOneMailbox ? (
+            <li className="inline-block mx-0.5">
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+                title={t("move")}
+                className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+              >
+                <FolderInput
+                  width={24}
+                  height={24}
+                  className="inline w-6 h-6 align-top"
+                />
+              </a>
+            </li>
+          ) : (
+            ""
+          )}
         </ul>
         {messagesToRender
           .slice()

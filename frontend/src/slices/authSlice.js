@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { setCapabilities } from "@/slices/capabilitiesSlice.js";
 
 export const authSlice = createSlice({
   name: "auth",
@@ -55,6 +56,7 @@ export function login(email, password) {
       state.error = err.message;
     }
     dispatch(authSlice.actions.login(state));
+    dispatch(setCapabilities);
   };
 }
 
@@ -73,6 +75,7 @@ export async function checkAuth(dispatch) {
     state.error = err.message;
   }
   dispatch(authSlice.actions.login(state));
+  dispatch(setCapabilities);
 }
 
 export async function logout(dispatch) {

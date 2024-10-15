@@ -14,6 +14,10 @@ module.exports = function init(email, password, callback) {
 
   imap.once("ready", () => {
     const receiveObject = {
+      capabilities: {
+        markAsUnread: true,
+        multipleMailboxes: true
+      },
       close: () => {
         imap.end();
       },

@@ -78,4 +78,9 @@ router.get("/attachment/:attachment", (req, res) => {
   });
 });
 
+router.get("/capabilities", (req, res) => {
+  res.json({ ...req.receiveDriver.capabilities });
+  req.receiveDriver.close();
+});
+
 module.exports = router;
