@@ -43,7 +43,27 @@ function MessageContent() {
     };
   }, [dispatch]);
 
-  const onIframeLoad = (iframeRefContents) => {
+  const replaceCIDsOnIframeLoad = (iframeRefContents, attachments) => {
+    return () => {
+      const srcElements =
+        iframeRefContents.contentWindow.document.querySelectorAll("[src]");
+      srcElements.forEach((srcElement) => {
+        if (srcElement.src) {
+          const cidMatch = srcElement.src.match(/^cid:(.+)/);
+          if (cidMatch) {
+            const cid = cidMatch[1];
+            const attachment = attachments.find((attachment) => {
+              return attachment.contentId == cid;
+            });
+            if (attachment)
+              srcElement.src = `/api/receive/attachment/${attachment.id}`;
+          }
+        }
+      });
+    };
+  };
+
+  const resizeOnIframeLoad = (iframeRefContents) => {
     return () => {
       const body = iframeRefContents.contentWindow.document.body;
       const html = iframeRefContents.contentWindow.document.documentElement;
@@ -51,17 +71,17 @@ function MessageContent() {
     };
   };
 
-  const onIframeLoadAllRefs = () => {
+  const resizeOnIframeLoadAllRefs = () => {
     Object.keys(iframeRef.current).forEach((refKey) => {
-      onIframeLoad(iframeRef.current[refKey])();
+      resizeOnIframeLoad(iframeRef.current[refKey])();
     });
   };
 
   useEffect(() => {
-    window.addEventListener("resize", onIframeLoadAllRefs);
+    window.addEventListener("resize", resizeOnIframeLoadAllRefs);
 
     return () => {
-      window.removeEventListener("resize", onIframeLoadAllRefs);
+      window.removeEventListener("resize", resizeOnIframeLoadAllRefs);
     };
   }, []);
 
@@ -215,6 +235,12 @@ function MessageContent() {
             const id = message.id;
             const body = message.body;
             const attachments = message.attachments;
+            const realAttachments = (attachments || []).filter((attachment) => {
+              return (
+                !attachment.contentDisposition ||
+                attachment.contentDisposition == "attachment"
+              );
+            });
             const firstMessage = message.firstMessage;
             const firstFrom = message.from[0] || {
               address: "unknown@example.com"
@@ -343,7 +369,13 @@ function MessageContent() {
                 <iframe
                   ref={(el) => (iframeRef.current[id] = el)}
                   onLoad={() => {
-                    setTimeout(onIframeLoad(iframeRef.current[id]), 0);
+                    setTimeout(() => {
+                      replaceCIDsOnIframeLoad(
+                        iframeRef.current[id],
+                        attachments
+                      )();
+                      resizeOnIframeLoad(iframeRef.current[id])();
+                    }, 0);
                   }}
                   className="bg-white w-full rounded-lg mb-2"
                   srcDoc={DOMPurify.sanitize(body, {
@@ -352,13 +384,13 @@ function MessageContent() {
                   width="100%"
                   height={iframeHeight}
                 />
-                {attachments && attachments.length > 0 ? (
+                {realAttachments && realAttachments.length > 0 ? (
                   <>
                     <h1 className="text-xl md:text-2xl mx-2 mt-2 mb-1.5 pb-0.5 md:mb-1 md:pb-1 font-bold content-center whitespace-nowrap overflow-hidden text-ellipsis">
                       {t("attachments")}
                     </h1>
                     <ul className="list-none border-border border-t-2 mx-2">
-                      {attachments.map((attachment) => {
+                      {realAttachments.map((attachment) => {
                         const id = attachment.id;
                         const size = attachment.size;
                         const filename = attachment.filename;
