@@ -9,7 +9,8 @@ import {
   Ban,
   FolderInput,
   Mail,
-  MailOpen
+  MailOpen,
+  ThumbsUp
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { setMessages, resetLoading } from "@/slices/messagesSlice.js";
@@ -38,6 +39,9 @@ function EmailContent() {
     (state) => state.capabilities.receiveCapabilities.star
   );
   const mailboxId = useSelector((state) => state.mailboxes.currentMailbox);
+  const mailboxType = useSelector(
+    (state) => state.mailboxes.currentMailboxType
+  );
   const messages = useSelector((state) => state.messages.messages);
   const loading = useSelector((state) => state.messages.loading);
   const error = useSelector((state) => state.messages.error);
@@ -219,12 +223,13 @@ function EmailContent() {
           {selectedAny ? (
             <>
               {hasSpamMailbox ? (
-                <li className="inline-block mx-0.5">
-                  <a
-                    href="#"
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      const messages = getSelectedMessages();
+                mailboxType == "spam" ? (
+                  <li className="inline-block mx-0.5">
+                    <a
+                      href="#"
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        /*const messages = getSelectedMessages();
                       try {
                         const res = await fetch(
                           `/api/receive/spam/${mailboxId}`,
@@ -249,18 +254,62 @@ function EmailContent() {
                         // eslint-disable-next-line no-unused-vars
                       } catch (err) {
                         // Can't set the message as spam
-                      }
-                    }}
-                    title={t("markasspam")}
-                    className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
-                  >
-                    <Ban
-                      width={24}
-                      height={24}
-                      className="inline w-6 h-6 align-top"
-                    />
-                  </a>
-                </li>
+                      }*/
+                      }}
+                      title={t("notspam")}
+                      className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                    >
+                      <ThumbsUp
+                        width={24}
+                        height={24}
+                        className="inline w-6 h-6 align-top"
+                      />
+                    </a>
+                  </li>
+                ) : (
+                  <li className="inline-block mx-0.5">
+                    <a
+                      href="#"
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        const messages = getSelectedMessages();
+                        try {
+                          const res = await fetch(
+                            `/api/receive/spam/${mailboxId}`,
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json"
+                              },
+                              body: JSON.stringify({
+                                messages: messages
+                              }),
+                              credentials: "include"
+                            }
+                          );
+                          if (res.status == 200) {
+                            const data = await res.json();
+                            setSelectedMessages({});
+                            document.location.hash = encodeURI(
+                              `#mailbox/${data.spamMailbox}`
+                            );
+                          }
+                          // eslint-disable-next-line no-unused-vars
+                        } catch (err) {
+                          // Can't set the message as spam
+                        }
+                      }}
+                      title={t("markasspam")}
+                      className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                    >
+                      <Ban
+                        width={24}
+                        height={24}
+                        className="inline w-6 h-6 align-top"
+                      />
+                    </a>
+                  </li>
+                )
               ) : (
                 ""
               )}

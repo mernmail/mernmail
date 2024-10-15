@@ -46,5 +46,6 @@
     "forward": "Przekaż dalej",
     "attachments": "Załączniki",
     "cantloadmessage": "Nie można załadować wiadomości: {{error}}",
-    "markasread": "Oznacz jako przeczytane"
+    "markasread": "Oznacz jako przeczytane",
+    "notspam": "To nie jest spam"
 }

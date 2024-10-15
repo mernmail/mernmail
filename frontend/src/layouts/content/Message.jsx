@@ -8,6 +8,7 @@ import {
   Reply,
   ReplyAll,
   Star,
+  ThumbsUp,
   Trash
 } from "lucide-react";
 import { useEffect, useRef } from "react";
@@ -32,6 +33,10 @@ function MessageContent() {
         return mailbox.type == "spam";
       })
     )
+  );
+  const mailboxId = useSelector((state) => state.mailboxes.currentMailbox);
+  const mailboxType = useSelector(
+    (state) => state.mailboxes.currentMailboxType
   );
   const canMarkAsUnread = useSelector(
     (state) => state.capabilities.receiveCapabilities.markAsUnread
@@ -230,20 +235,7 @@ function MessageContent() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                let mailboxName = "";
-                try {
-                  const messageMatch = decodeURI(document.location.hash).match(
-                    /^#message\/((?:(?!\/[^/]*$).)+)\/.+/
-                  );
-                  if (messageMatch) {
-                    mailboxName = messageMatch[1];
-                  }
-                  //eslint-disable-next-line no-unused-vars
-                } catch (err) {
-                  // Hash URL parse error, invalid URL
-                }
-
-                document.location.hash = encodeURI(`#mailbox/${mailboxName}`);
+                document.location.hash = encodeURI(`#mailbox/${mailboxId}`);
               }}
               title={t("back")}
               className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
@@ -281,26 +273,16 @@ function MessageContent() {
             ""
           )}
           {hasSpamMailbox ? (
-            <li className="inline-block mx-0.5">
-              <a
-                href="#"
-                onClick={async (e) => {
-                  e.preventDefault();
-                  let mailboxName = "";
-                  try {
-                    const messageMatch = decodeURI(
-                      document.location.hash
-                    ).match(/^#message\/((?:(?!\/[^/]*$).)+)\/.+/);
-                    if (messageMatch) {
-                      mailboxName = messageMatch[1];
-                    }
-                    //eslint-disable-next-line no-unused-vars
-                  } catch (err) {
-                    // Hash URL parse error, invalid URL
-                  }
-                  try {
+            mailboxType == "spam" ? (
+              <li className="inline-block mx-0.5">
+                <a
+                  href="#"
+                  onClick={async (e) => {
+                    e.preventDefault();
+
+                    /*try {
                     const res = await fetch(
-                      `/api/receive/spam/${mailboxName}`,
+                      `/api/receive/spam/${mailboxId}`,
                       {
                         method: "POST",
                         headers: {
@@ -321,18 +303,61 @@ function MessageContent() {
                     // eslint-disable-next-line no-unused-vars
                   } catch (err) {
                     // Can't set the message as spam
-                  }
-                }}
-                title={t("markasspam")}
-                className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
-              >
-                <Ban
-                  width={24}
-                  height={24}
-                  className="inline w-6 h-6 align-top"
-                />
-              </a>
-            </li>
+                  }*/
+                  }}
+                  title={t("notspam")}
+                  className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                >
+                  <ThumbsUp
+                    width={24}
+                    height={24}
+                    className="inline w-6 h-6 align-top"
+                  />
+                </a>
+              </li>
+            ) : (
+              <li className="inline-block mx-0.5">
+                <a
+                  href="#"
+                  onClick={async (e) => {
+                    e.preventDefault();
+
+                    try {
+                      const res = await fetch(
+                        `/api/receive/spam/${mailboxId}`,
+                        {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json"
+                          },
+                          body: JSON.stringify({
+                            messages: getMessageIds()
+                          }),
+                          credentials: "include"
+                        }
+                      );
+                      if (res.status == 200) {
+                        const data = await res.json();
+                        document.location.hash = encodeURI(
+                          `#mailbox/${data.spamMailbox}`
+                        );
+                      }
+                      // eslint-disable-next-line no-unused-vars
+                    } catch (err) {
+                      // Can't set the message as spam
+                    }
+                  }}
+                  title={t("markasspam")}
+                  className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                >
+                  <Ban
+                    width={24}
+                    height={24}
+                    className="inline w-6 h-6 align-top"
+                  />
+                </a>
+              </li>
+            )
           ) : (
             ""
           )}
@@ -341,32 +366,17 @@ function MessageContent() {
               href="#"
               onClick={async (e) => {
                 e.preventDefault();
-                let mailboxName = "";
                 try {
-                  const messageMatch = decodeURI(document.location.hash).match(
-                    /^#message\/((?:(?!\/[^/]*$).)+)\/.+/
-                  );
-                  if (messageMatch) {
-                    mailboxName = messageMatch[1];
-                  }
-                  //eslint-disable-next-line no-unused-vars
-                } catch (err) {
-                  // Hash URL parse error, invalid URL
-                }
-                try {
-                  const res = await fetch(
-                    `/api/receive/delete/${mailboxName}`,
-                    {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json"
-                      },
-                      body: JSON.stringify({
-                        messages: getMessageIds()
-                      }),
-                      credentials: "include"
-                    }
-                  );
+                  const res = await fetch(`/api/receive/delete/${mailboxId}`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                      messages: getMessageIds()
+                    }),
+                    credentials: "include"
+                  });
                   if (res.status == 200) {
                     const data = await res.json();
                     if (data.trashMailbox) {
@@ -375,7 +385,7 @@ function MessageContent() {
                       );
                     } else {
                       document.location.hash = encodeURI(
-                        `#mailbox/${mailboxName}`
+                        `#mailbox/${mailboxId}`
                       );
                     }
                   }
@@ -400,21 +410,10 @@ function MessageContent() {
                 href="#"
                 onClick={async (e) => {
                   e.preventDefault();
-                  let mailboxName = "";
-                  try {
-                    const messageMatch = decodeURI(
-                      document.location.hash
-                    ).match(/^#message\/((?:(?!\/[^/]*$).)+)\/.+/);
-                    if (messageMatch) {
-                      mailboxName = messageMatch[1];
-                    }
-                    //eslint-disable-next-line no-unused-vars
-                  } catch (err) {
-                    // Hash URL parse error, invalid URL
-                  }
+
                   try {
                     const res = await fetch(
-                      `/api/receive/unread/${mailboxName}`,
+                      `/api/receive/unread/${mailboxId}`,
                       {
                         method: "POST",
                         headers: {
@@ -428,7 +427,7 @@ function MessageContent() {
                     );
                     if (res.status == 200) {
                       document.location.hash = encodeURI(
-                        `#mailbox/${mailboxName}`
+                        `#mailbox/${mailboxId}`
                       );
                     }
                     // eslint-disable-next-line no-unused-vars

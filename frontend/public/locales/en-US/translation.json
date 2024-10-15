@@ -46,5 +46,6 @@
     "forward": "Forward",
     "attachments": "Attachments",
     "cantloadmessage": "Can't load a message: {{error}}",
-    "markasread": "Mark as read"
+    "markasread": "Mark as read",
+    "notspam": "This is not spam"
 }
