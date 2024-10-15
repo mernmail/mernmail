@@ -15,6 +15,7 @@ import DOMPurify from "dompurify";
 import { filesize } from "filesize";
 import { useDispatch, useSelector } from "react-redux";
 import { loadMessage, resetLoading } from "@/slices/messageSlice.js";
+import { setMailboxes } from "@/slices/mailboxesSlice";
 import download from "downloadjs";
 
 function MessageContent() {
@@ -37,6 +38,7 @@ function MessageContent() {
     const signal = controller ? controller.signal : undefined;
 
     dispatch(resetLoading());
+    dispatch(setMailboxes);
     dispatch(loadMessage(signal));
 
     return () => {
@@ -113,6 +115,7 @@ function MessageContent() {
       const onBackButtonEvent = () => {
         setTimeout(() => {
           dispatch(resetLoading());
+          dispatch(setMailboxes);
           dispatch(loadMessage(signal));
         }, 0);
       };

@@ -48,6 +48,7 @@ function EmailContent() {
       const signal = controller ? controller.signal : undefined;
 
       dispatch(resetLoading());
+      dispatch(setMailboxes);
       dispatch(setMessages(signal));
 
       const interval = setInterval(() => {
@@ -70,6 +71,7 @@ function EmailContent() {
             : undefined;
         const signal = controller ? controller.signal : undefined;
 
+        dispatch(setMailboxes);
         dispatch(setMessages(signal));
 
         return () => {
@@ -119,7 +121,6 @@ function EmailContent() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                dispatch(setMailboxes);
                 dispatch(resetLoading());
                 setRefresh(true);
               }}
