@@ -7,6 +7,7 @@ import {
   Mail,
   Reply,
   ReplyAll,
+  Star,
   Trash
 } from "lucide-react";
 import { useEffect, useRef } from "react";
@@ -34,6 +35,9 @@ function MessageContent() {
   );
   const canMarkAsUnread = useSelector(
     (state) => state.capabilities.receiveCapabilities.markAsUnread
+  );
+  const canStar = useSelector(
+    (state) => state.capabilities.receiveCapabilities.star
   );
   const messageData = useSelector((state) => state.message.messageData);
   const loading = useSelector((state) => state.message.loading);
@@ -244,6 +248,31 @@ function MessageContent() {
               />
             </a>
           </li>
+          {canStar ? (
+            <li className="inline-block mx-0.5">
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+                title={t("star")}
+                className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+              >
+                <Star
+                  width={24}
+                  height={24}
+                  fill={
+                    messagesToRender[messagesToRender.length - 1].starred
+                      ? "#ffff00"
+                      : "none"
+                  }
+                  className="inline w-6 h-6 align-top"
+                />
+              </a>
+            </li>
+          ) : (
+            ""
+          )}
           {hasSpamMailbox ? (
             <li className="inline-block mx-0.5">
               <a

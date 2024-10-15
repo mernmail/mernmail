@@ -34,6 +34,9 @@ function EmailContent() {
   const canMarkAsUnread = useSelector(
     (state) => state.capabilities.receiveCapabilities.markAsUnread
   );
+  const canStar = useSelector(
+    (state) => state.capabilities.receiveCapabilities.star
+  );
   const mailboxId = useSelector((state) => state.mailboxes.currentMailbox);
   const messages = useSelector((state) => state.messages.messages);
   const loading = useSelector((state) => state.messages.loading);
@@ -341,22 +344,26 @@ function EmailContent() {
                             className="w-6 h-6 mx-1.5 my-1 inline-block align-middle"
                             title={t("select")}
                           />
-                          <a
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                            }}
-                            title={t("star")}
-                            className="inline-block align-middle shrink-0 w-8 h-8 p-1 mx-0.5 rounded-sm bg-inherit text-inherit hover:bg-accent/60 hover:text-accent-foreground transition-colors"
-                          >
-                            <Star
-                              width={24}
-                              height={24}
-                              fill={starred ? "#ffff00" : "none"}
-                              className="inline w-6 h-6 align-top"
-                            />
-                          </a>
+                          {canStar ? (
+                            <a
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                              }}
+                              title={t("star")}
+                              className="inline-block align-middle shrink-0 w-8 h-8 p-1 mx-0.5 rounded-sm bg-inherit text-inherit hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+                            >
+                              <Star
+                                width={24}
+                                height={24}
+                                fill={starred ? "#ffff00" : "none"}
+                                className="inline w-6 h-6 align-top"
+                              />
+                            </a>
+                          ) : (
+                            ""
+                          )}
                         </div>
                         <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis md:self-center px-1 md:max-w-96">
                           {address}

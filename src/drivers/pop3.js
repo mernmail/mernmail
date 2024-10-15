@@ -22,6 +22,7 @@ module.exports = function init(email, password, callback) {
               const receiveObject = {
                 capabilities: {
                   markAsUnread: false,
+                  star: false,
                   multipleMailboxes: false
                 },
                 close: () => {
