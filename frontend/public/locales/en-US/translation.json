@@ -47,5 +47,6 @@
     "attachments": "Attachments",
     "cantloadmessage": "Can't load a message: {{error}}",
     "markasread": "Mark as read",
-    "notspam": "This is not spam"
+    "notspam": "This is not spam",
+    "spamwarning": "This message is in your Spam folder and may contain unsolicited or potentially harmful content. Be cautious and avoid clicking links or downloading attachments unless you trust the sender. Consider deleting if the message seems suspicious."
 }

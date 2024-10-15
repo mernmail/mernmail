@@ -9,7 +9,8 @@ import {
   ReplyAll,
   Star,
   ThumbsUp,
-  Trash
+  Trash,
+  TriangleAlert
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -469,6 +470,18 @@ function MessageContent() {
             ""
           )}
         </ul>
+        {mailboxType == "spam" ? (
+          <div className="flex flex-column md:flex-row my-2">
+            <TriangleAlert
+              width={24}
+              height={24}
+              className="inline-block w-8 h-8 p-1 align-top shrink-0"
+            />
+            <p className="mx-1">{t("spamwarning")}</p>
+          </div>
+        ) : (
+          ""
+        )}
         {messagesToRender
           .slice()
           .reverse()
