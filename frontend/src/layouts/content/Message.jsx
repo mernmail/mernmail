@@ -64,6 +64,16 @@ function MessageContent() {
     };
   };
 
+  const processLinksOnIframeLoad = (iframeRefContents) => {
+    return () => {
+      const aElements =
+        iframeRefContents.contentWindow.document.querySelectorAll("a");
+      aElements.forEach((aElement) => {
+        aElement.target = "_parent";
+      });
+    };
+  };
+
   const resizeOnIframeLoad = (iframeRefContents) => {
     return () => {
       const body = iframeRefContents.contentWindow.document.body;
@@ -375,6 +385,7 @@ function MessageContent() {
                         iframeRef.current[id],
                         attachments
                       )();
+                      processLinksOnIframeLoad(iframeRef.current[id])();
                       resizeOnIframeLoad(iframeRef.current[id])();
                     }, 0);
                   }}
