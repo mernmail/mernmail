@@ -390,7 +390,15 @@ function MessageContent() {
                       )();
                       processLinksOnIframeLoad(iframeRef.current[id])();
                       resizeOnIframeLoad(iframeRef.current[id])();
-                    }, 10);
+                      setTimeout(() => {
+                        try {
+                          resizeOnIframeLoad(iframeRef.current[id])();
+                          // eslint-disable-next-line no-unused-vars
+                        } catch (err) {
+                          // Don't reload when it failed
+                        }
+                      }, 100);
+                    }, 0);
                   }}
                   className="bg-white w-full rounded-lg mb-2"
                   srcDoc={DOMPurify.sanitize(body, {
