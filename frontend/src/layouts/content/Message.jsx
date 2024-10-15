@@ -15,6 +15,7 @@ import DOMPurify from "dompurify";
 import { filesize } from "filesize";
 import { useDispatch, useSelector } from "react-redux";
 import { loadMessage, resetLoading } from "@/slices/messageSlice.js";
+import download from "downloadjs";
 
 function MessageContent() {
   const iframeRef = useRef({});
@@ -400,9 +401,25 @@ function MessageContent() {
                             key={id}
                           >
                             <div
-                              onClick={() => {
-                                // TODO: open a message
-                                alert(`Download attachment ${id}`);
+                              onClick={async () => {
+                                try {
+                                  const res = await fetch(
+                                    `/api/receive/attachment/${id}`,
+                                    {
+                                      method: "GET",
+                                      credentials: "include"
+                                    }
+                                  );
+                                  const blob = await res.blob();
+                                  download(
+                                    blob,
+                                    attachment.filename,
+                                    attachment.contentType
+                                  );
+                                  // eslint-disable-next-line no-unused-vars
+                                } catch (err) {
+                                  // Can't download file
+                                }
                               }}
                               className="block bg-background px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5 text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors cursor-pointer"
                             >
