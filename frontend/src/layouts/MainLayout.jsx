@@ -55,7 +55,7 @@ function LoginLayout() {
 
   return (
     <div
-      className={`block w-full h-screen relative ${menuShown ? "md:overflow-hidden" : ""}`}
+      className={`block w-full h-screen relative ${menuShown ? "overflow-hidden md:overflow-auto" : ""}`}
     >
       <header className="fixed z-10 h-12 flex flex-row flex-nowrap justify-between w-full py-2 px-3 text-lg bg-primary text-primary-foreground">
         <div className="whitespace-nowrap">
@@ -177,7 +177,7 @@ function LoginLayout() {
           <Sidebar />
         </aside>
         <main
-          className={`overflow-auto ${menuShown ? "md:overflow-hidden" : ""} grow p-2`}
+          className={`overflow-auto ${menuShown ? "overflow-hidden md:overflow-auto" : ""} grow p-2`}
         >
           <Content />
         </main>
