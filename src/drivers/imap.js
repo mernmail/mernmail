@@ -417,6 +417,15 @@ module.exports = function init(email, password, callback) {
         getOneMessage(messageId, () => {
           callback(null, messages);
         });
+      },
+      markMessageAsUnread: (message, callback) => {
+        imap.delFlags(message, ["\\Seen"], (err) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null);
+          }
+        });
       }
     };
     callback(null, receiveObject);

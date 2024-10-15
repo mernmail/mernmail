@@ -284,8 +284,43 @@ function MessageContent() {
             <li className="inline-block mx-0.5">
               <a
                 href="#"
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.preventDefault();
+                  let mailboxName = "";
+                  let messageId = "";
+                  try {
+                    const messageMatch = decodeURI(
+                      document.location.hash
+                    ).match(/^#message\/((?:(?!\/[^/]*$).)+)\/(.+)/);
+                    if (messageMatch) {
+                      mailboxName = messageMatch[1];
+                      messageId = messageMatch[2];
+                    }
+                    //eslint-disable-next-line no-unused-vars
+                  } catch (err) {
+                    // Hash URL parse error, invalid URL
+                  }
+                  try {
+                    const res = await fetch(
+                      `/api/receive/unread/${mailboxName}/${messageId}`,
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({}),
+                        credentials: "include"
+                      }
+                    );
+                    if (res.status == 200) {
+                      document.location.hash = encodeURI(
+                        `#mailbox/${mailboxName}`
+                      );
+                    }
+                    // eslint-disable-next-line no-unused-vars
+                  } catch (err) {
+                    // Can't download file
+                  }
                 }}
                 title={t("markasunread")}
                 className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
