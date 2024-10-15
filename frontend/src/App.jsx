@@ -14,12 +14,6 @@ function App() {
     setTimeout(() => {
       dispatch(checkAuth);
     }, 500);
-
-    const interval = setInterval(() => {
-      dispatch(checkAuth);
-    }, 10000);
-
-    return () => clearInterval(interval);
   }, [dispatch]);
 
   if (loading) {
