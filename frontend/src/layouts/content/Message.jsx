@@ -49,8 +49,8 @@ function MessageContent() {
     const signal = controller ? controller.signal : undefined;
 
     dispatch(resetLoading());
-    dispatch(setMailboxes);
     dispatch(loadMessage(signal));
+    dispatch(setMailboxes);
 
     return () => {
       if (controller) controller.abort();
@@ -171,8 +171,8 @@ function MessageContent() {
       const onBackButtonEvent = () => {
         setTimeout(() => {
           dispatch(resetLoading());
-          dispatch(setMailboxes);
           dispatch(loadMessage(signal));
+          dispatch(setMailboxes);
         }, 0);
       };
 
