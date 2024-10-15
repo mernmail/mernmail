@@ -79,8 +79,13 @@ function MessageContent() {
     return () => {
       const body = iframeRefContents.contentWindow.document.body;
       const html = iframeRefContents.contentWindow.document.documentElement;
-      iframeRefContents.height =
-        Math.max(body.offsetHeight, html.offsetHeight) + "px";
+      iframeRefContents.height = Math.max(
+        html.scrollHeight > parseInt(iframeRefContents.height)
+          ? html.scrollHeight
+          : 0,
+        body.offsetHeight,
+        html.offsetHeight
+      );
     };
   };
 
@@ -390,17 +395,9 @@ function MessageContent() {
                       )();
                       processLinksOnIframeLoad(iframeRef.current[id])();
                       resizeOnIframeLoad(iframeRef.current[id])();
-                      setTimeout(() => {
-                        try {
-                          resizeOnIframeLoad(iframeRef.current[id])();
-                          // eslint-disable-next-line no-unused-vars
-                        } catch (err) {
-                          // Don't reload when it failed
-                        }
-                      }, 100);
                     }, 0);
                   }}
-                  className="bg-white w-full rounded-lg mb-2"
+                  className="bg-white w-full rounded-lg mb-2 overflow-x-auto overflow-y-hidden"
                   srcDoc={DOMPurify.sanitize(body, {
                     WHOLE_DOCUMENT: true
                   })}
