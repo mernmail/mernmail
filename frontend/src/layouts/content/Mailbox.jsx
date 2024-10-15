@@ -168,8 +168,7 @@ function EmailContent() {
                   <li className="block border-border border-b-2" key={id}>
                     <div
                       onClick={() => {
-                        // TODO: open a message
-                        alert(`Message ${id} to open`);
+                        document.location.hash = `#message/${mailboxId}/${id}`;
                       }}
                       className="block bg-background px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5 text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors cursor-pointer"
                     >

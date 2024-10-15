@@ -44,5 +44,6 @@
     "reply": "Odpowiedz",
     "replyall": "Odpowiedz wszystkim",
     "forward": "Przekaż dalej",
-    "attachments": "Załączniki"
+    "attachments": "Załączniki",
+    "cantloadmessage": "Nie można załadować wiadomości: {{error}}"
 }

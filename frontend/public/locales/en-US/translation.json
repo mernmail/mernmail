@@ -44,5 +44,6 @@
     "reply": "Reply",
     "replyall": "Reply to all",
     "forward": "Forward",
-    "attachments": "Attachments"
+    "attachments": "Attachments",
+    "cantloadmessage": "Can't load a message: {{error}}"
 }

@@ -94,7 +94,7 @@ export async function setMailboxes(dispatch, getState) {
       state.error = data.message;
     }
   } catch (err) {
-    state.errored = err.message;
+    state.error = err.message;
   }
   dispatch(mailboxesSlice.actions.setMailboxes(state));
 }

@@ -13,38 +13,18 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import DOMPurify from "dompurify";
 import { filesize } from "filesize";
+import { useDispatch, useSelector } from "react-redux";
+import { loadMessage, resetLoading } from "@/slices/messageSlice.js";
 
 function MessageContent() {
   const iframeRef = useRef();
   const [iframeHeight, setIframeHeight] = useState("0px");
   const { t } = useTranslation();
-  // Example message
-  const messageData = {
-    messages: [
-      {
-        seen: true,
-        starred: false,
-        answered: false,
-        date: "2024-10-14T18:02:44.000Z",
-        id: 1,
-        subject: "Mail failure - no recipient addresses",
-        from: [
-          {
-            name: "Mail Delivery System",
-            address: "Mailer-Daemon@test-mail.home"
-          }
-        ],
-        to: [
-          {
-            name: "",
-            address: "sysadmin@test-mail.home"
-          }
-        ],
-        body: "<!DOCTYPE html><html><head></head><body><pre>A message that you sent using the -t command line option contained no\naddresses that were not also on the command line, and were therefore\nsuppressed. This left no recipient addresses, and so no delivery could\nbe attempted.\n\n------ This is a copy of your message, including all the headers. ------\n\nFrom: sysadmin@localhost\nTo: sysadmin@localhost\nSubject: test\nMeMessage-Id: &lt;E1t0PP2-000000002G5-1Srj@test-mail.home&gt;\nDate: Mon, 14 Oct 2024 18:02:44 +0000\n\ntest\n</pre></body></html>",
-        attachments: []
-      }
-    ]
-  };
+  const view = useSelector((state) => state.view.view);
+  const messageData = useSelector((state) => state.message.messageData);
+  const loading = useSelector((state) => state.message.loading);
+  const error = useSelector((state) => state.message.error);
+  const dispatch = useDispatch();
   const messagesToRender = [...messageData.messages];
 
   const onIframeLoad = () => {
@@ -54,6 +34,21 @@ function MessageContent() {
   };
 
   useEffect(() => {
+    const controller =
+      typeof window.AbortController != "undefined"
+        ? new AbortController()
+        : undefined;
+    const signal = controller ? controller.signal : undefined;
+
+    dispatch(resetLoading());
+    dispatch(loadMessage(signal));
+
+    return () => {
+      if (controller) controller.abort();
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     window.addEventListener("resize", onIframeLoad);
 
     return () => {
@@ -61,7 +56,44 @@ function MessageContent() {
     };
   }, []);
 
-  if (messagesToRender.length == 0) {
+  useEffect(() => {
+    if (messagesToRender.length > 0)
+      document.title =
+        messagesToRender[messagesToRender.length - 1].subject + " - MERNMail";
+  }, [messagesToRender]);
+
+  useEffect(() => {
+    if (view == "message") {
+      const controller =
+        typeof window.AbortController != "undefined"
+          ? new AbortController()
+          : undefined;
+      const signal = controller ? controller.signal : undefined;
+
+      const onBackButtonEvent = () => {
+        setTimeout(() => {
+          dispatch(resetLoading());
+          dispatch(loadMessage(signal));
+        }, 0);
+      };
+
+      window.addEventListener("popstate", onBackButtonEvent);
+      return () => {
+        if (controller) controller.abort();
+        window.removeEventListener("popstate", onBackButtonEvent);
+      };
+    }
+  }, [view, dispatch]);
+
+  if (loading) {
+    return <p className="text-center">{t("loading")}</p>;
+  } else if (error) {
+    return (
+      <p className="text-red-500 block text-center">
+        {t("cantloadmessage", { error: error })}
+      </p>
+    );
+  } else if (messagesToRender.length == 0) {
     return <p className="text-center">{t("messagenotfound")}</p>;
   } else {
     messagesToRender[messagesToRender.length - 1] = {
