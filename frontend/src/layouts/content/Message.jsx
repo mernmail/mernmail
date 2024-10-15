@@ -144,6 +144,13 @@ function MessageContent() {
     };
   };
 
+  const getMessageIds = () => {
+    return messagesToRender
+      .slice()
+      .reverse()
+      .map((message) => message.id);
+  };
+
   useEffect(() => {
     const resizeOnIframeLoadAllRefs = () => {
       Object.keys(iframeRef.current).forEach((refKey) => {
@@ -336,9 +343,7 @@ function MessageContent() {
                           "Content-Type": "application/json"
                         },
                         body: JSON.stringify({
-                          messages: [
-                            messagesToRender[messagesToRender.length - 1].id
-                          ]
+                          messages: getMessageIds()
                         }),
                         credentials: "include"
                       }

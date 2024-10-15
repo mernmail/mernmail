@@ -75,6 +75,7 @@ module.exports = function init(email, password, callback) {
                               subject: "Unknown email",
                               from: "Unknown",
                               to: "Unknown",
+                              otherIds: [],
                               messageId: null
                             };
                             simpleParser(header)

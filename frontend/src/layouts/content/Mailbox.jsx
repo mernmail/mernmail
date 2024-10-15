@@ -69,7 +69,16 @@ function EmailContent() {
   }
 
   const getSelectedMessages = () => {
-    return Object.keys(selectedMessages).filter((key) => selectedMessages[key]);
+    const selectedMessagesArray = Object.keys(selectedMessages).filter((key) =>
+      String(selectedMessages[key])
+    );
+    let additionalMessages = [];
+    messages.forEach((message) => {
+      if (selectedMessagesArray.indexOf(String(message.id)) != -1) {
+        additionalMessages = [...additionalMessages, ...message.otherIds];
+      }
+    });
+    return [...selectedMessagesArray, ...additionalMessages];
   };
 
   useEffect(() => {

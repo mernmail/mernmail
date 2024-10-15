@@ -140,6 +140,7 @@ module.exports = function init(email, password, callback) {
               subject: "Unknown email",
               from: "Unknown",
               to: "Unknown",
+              otherIds: [],
               messageId: null
             };
 
@@ -178,7 +179,18 @@ module.exports = function init(email, password, callback) {
                   finalAttributes.to = to;
                   finalAttributes.subject = parsed.subject;
                   finalAttributes.messageId = parsed.messageId;
-                  if (parsed.inReplyTo) replyIds.push(parsed.inReplyTo);
+                  if (parsed.inReplyTo) {
+                    for (let i = 0; i < finalMessages.length; i++) {
+                      if (finalMessages[i].messageId == parsed.inReplyTo) {
+                        finalAttributes.otherIds = [
+                          ...finalMessages[i].otherIds,
+                          finalMessages[i].id
+                        ];
+                        break;
+                      }
+                    }
+                    replyIds.push(parsed.inReplyTo);
+                  }
                   if (attributesSet) {
                     finalMessages.push(finalAttributes);
                     if (finalMessages.length == messages.length) {
