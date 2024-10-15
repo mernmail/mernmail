@@ -272,7 +272,7 @@ module.exports = function init(email, password, callback) {
                       callback(err);
                     });
                 },
-                markMessageAsUnread: (message, callback) => {
+                markMessagesAsUnread: (messages, callback) => {
                   callback(new Error("POP3 doesn't support read/unread flags"));
                 }
               };

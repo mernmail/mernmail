@@ -316,14 +316,12 @@ function MessageContent() {
                 onClick={async (e) => {
                   e.preventDefault();
                   let mailboxName = "";
-                  let messageId = "";
                   try {
                     const messageMatch = decodeURI(
                       document.location.hash
-                    ).match(/^#message\/((?:(?!\/[^/]*$).)+)\/(.+)/);
+                    ).match(/^#message\/((?:(?!\/[^/]*$).)+)\/.+/);
                     if (messageMatch) {
                       mailboxName = messageMatch[1];
-                      messageId = messageMatch[2];
                     }
                     //eslint-disable-next-line no-unused-vars
                   } catch (err) {
@@ -331,13 +329,17 @@ function MessageContent() {
                   }
                   try {
                     const res = await fetch(
-                      `/api/receive/unread/${mailboxName}/${messageId}`,
+                      `/api/receive/unread/${mailboxName}`,
                       {
                         method: "POST",
                         headers: {
                           "Content-Type": "application/json"
                         },
-                        body: JSON.stringify({}),
+                        body: JSON.stringify({
+                          messages: [
+                            messagesToRender[messagesToRender.length - 1].id
+                          ]
+                        }),
                         credentials: "include"
                       }
                     );
@@ -348,7 +350,7 @@ function MessageContent() {
                     }
                     // eslint-disable-next-line no-unused-vars
                   } catch (err) {
-                    // Can't download file
+                    // Can't set the message as unread
                   }
                 }}
                 title={t("markasunread")}

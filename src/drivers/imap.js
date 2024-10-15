@@ -419,8 +419,8 @@ module.exports = function init(email, password, callback) {
           callback(null, messages);
         });
       },
-      markMessageAsUnread: (message, callback) => {
-        imap.delFlags(message, ["\\Seen"], (err) => {
+      markMessagesAsUnread: (messages, callback) => {
+        imap.delFlags(messages, ["\\Seen"], (err) => {
           if (err) {
             callback(err);
           } else {

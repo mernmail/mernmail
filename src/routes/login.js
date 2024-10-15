@@ -7,8 +7,10 @@ const { encryptPassword } = require("../utils/passwordCrypto.js");
 const router = express.Router();
 
 router.post("/", (req, res) => {
-  if (!req.body || !req.body.email || !req.body.password)
+  if (!req.body || !req.body.email || !req.body.password) {
     res.status(400).json({ message: "Email and password are required" });
+    return;
+  }
   initReceiveDriver(
     String(req.body.email),
     String(req.body.password),
