@@ -65,6 +65,7 @@ router.get("/message/:message*", (req, res, next) => {
 });
 
 router.get("/attachment/:attachment", (req, res) => {
+  req.receiveDriver.close();
   const attachmentHash = req.params.attachment;
   getAttachment(attachmentHash, req.credentials.email, (err, readStream) => {
     if (err && err.code == "ENOENT") {
