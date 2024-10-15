@@ -33,5 +33,16 @@
     "datetime": "{{val, datetime}}",
     "nomessages": "Brak wiadomości",
     "nospam": "Hurra, nie ma spamu!",
-    "reload": "Załaduj ponownie"
+    "reload": "Załaduj ponownie",
+    "messagenotfound": "Nie znaleziono wiadomości",
+    "back": "Wstecz",
+    "markasspam": "Oznacz jako spam",
+    "delete": "Usuń",
+    "markasunread": "Oznacz jako nieprzeczytane",
+    "move": "Przenieś",
+    "to": "Do: {{to}}",
+    "reply": "Odpowiedz",
+    "replyall": "Odpowiedz wszystkim",
+    "forward": "Przekaż dalej",
+    "attachments": "Załączniki"
 }

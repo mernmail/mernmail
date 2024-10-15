@@ -33,5 +33,16 @@
     "datetime": "{{val, datetime}}",
     "nomessages": "No messages",
     "nospam": "There is no spam, woohoo!",
-    "reload": "Reload"
+    "reload": "Reload",
+    "messagenotfound": "Message not found",
+    "back": "Back",
+    "markasspam": "Mark as spam",
+    "delete": "Delete",
+    "markasunread": "Mark as unread",
+    "move": "Move",
+    "to": "To: {{to}}",
+    "reply": "Reply",
+    "replyall": "Reply to all",
+    "forward": "Forward",
+    "attachments": "Attachments"
 }
