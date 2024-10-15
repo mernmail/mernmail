@@ -248,7 +248,7 @@ function EmailContent() {
                         }
                         // eslint-disable-next-line no-unused-vars
                       } catch (err) {
-                        // Can't set the message as unread
+                        // Can't set the message as spam
                       }
                     }}
                     title={t("markasspam")}
@@ -298,7 +298,7 @@ function EmailContent() {
                       }
                       // eslint-disable-next-line no-unused-vars
                     } catch (err) {
-                      // Can't set the message as unread
+                      // Can't delete the message
                     }
                   }}
                   title={t("delete")}

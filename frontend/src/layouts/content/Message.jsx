@@ -284,8 +284,44 @@ function MessageContent() {
             <li className="inline-block mx-0.5">
               <a
                 href="#"
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.preventDefault();
+                  let mailboxName = "";
+                  try {
+                    const messageMatch = decodeURI(
+                      document.location.hash
+                    ).match(/^#message\/((?:(?!\/[^/]*$).)+)\/.+/);
+                    if (messageMatch) {
+                      mailboxName = messageMatch[1];
+                    }
+                    //eslint-disable-next-line no-unused-vars
+                  } catch (err) {
+                    // Hash URL parse error, invalid URL
+                  }
+                  try {
+                    const res = await fetch(
+                      `/api/receive/spam/${mailboxName}`,
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                          messages: getMessageIds()
+                        }),
+                        credentials: "include"
+                      }
+                    );
+                    if (res.status == 200) {
+                      const data = await res.json();
+                      document.location.hash = encodeURI(
+                        `#mailbox/${data.spamMailbox}`
+                      );
+                    }
+                    // eslint-disable-next-line no-unused-vars
+                  } catch (err) {
+                    // Can't set the message as spam
+                  }
                 }}
                 title={t("markasspam")}
                 className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
@@ -303,8 +339,50 @@ function MessageContent() {
           <li className="inline-block mx-0.5">
             <a
               href="#"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault();
+                let mailboxName = "";
+                try {
+                  const messageMatch = decodeURI(document.location.hash).match(
+                    /^#message\/((?:(?!\/[^/]*$).)+)\/.+/
+                  );
+                  if (messageMatch) {
+                    mailboxName = messageMatch[1];
+                  }
+                  //eslint-disable-next-line no-unused-vars
+                } catch (err) {
+                  // Hash URL parse error, invalid URL
+                }
+                try {
+                  const res = await fetch(
+                    `/api/receive/delete/${mailboxName}`,
+                    {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json"
+                      },
+                      body: JSON.stringify({
+                        messages: getMessageIds()
+                      }),
+                      credentials: "include"
+                    }
+                  );
+                  if (res.status == 200) {
+                    const data = await res.json();
+                    if (data.trashMailbox) {
+                      document.location.hash = encodeURI(
+                        `#mailbox/${data.trashMailbox}`
+                      );
+                    } else {
+                      document.location.hash = encodeURI(
+                        `#mailbox/${mailboxName}`
+                      );
+                    }
+                  }
+                  // eslint-disable-next-line no-unused-vars
+                } catch (err) {
+                  // Can't delete the message
+                }
               }}
               title={t("delete")}
               className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
