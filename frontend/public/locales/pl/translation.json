@@ -49,5 +49,7 @@
     "markasread": "Oznacz jako przeczytane",
     "notspam": "To nie jest spam",
     "spamwarning": "Ta wiadomość znajduje się w folderze Spam i może zawierać niechcianą lub potencjalnie szkodliwą treść. Zachowaj ostrożność i unikaj klikania linków lub pobierania załączników, chyba że ufasz nadawcy. Rozważ usunięcie, jeśli wiadomość wydaje się podejrzana.",
-    "nosubject": "Brak tematu"
+    "nosubject": "Brak tematu",
+    "cc": "DW: {{cc}}",
+    "bcc": "UDW: {{bcc}}"
 }

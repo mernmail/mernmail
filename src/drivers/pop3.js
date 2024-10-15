@@ -170,6 +170,7 @@ module.exports = function init(email, password, callback) {
                         to: [
                           { name: "Unknown", address: "unknown@example.com" }
                         ],
+                        cc: [],
                         body: "",
                         attachments: []
                       };
@@ -215,6 +216,25 @@ module.exports = function init(email, password, callback) {
                           );
                         });
                         finalAttributes.to = to;
+                        const ccArray =
+                          headers.get("cc") && headers.get("cc").value
+                            ? headers.get("cc").value || []
+                            : [];
+                        const cc = [];
+                        ccArray.forEach((ccObject) => {
+                          cc.push(
+                            ccObject
+                              ? {
+                                  name: ccObject.name,
+                                  address: ccObject.address
+                                }
+                              : {
+                                  name: "Unknown",
+                                  address: "unknown@example.com"
+                                }
+                          );
+                        });
+                        finalAttributes.cc = cc;
                         finalAttributes.subject = headers.get("subject");
                         messageDate = headers.get("date");
                       });

@@ -492,6 +492,7 @@ function MessageContent() {
           .map((message) => {
             const from = message.from;
             const to = message.to;
+            const cc = message.cc;
             const date = new Date(message.date);
             const id = message.id;
             const body = message.body;
@@ -561,6 +562,21 @@ function MessageContent() {
                           .join(", ")
                       })}
                     </p>
+                    {cc && cc.length > 0 ? (
+                      <p className="block text-foreground/50 overflow-hidden text-ellipsis">
+                        {t("cc", {
+                          cc: cc
+                            .map((ccObject) => {
+                              return ccObject.name
+                                ? `${ccObject.name} <${ccObject.address}>`
+                                : ccObject.address;
+                            })
+                            .join(", ")
+                        })}
+                      </p>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <p className="whitespace-nowrap px-1 lg:self-center">
                     {t("datetime", {

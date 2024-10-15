@@ -49,5 +49,7 @@
     "markasread": "Mark as read",
     "notspam": "This is not spam",
     "spamwarning": "This message is in your Spam folder and may contain unsolicited or potentially harmful content. Be cautious and avoid clicking links or downloading attachments unless you trust the sender. Consider deleting if the message seems suspicious.",
-    "nosubject": "No subject"
+    "nosubject": "No subject",
+    "cc": "CC: {{cc}}",
+    "bcc": "BCC: {{bcc}}"
 }
