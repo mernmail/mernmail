@@ -68,6 +68,10 @@ function EmailContent() {
     title = titleSelected;
   }
 
+  const getSelectedMessages = () => {
+    return Object.keys(selectedMessages).filter((key) => selectedMessages[key]);
+  };
+
   useEffect(() => {
     if (!mailboxesLoading) {
       const controller =
@@ -248,6 +252,30 @@ function EmailContent() {
                       href="#"
                       onClick={async (e) => {
                         e.preventDefault();
+                        const messages = getSelectedMessages();
+                        try {
+                          const res = await fetch(
+                            `/api/receive/unread/${mailboxId}`,
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json"
+                              },
+                              body: JSON.stringify({
+                                messages: messages
+                              }),
+                              credentials: "include"
+                            }
+                          );
+                          if (res.status == 200) {
+                            setSelectedMessages({});
+                            dispatch(resetLoading());
+                            setRefresh(true);
+                          }
+                        } catch (err) {
+                          alert(err);
+                          // Can't set messages as unread
+                        }
                       }}
                       title={t("markasunread")}
                       className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
@@ -264,6 +292,30 @@ function EmailContent() {
                       href="#"
                       onClick={async (e) => {
                         e.preventDefault();
+                        const messages = getSelectedMessages();
+                        try {
+                          const res = await fetch(
+                            `/api/receive/read/${mailboxId}`,
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json"
+                              },
+                              body: JSON.stringify({
+                                messages: messages
+                              }),
+                              credentials: "include"
+                            }
+                          );
+                          if (res.status == 200) {
+                            setSelectedMessages({});
+                            dispatch(resetLoading());
+                            setRefresh(true);
+                          }
+                        } catch (err) {
+                          alert(err);
+                          // Can't set messages as read
+                        }
                       }}
                       title={t("markasread")}
                       className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"

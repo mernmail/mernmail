@@ -274,6 +274,9 @@ module.exports = function init(email, password, callback) {
                 },
                 markMessagesAsUnread: (messages, callback) => {
                   callback(new Error("POP3 doesn't support read/unread flags"));
+                },
+                markMessagesAsRead: (messages, callback) => {
+                  callback(new Error("POP3 doesn't support read/unread flags"));
                 }
               };
               callback(null, receiveObject);

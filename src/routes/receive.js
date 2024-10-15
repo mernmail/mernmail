@@ -109,4 +109,30 @@ router.post("/unread/:mailbox*", (req, res) => {
   });
 });
 
+router.post("/read/:mailbox*", (req, res) => {
+  if (!req.body || !req.body.messages || req.body.messages.length === 0) {
+    res
+      .status(400)
+      .json({ message: "You need to provide messages to mark as unread" });
+    return;
+  }
+  const mailbox = req.params.mailbox + req.params[0];
+  req.receiveDriver.openMailbox(mailbox, (err) => {
+    if (err) {
+      res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
+      return;
+    }
+    req.receiveDriver.markMessagesAsRead(req.body.messages, (err) => {
+      if (err) {
+        res.status(500).json({ message: err.message });
+        req.receiveDriver.close();
+        return;
+      }
+      res.json({ message: "Marked messages as unread successfully" });
+      req.receiveDriver.close();
+    });
+  });
+});
+
 module.exports = router;

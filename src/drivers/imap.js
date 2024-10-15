@@ -427,6 +427,15 @@ module.exports = function init(email, password, callback) {
             callback(null);
           }
         });
+      },
+      markMessagesAsRead: (messages, callback) => {
+        imap.addFlags(messages, ["\\Seen"], (err) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null);
+          }
+        });
       }
     };
     callback(null, receiveObject);
