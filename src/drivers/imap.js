@@ -113,6 +113,7 @@ module.exports = function init(email, password, callback) {
             return;
           }
           const finalMessages = [];
+          const replyIds = [];
           if (messages.length == 0) {
             callback(null, []);
             return;
@@ -134,7 +135,6 @@ module.exports = function init(email, password, callback) {
               to: "Unknown",
               messageId: null
             };
-            const replyIds = [];
 
             msg.on("body", (bodyStream) => {
               simpleParser(bodyStream)
