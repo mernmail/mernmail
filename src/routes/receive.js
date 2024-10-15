@@ -1,4 +1,5 @@
 const express = require("express");
+const { getAttachment } = require("../utils/attachments");
 const router = express.Router();
 
 router.get("/mailboxes", (req, res) => {
@@ -60,6 +61,19 @@ router.get("/message/:message*", (req, res, next) => {
         req.receiveDriver.close();
       }
     );
+  });
+});
+
+router.get("/attachment/:attachment", (req, res) => {
+  const attachmentHash = req.params.attachment;
+  getAttachment(attachmentHash, req.credentials.email, (err, readStream) => {
+    if (err && err.code == "ENOENT") {
+      res.status(404).send("Attachment not found");
+    } else if (err) {
+      res.status(500).send(err.message);
+    } else {
+      readStream.pipe(res);
+    }
   });
 });
 

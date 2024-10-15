@@ -346,6 +346,8 @@ module.exports = function init(email, password, callback) {
                           finalAttributes.attachments.push({
                             filename: data.filename || attachmentId,
                             contentType: data.contentType,
+                            contentDisposition: data.contentDisposition,
+                            contentId: data.cid,
                             size: size,
                             id: attachmentId
                           });

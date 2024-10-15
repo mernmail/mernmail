@@ -51,6 +51,26 @@ function saveAttachment(attachmentHash, attachmentStream, user, callback) {
   });
 }
 
+function getAttachment(attachmentHash, user, callback) {
+  const sanitizedAttachmentHash = attachmentHash
+    .replace(/(?:^|[/\\])\.\.(?=[/\\])/g, "")
+    .replace(/^[/\\]+/g, "")
+    .replace(/[/\\]+$/g, "");
+  const pathToTheAttachment = path.join(
+    attachmentsPath,
+    user.replace(/(?:^|[/\\])\.\.(?=[/\\])/g, "").replace(/[/\\]+/g, ""),
+    sanitizedAttachmentHash
+  );
+  const readStream = fs.createReadStream(pathToTheAttachment);
+  readStream.on("open", () => {
+    callback(null, readStream);
+  });
+  readStream.on("error", (err) => {
+    callback(err);
+  });
+}
+
 module.exports = {
-  saveAttachment: saveAttachment
+  saveAttachment: saveAttachment,
+  getAttachment: getAttachment
 };
