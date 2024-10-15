@@ -94,6 +94,7 @@ router.post("/unread/:mailbox*", (req, res) => {
     res
       .status(400)
       .json({ message: "You need to provide messages to mark as unread" });
+    req.receiveDriver.close();
     return;
   }
   const mailbox = req.params.mailbox + req.params[0];
@@ -126,6 +127,7 @@ router.post("/read/:mailbox*", (req, res) => {
     res
       .status(400)
       .json({ message: "You need to provide messages to mark as read" });
+    req.receiveDriver.close();
     return;
   }
   const mailbox = req.params.mailbox + req.params[0];
@@ -158,6 +160,7 @@ router.post("/spam/:mailbox*", (req, res) => {
     res
       .status(400)
       .json({ message: "You need to provide messages to mark as spam" });
+    req.receiveDriver.close();
     return;
   }
   const mailbox = req.params.mailbox + req.params[0];
@@ -195,6 +198,40 @@ router.post("/spam/:mailbox*", (req, res) => {
         });
         req.receiveDriver.close();
       });
+    });
+  });
+});
+
+router.post("/delete/:mailbox*", (req, res) => {
+  if (
+    !req.body ||
+    !req.body.messages ||
+    (!Array.isArray(req.body.messages) &&
+      typeof req.body.messages != "string") ||
+    req.body.messages.length === 0
+  ) {
+    res.status(400).json({ message: "You need to provide messages to delete" });
+    req.receiveDriver.close();
+    return;
+  }
+  const mailbox = req.params.mailbox + req.params[0];
+  req.receiveDriver.openMailbox(mailbox, (err) => {
+    if (err) {
+      res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
+      return;
+    }
+    req.receiveDriver.deleteMessages(req.body.messages, (err, trashMailbox) => {
+      if (err) {
+        res.status(500).json({ message: err.message });
+        req.receiveDriver.close();
+        return;
+      }
+      res.json({
+        message: "Deleted messages successfully",
+        trashMailbox: trashMailbox
+      });
+      req.receiveDriver.close();
     });
   });
 });

@@ -13,6 +13,7 @@ module.exports = function init(email, password, callback) {
   });
 
   imap.once("ready", () => {
+    let currentMailbox = null;
     const receiveObject = {
       capabilities: {
         markAsUnread: true,
@@ -103,11 +104,12 @@ module.exports = function init(email, password, callback) {
         });
       },
       openMailbox: (mailbox, callback) => {
-        imap.openBox(mailbox, (err) => {
+        imap.openBox(mailbox, (err, mailboxObj) => {
           if (err) {
             callback(err);
             return;
           }
+          currentMailbox = mailboxObj;
           callback(null);
         });
       },
@@ -445,12 +447,11 @@ module.exports = function init(email, password, callback) {
           }
 
           const findSpamMailbox = (mailboxes) => {
-            const attribute = "\\Junk";
             return Object.keys(mailboxes).reduce((result, mailboxName) => {
               const mailbox = mailboxes[mailboxName];
               if (
                 mailbox.attribs.indexOf("\\NOSELECT") == -1 &&
-                mailbox.attribs.indexOf(attribute) != -1
+                mailbox.attribs.indexOf("\\Junk") != -1
               ) {
                 return mailboxName;
               }
@@ -464,7 +465,7 @@ module.exports = function init(email, password, callback) {
             }, null);
           };
 
-          callback(err, findSpamMailbox(mailboxes));
+          callback(null, findSpamMailbox(mailboxes));
         });
       },
       moveMessages: (messages, newMailbox, callback) => {
@@ -479,6 +480,95 @@ module.exports = function init(email, password, callback) {
         } catch (err) {
           callback(err);
         }
+      },
+      deleteMessages: (messages, callback) => {
+        imap.getBoxes((err, mailboxes) => {
+          if (err) {
+            callback(err);
+            return;
+          }
+
+          const findSpamMailbox = (mailboxes) => {
+            return Object.keys(mailboxes).reduce((result, mailboxName) => {
+              const mailbox = mailboxes[mailboxName];
+              if (
+                mailbox.attribs.indexOf("\\NOSELECT") == -1 &&
+                mailbox.attribs.indexOf("\\Junk") != -1
+              ) {
+                return mailboxName;
+              }
+              if (mailbox.children) {
+                const childResult = findSpamMailbox(mailbox.children);
+                if (childResult) {
+                  return `${mailboxName}${mailbox.delimiter}${childResult}`;
+                }
+              }
+              return result;
+            }, null);
+          };
+
+          const findTrashMailbox = (mailboxes) => {
+            return Object.keys(mailboxes).reduce((result, mailboxName) => {
+              const mailbox = mailboxes[mailboxName];
+              if (
+                mailbox.attribs.indexOf("\\NOSELECT") == -1 &&
+                mailbox.attribs.indexOf("\\Trash") != -1
+              ) {
+                return mailboxName;
+              }
+              if (mailbox.children) {
+                const childResult = findSpamMailbox(mailbox.children);
+                if (childResult) {
+                  return `${mailboxName}${mailbox.delimiter}${childResult}`;
+                }
+              }
+              return result;
+            }, null);
+          };
+
+          const trashMailbox = findTrashMailbox(mailboxes);
+          const spamMailbox = findSpamMailbox(mailboxes);
+
+          if (
+            !trashMailbox ||
+            currentMailbox.name == spamMailbox ||
+            currentMailbox.name == trashMailbox
+          ) {
+            try {
+              imap.addFlags(messages, ["\\Deleted"], (err) => {
+                if (err) {
+                  callback(err);
+                } else {
+                  try {
+                    imap.expunge((err) => {
+                      if (err) {
+                        callback(err);
+                      } else {
+                        callback(null, null);
+                      }
+                    });
+                  } catch (err) {
+                    callback(err);
+                  }
+                }
+              });
+            } catch (err) {
+              callback(err);
+            }
+          } else {
+            try {
+              imap.move(messages, trashMailbox, (err) => {
+                if (err) {
+                  callback(err);
+                } else {
+                  callback(null, trashMailbox);
+                }
+              });
+            } catch (err) {
+              callback(err);
+            }
+          }
+        });
       }
     };
     callback(null, receiveObject);

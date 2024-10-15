@@ -288,6 +288,30 @@ module.exports = function init(email, password, callback) {
                       "POP3 doesn't support moving messages between mailboxes"
                     )
                   );
+                },
+                deleteMessages: (messages, callback) => {
+                  const messagesArray = Array.isArray(messages)
+                    ? messages
+                    : [messages];
+                  const deleteMultipleMessages = (callback2, _id) => {
+                    if (!_id) _id = 0;
+                    if (_id >= messagesArray.length) {
+                      callback2();
+                      return;
+                    }
+                    pop3
+                      .command("DELE", messagesArray[_id])
+                      .then(() => {
+                        deleteMultipleMessages(callback2, _id);
+                      })
+                      .catch((err) => {
+                        callback(err);
+                      });
+                  };
+                  deleteMultipleMessages(() => {
+                    // POP3 supports only one mailbox
+                    callback(null, null);
+                  });
                 }
               };
               callback(null, receiveObject);
