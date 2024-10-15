@@ -173,6 +173,20 @@ function MessageContent() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
+                let mailboxName = "";
+                try {
+                  const messageMatch = decodeURI(document.location.hash).match(
+                    /^#message\/((?:(?!\/[^/]*$).)+)\/.+/
+                  );
+                  if (messageMatch) {
+                    mailboxName = messageMatch[1];
+                  }
+                  //eslint-disable-next-line no-unused-vars
+                } catch (err) {
+                  // Hash URL parse error, invalid URL
+                }
+
+                document.location.hash = `#mailbox/${mailboxName}`;
               }}
               title={t("back")}
               className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
