@@ -334,7 +334,9 @@ function MessageContent() {
                   ref={iframeRef}
                   onLoad={onIframeLoad}
                   className="bg-white w-full rounded-lg mb-2"
-                  srcDoc={DOMPurify.sanitize(body)}
+                  srcDoc={DOMPurify.sanitize(body, {
+                    WHOLE_DOCUMENT: true
+                  })}
                   width="100%"
                   height={iframeHeight}
                 />
