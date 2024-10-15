@@ -19,7 +19,12 @@ module.exports = function authAndInitReceiveMiddleware(req, res, next) {
           const password = decryptPassword(result.encryptedPassword);
           initReceiveDriver(email, password, (err, driver) => {
             if (err) {
-              res.status(401).json({ message: err.message });
+              try {
+                res.status(401).json({ message: err.message });
+                // eslint-disable-next-line no-unused-vars
+              } catch (err) {
+                // Header are probably already sent
+              }
             } else {
               req.credentials = {
                 email: email,
