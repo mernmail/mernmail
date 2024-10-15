@@ -79,7 +79,8 @@ function MessageContent() {
     return () => {
       const body = iframeRefContents.contentWindow.document.body;
       const html = iframeRefContents.contentWindow.document.documentElement;
-      iframeRefContents.height = Math.max(body.offsetHeight, html.offsetHeight);
+      iframeRefContents.height =
+        Math.max(body.offsetHeight, html.offsetHeight) + 5 + "px";
     };
   };
 
