@@ -57,8 +57,13 @@ function MessageContent() {
             const attachment = attachments.find((attachment) => {
               return attachment.contentId == cid;
             });
-            if (attachment)
+            if (attachment) {
               srcElement.src = `/api/receive/attachment/${attachment.id}`;
+              // Add onload event listener to images with CIDs, so that iframe heights are not broken
+              srcElement.addEventListener("load", () => {
+                resizeOnIframeLoad(iframeRefContents)();
+              });
+            }
           }
         }
       });
