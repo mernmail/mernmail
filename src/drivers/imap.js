@@ -246,8 +246,8 @@ module.exports = function init(email, password, callback) {
         });
       },
       getMessage: (message, user, callback) => {
-        const messageId = parseInt(message);
-        if (isNaN(messageId)) {
+        const fMessageId = parseInt(message);
+        if (isNaN(fMessageId)) {
           callback(new Error("Message ID parse error"));
           return;
         }
@@ -267,10 +267,12 @@ module.exports = function init(email, password, callback) {
         };
         const getOneMessage = (messageId, callback2) => {
           imap.addFlags(messageId, ["\\Seen"], () => {
+            let hasMessage = false;
             const imapFetch = imap.fetch(messageId, {
               bodies: ""
             });
             imapFetch.on("message", (msg) => {
+              hasMessage = true;
               let attributesSet = false;
               let bodyParsed = false;
               const finalAttributes = {
@@ -415,9 +417,16 @@ module.exports = function init(email, password, callback) {
             imapFetch.on("error", (err) => {
               callback(err);
             });
+            imapFetch.on("end", () => {
+              if (!hasMessage) {
+                if (messageId == fMessageId)
+                  callback(new Error("The message doesn't exist"));
+                else callback2();
+              }
+            });
           });
         };
-        getOneMessage(messageId, () => {
+        getOneMessage(fMessageId, () => {
           callback(null, messages);
         });
       },
