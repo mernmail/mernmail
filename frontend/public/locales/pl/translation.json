@@ -51,5 +51,13 @@
     "spamwarning": "Ta wiadomość znajduje się w folderze Spam i może zawierać niechcianą lub potencjalnie szkodliwą treść. Zachowaj ostrożność i unikaj klikania linków lub pobierania załączników, chyba że ufasz nadawcy. Rozważ usunięcie, jeśli wiadomość wydaje się podejrzana.",
     "nosubject": "Brak tematu",
     "cc": "DW: {{cc}}",
-    "bcc": "UDW: {{bcc}}"
+    "bcc": "UDW: {{bcc}}",
+    "markasspamsuccess": "Wiadomości oznaczone jako spam pomyślnie",
+    "deletesuccess": "Wiadomości usunięte pomyślnie",
+    "markasunreadsuccess": "Wiadomości oznaczone jako nieprzeczytane pomyślnie",
+    "markasreadsuccess": "Wiadomości oznaczone jako przeczytane pomyślnie",
+    "markasspamfail": "Nie można oznaczyć wiadomości jako spam: {{error}}",
+    "deletefail": "Nie można usunąć wiadomości: {{error}}",
+    "markasunreadfail": "Nie można oznaczyć wiadomości jako nieprzeczytane: {{error}}",
+    "markasreadfail": "Nie można oznaczyć wiadomości jako przeczytane: {{error}}"
 }

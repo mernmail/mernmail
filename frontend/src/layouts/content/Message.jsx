@@ -12,18 +12,20 @@ import {
   Trash,
   TriangleAlert
 } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import DOMPurify from "dompurify";
 import { filesize } from "filesize";
 import { useDispatch, useSelector } from "react-redux";
 import { loadMessage, resetLoading } from "@/slices/messageSlice.js";
 import { setMailboxes } from "@/slices/mailboxesSlice";
+import { ToastContext } from "@/contexts/ToastContext";
 import download from "downloadjs";
 
 function MessageContent() {
   const iframeRef = useRef({});
   const { t } = useTranslation();
+  const { toast } = useContext(ToastContext);
   const view = useSelector((state) => state.view.view);
   const hasMoreThanOneMailbox = useSelector(
     (state) => state.mailboxes.mailboxes.length > 1
@@ -341,15 +343,25 @@ function MessageContent() {
                           credentials: "include"
                         }
                       );
+                      const data = await res.json();
                       if (res.status == 200) {
-                        const data = await res.json();
+                        toast(t("markasspamsuccess"));
                         document.location.hash = encodeURI(
                           `#mailbox/${data.spamMailbox}`
                         );
+                      } else {
+                        toast(
+                          t("markasspamfail", {
+                            error: data.message
+                          })
+                        );
                       }
-                      // eslint-disable-next-line no-unused-vars
                     } catch (err) {
-                      // Can't set the message as spam
+                      toast(
+                        t("markasspamfail", {
+                          error: err.message
+                        })
+                      );
                     }
                   }}
                   title={t("markasspam")}
@@ -382,8 +394,9 @@ function MessageContent() {
                     }),
                     credentials: "include"
                   });
+                  const data = await res.json();
                   if (res.status == 200) {
-                    const data = await res.json();
+                    toast(t("deletesuccess"));
                     if (data.trashMailbox) {
                       document.location.hash = encodeURI(
                         `#mailbox/${data.trashMailbox}`
@@ -393,10 +406,19 @@ function MessageContent() {
                         `#mailbox/${mailboxId}`
                       );
                     }
+                  } else {
+                    toast(
+                      t("deletefail", {
+                        error: data.message
+                      })
+                    );
                   }
-                  // eslint-disable-next-line no-unused-vars
                 } catch (err) {
-                  // Can't delete the message
+                  toast(
+                    t("deletefail", {
+                      error: err.message
+                    })
+                  );
                 }
               }}
               title={t("delete")}
@@ -430,14 +452,25 @@ function MessageContent() {
                         credentials: "include"
                       }
                     );
+                    const data = await res.json();
                     if (res.status == 200) {
+                      toast(t("markasunreadsuccess"));
                       document.location.hash = encodeURI(
                         `#mailbox/${mailboxId}`
                       );
+                    } else {
+                      toast(
+                        t("markasunreadfail", {
+                          error: data.message
+                        })
+                      );
                     }
-                    // eslint-disable-next-line no-unused-vars
                   } catch (err) {
-                    // Can't set the message as unread
+                    toast(
+                      t("markasunreadfail", {
+                        error: err.message
+                      })
+                    );
                   }
                 }}
                 title={t("markasunread")}

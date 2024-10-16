@@ -51,5 +51,13 @@
     "spamwarning": "This message is in your Spam folder and may contain unsolicited or potentially harmful content. Be cautious and avoid clicking links or downloading attachments unless you trust the sender. Consider deleting if the message seems suspicious.",
     "nosubject": "No subject",
     "cc": "CC: {{cc}}",
-    "bcc": "BCC: {{bcc}}"
+    "bcc": "BCC: {{bcc}}",
+    "markasspamsuccess": "Message(s) marked as spam successfully",
+    "deletesuccess": "Message(s) deleted successfully",
+    "markasunreadsuccess": "Message(s) marked as unread successfully",
+    "markasreadsuccess": "Message(s) marked as read successfully",
+    "markasspamfail": "Can't mark message(s) as spam: {{error}}",
+    "deletefail": "Can't delete message(s): {{error}}",
+    "markasunreadfail": "Can't mark message(s) as unread: {{error}}",
+    "markasreadfail": "Can't mark message(s) as read: {{error}}"
 }

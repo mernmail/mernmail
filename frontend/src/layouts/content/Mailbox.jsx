@@ -12,12 +12,14 @@ import {
   MailOpen,
   ThumbsUp
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { setMessages, resetLoading } from "@/slices/messagesSlice.js";
 import { setMailboxes } from "@/slices/mailboxesSlice";
+import { ToastContext } from "@/contexts/ToastContext";
 
 function EmailContent() {
   const { t } = useTranslation();
+  const { toast } = useContext(ToastContext);
   const [refresh, setRefresh] = useState(false);
   const [selectedMessages, setSelectedMessages] = useState({});
   const [selectedAll, setSelectedAll] = useState(false);
@@ -230,31 +232,38 @@ function EmailContent() {
                       onClick={async (e) => {
                         e.preventDefault();
                         /*const messages = getSelectedMessages();
-                      try {
-                        const res = await fetch(
-                          `/api/receive/spam/${mailboxId}`,
-                          {
-                            method: "POST",
-                            headers: {
-                              "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                              messages: messages
-                            }),
-                            credentials: "include"
-                          }
-                        );
-                        if (res.status == 200) {
-                          const data = await res.json();
-                          setSelectedMessages({});
-                          document.location.hash = encodeURI(
-                            `#mailbox/${data.spamMailbox}`
+                        try {
+                          const res = await fetch(
+                            `/api/receive/spam/${mailboxId}`,
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json"
+                              },
+                              body: JSON.stringify({
+                                messages: messages
+                              }),
+                              credentials: "include"
+                            }
                           );
-                        }
-                        // eslint-disable-next-line no-unused-vars
-                      } catch (err) {
-                        // Can't set the message as spam
-                      }*/
+                          const data = await res.json();
+                          if (res.status == 200) {
+                            toast(t("markasspamsuccess"));
+                            setSelectedMessages({});
+                            document.location.hash = encodeURI(
+                              `#mailbox/${data.spamMailbox}`
+                            );
+                          } else {
+                            toast(t("markasspamfail", {
+                              error: data.message
+                            }));
+                          }
+                          // eslint-disable-next-line no-unused-vars
+                        } catch (err) {
+                          toast(t("markasspamfail", {
+                            error: err.message
+                          }));
+                        }*/
                       }}
                       title={t("notspam")}
                       className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
@@ -287,16 +296,26 @@ function EmailContent() {
                               credentials: "include"
                             }
                           );
+                          const data = await res.json();
                           if (res.status == 200) {
-                            const data = await res.json();
+                            toast(t("markasspamsuccess"));
                             setSelectedMessages({});
                             document.location.hash = encodeURI(
                               `#mailbox/${data.spamMailbox}`
                             );
+                          } else {
+                            toast(
+                              t("markasspamfail", {
+                                error: data.message
+                              })
+                            );
                           }
-                          // eslint-disable-next-line no-unused-vars
                         } catch (err) {
-                          // Can't set the message as spam
+                          toast(
+                            t("markasspamfail", {
+                              error: err.message
+                            })
+                          );
                         }
                       }}
                       title={t("markasspam")}
@@ -333,8 +352,13 @@ function EmailContent() {
                           credentials: "include"
                         }
                       );
+                      const data = await res.json();
                       if (res.status == 200) {
-                        const data = await res.json();
+                        toast(
+                          t("deletesuccess", {
+                            error: data.message
+                          })
+                        );
                         setSelectedMessages({});
                         if (data.trashMailbox) {
                           document.location.hash = encodeURI(
@@ -344,10 +368,19 @@ function EmailContent() {
                           dispatch(resetLoading());
                           setRefresh(true);
                         }
+                      } else {
+                        toast(
+                          t("deletefail", {
+                            error: data.message
+                          })
+                        );
                       }
-                      // eslint-disable-next-line no-unused-vars
                     } catch (err) {
-                      // Can't delete the message
+                      toast(
+                        t("deletefail", {
+                          error: err.message
+                        })
+                      );
                     }
                   }}
                   title={t("delete")}
@@ -382,14 +415,25 @@ function EmailContent() {
                               credentials: "include"
                             }
                           );
+                          const data = await res.json();
                           if (res.status == 200) {
+                            toast(t("markasunreadsuccess"));
                             setSelectedMessages({});
                             dispatch(resetLoading());
                             setRefresh(true);
+                          } else {
+                            toast(
+                              t("markasunreadfail", {
+                                error: data.message
+                              })
+                            );
                           }
                         } catch (err) {
-                          alert(err);
-                          // Can't set messages as unread
+                          toast(
+                            t("markasunreadfail", {
+                              error: err.message
+                            })
+                          );
                         }
                       }}
                       title={t("markasunread")}
@@ -422,14 +466,25 @@ function EmailContent() {
                               credentials: "include"
                             }
                           );
+                          const data = await res.json();
                           if (res.status == 200) {
+                            toast(t("deletesuccess"));
                             setSelectedMessages({});
                             dispatch(resetLoading());
                             setRefresh(true);
+                          } else {
+                            toast(
+                              t("deletefail", {
+                                error: data.message
+                              })
+                            );
                           }
                         } catch (err) {
-                          alert(err);
-                          // Can't set messages as read
+                          toast(
+                            t("markasreadfail", {
+                              error: err.message
+                            })
+                          );
                         }
                       }}
                       title={t("markasread")}
