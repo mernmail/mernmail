@@ -174,10 +174,11 @@ function MessageContent() {
   }, []);
 
   useEffect(() => {
-    if (messageData.length > 0)
+    if (!loading && messageData && messageData.messages.length > 0)
       document.title =
-        messageData[messageData.length - 1].subject + " - MERNMail";
-  }, [messageData]);
+        messageData.messages[messageData.messages.length - 1].subject +
+        " - MERNMail";
+  }, [messageData, loading]);
 
   useEffect(() => {
     if (view == "message") {
