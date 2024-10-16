@@ -220,7 +220,7 @@ function MessageContent() {
     };
     return (
       <>
-        <h1 className="text-3xl md:text-4xl mt-2 mb-2.5 pb-0.5 md:mb-2 md:pb-1 font-bold content-center whitespace-nowrap overflow-hidden text-ellipsis">
+        <h1 className="text-3xl md:text-4xl mt-2 mb-2.5 pb-0.5 md:mb-2 md:pb-1 font-bold content-center overflow-hidden text-ellipsis">
           {messagesToRender[messagesToRender.length - 1].answered ? (
             <Reply
               width={32}
@@ -550,7 +550,7 @@ function MessageContent() {
                   <div className="shrink-0 w-16 h-16 py-3 m-1 leading-10 text-2xl overflow-hidden text-ellipsis rounded-full bg-accent text-accent-foreground font-bold text-center items-center select-none">
                     {fromInitials}
                   </div>
-                  <div className="grow whitespace-nowrap overflow-hidden text-ellipsis ml-1 rtl:ml-0 rtl:mr-1 lg:mx-0 lg:self-center">
+                  <div className="grow overflow-hidden text-ellipsis ml-1 rtl:ml-0 rtl:mr-1 lg:mx-0 lg:self-center">
                     <p className="block overflow-hidden text-ellipsis">
                       {firstFrom.name ? (
                         <>
@@ -605,7 +605,7 @@ function MessageContent() {
                       ""
                     )}
                   </div>
-                  <p className="whitespace-nowrap px-1 lg:self-center">
+                  <p className="px-1 lg:self-center">
                     {t("datetime", {
                       val: date,
                       formatParams: {
@@ -619,7 +619,7 @@ function MessageContent() {
                       }
                     })}
                   </p>
-                  <ul className="mx-0.5 list-none whitespace-nowrap lg:self-center">
+                  <ul className="mx-0.5 list-none shrink-0 lg:self-center">
                     <li className="inline-block mx-0.5">
                       <button
                         onClick={(e) => {
