@@ -24,13 +24,19 @@ const ThemeProvider = ({ children }) => {
     }
   }, [isDarkMode]);
 
-  const toggleTheme = () => {
-    localStorage.setItem("theme", !isDarkMode ? "dark" : "light");
-    setIsDarkMode(!isDarkMode);
+  const setTheme = (themeName) => {
+    localStorage.setItem("theme", themeName);
+    if (themeName == "light") {
+      setIsDarkMode(false);
+    } else if (themeName == "dark") {
+      setIsDarkMode(true);
+    } else {
+      setIsDarkMode(isSystemDark);
+    }
   };
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
+    <ThemeContext.Provider value={{ isDarkMode, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );
