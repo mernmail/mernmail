@@ -188,8 +188,7 @@ function EmailContent() {
             />
           </li>
           <li className="inline-block mx-0.5">
-            <a
-              href="#"
+            <button
               onClick={(e) => {
                 e.preventDefault();
                 dispatch(resetLoading());
@@ -203,11 +202,11 @@ function EmailContent() {
                 height={24}
                 className="inline w-6 h-6 align-top"
               />
-            </a>
+            </button>
           </li>
           <li className="inline-block mx-0.5">
             <a
-              href="#"
+              href="#search"
               onClick={(e) => {
                 e.preventDefault();
                 document.location.hash = encodeURI("#search");
@@ -227,8 +226,7 @@ function EmailContent() {
               {hasSpamMailbox ? (
                 mailboxType == "spam" ? (
                   <li className="inline-block mx-0.5">
-                    <a
-                      href="#"
+                    <button
                       onClick={async (e) => {
                         e.preventDefault();
                         /*const messages = getSelectedMessages();
@@ -273,12 +271,11 @@ function EmailContent() {
                         height={24}
                         className="inline w-6 h-6 align-top"
                       />
-                    </a>
+                    </button>
                   </li>
                 ) : (
                   <li className="inline-block mx-0.5">
-                    <a
-                      href="#"
+                    <button
                       onClick={async (e) => {
                         e.preventDefault();
                         const messages = getSelectedMessages();
@@ -326,15 +323,14 @@ function EmailContent() {
                         height={24}
                         className="inline w-6 h-6 align-top"
                       />
-                    </a>
+                    </button>
                   </li>
                 )
               ) : (
                 ""
               )}
               <li className="inline-block mx-0.5">
-                <a
-                  href="#"
+                <button
                   onClick={async (e) => {
                     e.preventDefault();
                     const messages = getSelectedMessages();
@@ -391,13 +387,12 @@ function EmailContent() {
                     height={24}
                     className="inline w-6 h-6 align-top"
                   />
-                </a>
+                </button>
               </li>
               {canMarkAsUnread ? (
                 <>
                   <li className="inline-block mx-0.5">
-                    <a
-                      href="#"
+                    <button
                       onClick={async (e) => {
                         e.preventDefault();
                         const messages = getSelectedMessages();
@@ -444,11 +439,10 @@ function EmailContent() {
                         height={24}
                         className="inline w-6 h-6 align-top"
                       />
-                    </a>
+                    </button>
                   </li>
                   <li className="inline-block mx-0.5">
-                    <a
-                      href="#"
+                    <button
                       onClick={async (e) => {
                         e.preventDefault();
                         const messages = getSelectedMessages();
@@ -495,7 +489,7 @@ function EmailContent() {
                         height={24}
                         className="inline w-6 h-6 align-top"
                       />
-                    </a>
+                    </button>
                   </li>
                 </>
               ) : (
@@ -503,8 +497,7 @@ function EmailContent() {
               )}
               {hasMoreThanOneMailbox ? (
                 <li className="inline-block mx-0.5">
-                  <a
-                    href="#"
+                  <button
                     onClick={(e) => {
                       e.preventDefault();
                     }}
@@ -516,7 +509,7 @@ function EmailContent() {
                       height={24}
                       className="inline w-6 h-6 align-top"
                     />
-                  </a>
+                  </button>
                 </li>
               ) : (
                 ""
@@ -541,9 +534,13 @@ function EmailContent() {
                 const answered = message.answered;
                 return (
                   <li className="block border-border border-b-2" key={id}>
-                    <div
-                      onClick={() => {
-                        document.location.hash = `#message/${mailboxId}/${id}`;
+                    <a
+                      href={encodeURI(`#message/${mailboxId}/${id}`)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        document.location.hash = encodeURI(
+                          `#message/${mailboxId}/${id}`
+                        );
                       }}
                       className="block bg-background px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5 text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors cursor-pointer"
                     >
@@ -569,8 +566,7 @@ function EmailContent() {
                             title={t("select")}
                           />
                           {canStar ? (
-                            <a
-                              href="#"
+                            <button
                               onClick={(e) => {
                                 e.preventDefault();
                               }}
@@ -583,7 +579,7 @@ function EmailContent() {
                                 fill={starred ? "#ffff00" : "none"}
                                 className="inline w-6 h-6 align-top"
                               />
-                            </a>
+                            </button>
                           ) : (
                             ""
                           )}
@@ -624,7 +620,7 @@ function EmailContent() {
                           })}
                         </p>
                       </div>
-                    </div>
+                    </a>
                   </li>
                 );
               })}

@@ -239,7 +239,7 @@ function MessageContent() {
         <ul className="mx-0.5 list-none">
           <li className="inline-block mx-0.5">
             <a
-              href="#"
+              href={encodeURI(`#mailbox/${mailboxId}`)}
               onClick={(e) => {
                 e.preventDefault();
                 document.location.hash = encodeURI(`#mailbox/${mailboxId}`);
@@ -256,8 +256,7 @@ function MessageContent() {
           </li>
           {canStar ? (
             <li className="inline-block mx-0.5">
-              <a
-                href="#"
+              <button
                 onClick={(e) => {
                   e.preventDefault();
                 }}
@@ -274,7 +273,7 @@ function MessageContent() {
                   }
                   className="inline w-6 h-6 align-top"
                 />
-              </a>
+              </button>
             </li>
           ) : (
             ""
@@ -282,8 +281,7 @@ function MessageContent() {
           {hasSpamMailbox ? (
             mailboxType == "spam" ? (
               <li className="inline-block mx-0.5">
-                <a
-                  href="#"
+                <button
                   onClick={async (e) => {
                     e.preventDefault();
 
@@ -320,12 +318,11 @@ function MessageContent() {
                     height={24}
                     className="inline w-6 h-6 align-top"
                   />
-                </a>
+                </button>
               </li>
             ) : (
               <li className="inline-block mx-0.5">
-                <a
-                  href="#"
+                <button
                   onClick={async (e) => {
                     e.preventDefault();
 
@@ -372,15 +369,14 @@ function MessageContent() {
                     height={24}
                     className="inline w-6 h-6 align-top"
                   />
-                </a>
+                </button>
               </li>
             )
           ) : (
             ""
           )}
           <li className="inline-block mx-0.5">
-            <a
-              href="#"
+            <button
               onClick={async (e) => {
                 e.preventDefault();
                 try {
@@ -429,12 +425,11 @@ function MessageContent() {
                 height={24}
                 className="inline w-6 h-6 align-top"
               />
-            </a>
+            </button>
           </li>
           {canMarkAsUnread ? (
             <li className="inline-block mx-0.5">
-              <a
-                href="#"
+              <button
                 onClick={async (e) => {
                   e.preventDefault();
 
@@ -481,15 +476,14 @@ function MessageContent() {
                   height={24}
                   className="inline w-6 h-6 align-top"
                 />
-              </a>
+              </button>
             </li>
           ) : (
             ""
           )}
           {hasMoreThanOneMailbox ? (
             <li className="inline-block mx-0.5">
-              <a
-                href="#"
+              <button
                 onClick={(e) => {
                   e.preventDefault();
                 }}
@@ -501,7 +495,7 @@ function MessageContent() {
                   height={24}
                   className="inline w-6 h-6 align-top"
                 />
-              </a>
+              </button>
             </li>
           ) : (
             ""
@@ -627,8 +621,7 @@ function MessageContent() {
                   </p>
                   <ul className="mx-0.5 list-none whitespace-nowrap lg:self-center">
                     <li className="inline-block mx-0.5">
-                      <a
-                        href="#"
+                      <button
                         onClick={(e) => {
                           e.preventDefault();
                         }}
@@ -640,10 +633,10 @@ function MessageContent() {
                           height={24}
                           className="inline w-6 h-6 align-top"
                         />
-                      </a>
+                      </button>
                     </li>
                     <li className="inline-block mx-0.5">
-                      <a
+                      <button
                         href="#"
                         onClick={(e) => {
                           e.preventDefault();
@@ -656,10 +649,10 @@ function MessageContent() {
                           height={24}
                           className="inline w-6 h-6 align-top"
                         />
-                      </a>
+                      </button>
                     </li>
                     <li className="inline-block mx-0.5">
-                      <a
+                      <button
                         href="#"
                         onClick={(e) => {
                           e.preventDefault();
@@ -672,7 +665,7 @@ function MessageContent() {
                           height={24}
                           className="inline w-6 h-6 align-top"
                         />
-                      </a>
+                      </button>
                     </li>
                   </ul>
                 </div>

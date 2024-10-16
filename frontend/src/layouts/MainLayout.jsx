@@ -68,7 +68,7 @@ function LoginLayout() {
           <ul className="inline list-none">
             <li className="inline">
               <a
-                href="#"
+                href="#mailbox"
                 onClick={(e) => {
                   e.preventDefault();
                   if (
@@ -131,8 +131,7 @@ function LoginLayout() {
             </Settings>
           </a>
           <span className="inline select-none align-middle">|</span>
-          <a
-            href="#"
+          <button
             onClick={(e) => {
               e.preventDefault();
               dispatch(logout);
@@ -142,10 +141,9 @@ function LoginLayout() {
             <LogOut className="inline-block w-full align-top">
               <title>{t("logout")}</title>
             </LogOut>
-          </a>
+          </button>
           <span className="inline md:hidden select-none align-middle">|</span>
-          <a
-            href="#"
+          <button
             onClick={(e) => {
               e.preventDefault();
               dispatch(showMenu());
@@ -155,15 +153,14 @@ function LoginLayout() {
             <Menu className="inline-block w-full align-top">
               <title>{t("menu")}</title>
             </Menu>
-          </a>
+          </button>
         </span>
       </header>
       <div className="h-full pt-12 md:flex md:flex-row">
         <aside
           className={`bg-background w-full h-full p-2 overflow-auto z-20 fixed top-0 ${menuShown ? "left-0" : "left-full"} transition-[left] shrink-0 duration-1000 md:static md:w-72 md:border-r-2 rtl:md:border-r-0 rtl:md:border-l-2 md:border-border md:transition-none`}
         >
-          <a
-            href="#"
+          <button
             onClick={(e) => {
               e.preventDefault();
               dispatch(hideMenu());
@@ -173,7 +170,7 @@ function LoginLayout() {
             <X className="inline-block w-8 h-8 py-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors">
               <title>{t("close")}</title>
             </X>
-          </a>
+          </button>
           <Sidebar />
         </aside>
         <main

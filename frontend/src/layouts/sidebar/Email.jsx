@@ -120,7 +120,7 @@ function EmailSidebar() {
             return (
               <li key={id}>
                 <a
-                  href="#"
+                  href={encodeURI(`#mailbox/${id}`)}
                   onClick={(e) => {
                     e.preventDefault();
                     if (openable) {
