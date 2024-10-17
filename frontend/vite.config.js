@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     legacy({
-      targets: ['firefox >= 52', 'chrome >= 55', 'safari >= 11', 'ie >= 11'],
+      targets: ['firefox >= 52', 'chrome >= 55', 'safari >= 11'],
     })
   ],
   resolve: {
