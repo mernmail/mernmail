@@ -136,7 +136,7 @@ function LoginLayout() {
               e.preventDefault();
               dispatch(logout);
             }}
-            className="inline-block text-inherit w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
+            className="inline-block bg-inherit text-inherit w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
           >
             <LogOut className="inline-block w-full align-top">
               <title>{t("logout")}</title>
@@ -148,7 +148,7 @@ function LoginLayout() {
               e.preventDefault();
               dispatch(showMenu());
             }}
-            className="inline-block md:hidden text-inherit w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
+            className="inline-block md:hidden bg-inherit text-inherit w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
           >
             <Menu className="inline-block w-full align-top">
               <title>{t("menu")}</title>
