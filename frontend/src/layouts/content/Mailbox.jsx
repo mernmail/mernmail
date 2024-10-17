@@ -534,10 +534,8 @@ function EmailContent() {
                 const answered = message.answered;
                 return (
                   <li className="block border-border border-b-2" key={id}>
-                    <a
-                      href={encodeURI(`#message/${mailboxId}/${id}`)}
-                      onClick={(e) => {
-                        e.preventDefault();
+                    <div
+                      onClick={() => {
                         document.location.hash = encodeURI(
                           `#message/${mailboxId}/${id}`
                         );
@@ -553,6 +551,9 @@ function EmailContent() {
                         >
                           <input
                             type="checkbox"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
                             onChange={() => {
                               const newSelectedMessages = Object.assign(
                                 {},
@@ -569,6 +570,7 @@ function EmailContent() {
                             <button
                               onClick={(e) => {
                                 e.preventDefault();
+                                e.stopPropagation();
                               }}
                               title={t("star")}
                               className="inline-block align-middle shrink-0 w-8 h-8 p-1 mx-0.5 rounded-sm bg-inherit text-inherit hover:bg-accent/60 hover:text-accent-foreground transition-colors"
@@ -590,18 +592,26 @@ function EmailContent() {
                         <p
                           className={`whitespace-nowrap grow ${!seen ? "font-bold" : "opacity-70"} md:self-center px-1 overflow-hidden text-ellipsis`}
                         >
-                          {answered ? (
-                            <Reply
-                              width={24}
-                              height={24}
-                              className="inline w-6 h-6 mr-2 rtl:mr-0 rtl:ml-2 align-top"
-                            />
-                          ) : (
-                            ""
-                          )}
-                          {subject !== undefined && subject !== null
-                            ? subject
-                            : t("nosubject")}
+                          <a
+                            href={encodeURI(`#message/${mailboxId}/${id}`)}
+                            className="block"
+                            onClick={(e) => {
+                              e.preventDefault();
+                            }}
+                          >
+                            {answered ? (
+                              <Reply
+                                width={24}
+                                height={24}
+                                className="inline w-6 h-6 mr-2 rtl:mr-0 rtl:ml-2 align-top"
+                              />
+                            ) : (
+                              ""
+                            )}
+                            {subject !== undefined && subject !== null
+                              ? subject
+                              : t("nosubject")}
+                          </a>
                         </p>
                         <p
                           className={`whitespace-nowrap px-1 ${!seen ? "font-bold" : ""} md:self-center`}
@@ -620,7 +630,7 @@ function EmailContent() {
                           })}
                         </p>
                       </div>
-                    </a>
+                    </div>
                   </li>
                 );
               })}
