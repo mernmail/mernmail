@@ -75,8 +75,8 @@ function EmailContent() {
   }
 
   const getSelectedMessages = () => {
-    const selectedMessagesArray = Object.keys(selectedMessages).filter((key) =>
-      String(selectedMessages[key])
+    const selectedMessagesArray = Object.keys(selectedMessages).filter(
+      (key) => selectedMessages[key]
     );
     let additionalMessages = [];
     messages.forEach((message) => {
