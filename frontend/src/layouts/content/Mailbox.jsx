@@ -462,13 +462,13 @@ function EmailContent() {
                           );
                           const data = await res.json();
                           if (res.status == 200) {
-                            toast(t("deletesuccess"));
+                            toast(t("markasreadsuccess"));
                             setSelectedMessages({});
                             dispatch(resetLoading());
                             setRefresh(true);
                           } else {
                             toast(
-                              t("deletefail", {
+                              t("markasreadfail", {
                                 error: data.message
                               })
                             );
