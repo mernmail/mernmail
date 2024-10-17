@@ -136,11 +136,11 @@ function EmailSidebar() {
                       className="shrink-0 inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
                       size={24}
                     />
-                    <span className="grow overflow-hidden text-ellipsis whitespace-nowrap">
+                    <span className="grow overflow-hidden text-ellipsis whitespace-nowrap self-center">
                       {title}
                     </span>
                     {newMessages > 0 ? (
-                      <span className="shrink-0 ml-1 rtl:ml-0 rtl:mr-1">
+                      <span className="shrink-0 ml-1 rtl:ml-0 rtl:mr-1 self-center">
                         {newMessages}
                       </span>
                     ) : (
