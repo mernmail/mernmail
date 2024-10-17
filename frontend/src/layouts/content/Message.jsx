@@ -513,7 +513,7 @@ function MessageContent() {
               height={24}
               className="inline-block w-8 h-8 p-1 align-top shrink-0"
             />
-            <p className="mx-1">{t("spamwarning")}</p>
+            <p className="mx-1 self-center">{t("spamwarning")}</p>
           </div>
         ) : (
           ""
