@@ -131,14 +131,11 @@ module.exports = function init(email, password, callback) {
                         finalMessages.sort((a, b) => {
                           return a.date - b.date;
                         });
-                        const realFinalMessages = finalMessages
-                          .filter((msg) => {
+                        const realFinalMessages = finalMessages.filter(
+                          (msg) => {
                             return replyIds.indexOf(msg.messageId) == -1;
-                          })
-                          .map((msg) => {
-                            msg.messageId = undefined;
-                            return msg;
-                          });
+                          }
+                        );
                         callback(null, realFinalMessages);
                       });
                     })
