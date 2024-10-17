@@ -8,14 +8,16 @@ const ToastProvider = ({ children }) => {
   const [shown, setShown] = useState(false);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShown(false);
-    }, 3000);
+    if (shown) {
+      const timeout = setTimeout(() => {
+        setShown(false);
+      }, 3000);
 
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [toastContent]);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+  }, [toastContent, shown]);
 
   const toast = (content) => {
     setToastContent(content);
