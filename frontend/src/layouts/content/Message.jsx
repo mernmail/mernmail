@@ -12,18 +12,20 @@ import {
   Trash,
   TriangleAlert
 } from "lucide-react";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import Iframe from "@/components/Iframe.jsx";
 import { useTranslation } from "react-i18next";
 import DOMPurify from "dompurify";
 import { filesize } from "filesize";
 import { useDispatch, useSelector } from "react-redux";
 import { loadMessage, resetLoading } from "@/slices/messageSlice.js";
-import { setMailboxes } from "@/slices/mailboxesSlice";
-import { ToastContext } from "@/contexts/ToastContext";
+import { setMailboxes } from "@/slices/mailboxesSlice.js";
+import { ToastContext } from "@/contexts/ToastContext.jsx";
 import download from "downloadjs";
 
 function MessageContent() {
   const iframeRef = useRef({});
+  const [iframeHeights, setIframeHeights] = useState({});
   const { t } = useTranslation();
   const { toast } = useContext(ToastContext);
   const view = useSelector((state) => state.view.view);
@@ -138,17 +140,19 @@ function MessageContent() {
     };
   };
 
-  const resizeOnIframeLoad = (iframeRefContents) => {
+  const resizeOnIframeLoad = (iframeRefContents, id) => {
     return () => {
       const body = iframeRefContents.contentWindow.document.body;
       const html = iframeRefContents.contentWindow.document.documentElement;
-      iframeRefContents.height = Math.max(
+      const newIframeHeights = Object.assign({}, iframeHeights);
+      newIframeHeights[id] = Math.max(
         html.scrollHeight > parseInt(iframeRefContents.height)
           ? html.scrollHeight
           : 0,
         body.offsetHeight,
         html.offsetHeight
       );
+      setIframeHeights(newIframeHeights);
     };
   };
 
@@ -162,7 +166,7 @@ function MessageContent() {
   useEffect(() => {
     const resizeOnIframeLoadAllRefs = () => {
       Object.keys(iframeRef.current).forEach((refKey) => {
-        resizeOnIframeLoad(iframeRef.current[refKey])();
+        resizeOnIframeLoad(iframeRef.current[refKey], refKey)();
       });
     };
 
@@ -670,7 +674,7 @@ function MessageContent() {
                     </li>
                   </ul>
                 </div>
-                <iframe
+                <Iframe
                   ref={(el) => (iframeRef.current[id] = el)}
                   onLoad={() => {
                     setTimeout(() => {
@@ -679,13 +683,18 @@ function MessageContent() {
                         attachments
                       )();
                       processLinksAndFormsOnIframeLoad(iframeRef.current[id])();
-                      resizeOnIframeLoad(iframeRef.current[id])();
+                      resizeOnIframeLoad(iframeRef.current[id], id)();
                     }, 0);
                   }}
                   className="bg-white w-full rounded-lg mb-2 overflow-x-auto overflow-y-hidden"
                   srcDoc={DOMPurify.sanitize(body, {
                     WHOLE_DOCUMENT: true
                   })}
+                  height={
+                    typeof iframeHeights[id] == "undefined"
+                      ? 500
+                      : iframeHeights[id]
+                  }
                 />
                 {realAttachments && realAttachments.length > 0 ? (
                   <>
