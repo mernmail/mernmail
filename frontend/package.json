@@ -28,7 +28,8 @@
     "react-i18next": "^15.0.2",
     "react-redux": "^9.1.2",
     "redux": "^5.0.1",
-    "redux-thunk": "^3.1.0"
+    "redux-thunk": "^3.1.0",
+    "unfetch": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
@@ -52,7 +53,8 @@
   "browserslist": [
     "chrome 55",
     "firefox 52",
-    "safari 11"
+    "safari 11",
+    "edge 12"
   ],
   "proxy": "http://localhost:3000/"
 }
