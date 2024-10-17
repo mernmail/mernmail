@@ -81,7 +81,7 @@ function EmailSidebar() {
             className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
             size={24}
           />
-          {t("compose")}
+          <span className="align-middle">{t("compose")}</span>
         </button>
         <ul className="mt-4">
           {mailboxes.map((mailbox) => {

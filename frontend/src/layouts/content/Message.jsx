@@ -763,7 +763,7 @@ function MessageContent() {
                         className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
                         size={24}
                       />
-                      {t("reply")}
+                      <span className="align-middle">{t("reply")}</span>
                     </button>
                     <button
                       onClick={(e) => {
@@ -775,7 +775,7 @@ function MessageContent() {
                         className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
                         size={24}
                       />
-                      {t("replyall")}
+                      <span className="align-middle">{t("replyall")}</span>
                     </button>
                     <button
                       onClick={(e) => {
@@ -787,7 +787,7 @@ function MessageContent() {
                         className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
                         size={24}
                       />
-                      {t("forward")}
+                      <span className="align-middle">{t("forward")}</span>
                     </button>
                   </div>
                 ) : (

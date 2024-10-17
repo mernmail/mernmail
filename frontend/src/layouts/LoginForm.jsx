@@ -40,7 +40,7 @@ function LoginLayout() {
               className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
               size={24}
             />
-            {t("emailaddress")}
+            <span className="align-middle">{t("emailaddress")}</span>
           </label>
           <input
             type="email"
@@ -55,7 +55,7 @@ function LoginLayout() {
               className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
               size={24}
             />
-            {t("password")}
+            <span className="align-middle">{t("password")}</span>
           </label>
           <input
             type="password"
@@ -80,7 +80,7 @@ function LoginLayout() {
               className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
               size={24}
             />
-            {t("login")}
+            <span className="align-middle">{t("login")}</span>
           </button>
         </form>
       </div>
