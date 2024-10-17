@@ -16,16 +16,16 @@ import "./i18n.js";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeProvider>
-      <ToastProvider>
-        <Provider store={store}>
-          <Suspense fallback={<Loading />}>
-            <ErrorBoundary fallback={<Error />}>
+    <ErrorBoundary fallback={<Error />}>
+      <ThemeProvider>
+        <ToastProvider>
+          <Provider store={store}>
+            <Suspense fallback={<Loading />}>
               <App />
-            </ErrorBoundary>
-          </Suspense>
-        </Provider>
-      </ToastProvider>
-    </ThemeProvider>
+            </Suspense>
+          </Provider>
+        </ToastProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   </StrictMode>
 );
