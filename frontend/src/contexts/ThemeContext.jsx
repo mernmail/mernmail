@@ -4,6 +4,10 @@ import PropTypes from "prop-types";
 export const ThemeContext = createContext();
 
 const ThemeProvider = ({ children }) => {
+  const areThemesSupported =
+    window.CSS &&
+    window.CSS.supports &&
+    window.CSS.supports("color", "var(--fake-var)");
   const savedTheme = localStorage.getItem("theme");
   const isSystemDark =
     window.matchMedia &&
@@ -14,7 +18,9 @@ const ThemeProvider = ({ children }) => {
   } else if (savedTheme == "light") {
     initialDarkMode = false;
   }
-  const [isDarkMode, setIsDarkMode] = useState(initialDarkMode);
+  const [isDarkMode, setIsDarkMode] = useState(
+    areThemesSupported ? initialDarkMode : false
+  );
 
   useEffect(() => {
     if (isDarkMode) {
@@ -25,6 +31,7 @@ const ThemeProvider = ({ children }) => {
   }, [isDarkMode]);
 
   const setTheme = (themeName) => {
+    if (!areThemesSupported) throw new Error("Themes are not supported");
     localStorage.setItem("theme", themeName);
     if (themeName == "light") {
       setIsDarkMode(false);
@@ -36,7 +43,7 @@ const ThemeProvider = ({ children }) => {
   };
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, setTheme }}>
+    <ThemeContext.Provider value={{ isDarkMode, setTheme, areThemesSupported }}>
       {children}
     </ThemeContext.Provider>
   );

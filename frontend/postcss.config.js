@@ -2,6 +2,8 @@ export default {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
-    "postcss-css-variables": {}
+    "postcss-css-variables": {
+      preserve: true
+    }
   },
 }
