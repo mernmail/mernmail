@@ -594,7 +594,7 @@ function EmailContent() {
                         >
                           <a
                             href={encodeURI(`#message/${mailboxId}/${id}`)}
-                            className="block whitespace-nowrap text-ellipsis"
+                            className="block whitespace-nowrap text-ellipsis overflow-hidden"
                             onClick={(e) => {
                               e.preventDefault();
                             }}
