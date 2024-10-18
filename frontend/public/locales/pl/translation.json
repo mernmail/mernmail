@@ -59,5 +59,10 @@
     "markasspamfail": "Nie można oznaczyć wiadomości jako spam: {{error}}",
     "deletefail": "Nie można usunąć wiadomości: {{error}}",
     "markasunreadfail": "Nie można oznaczyć wiadomości jako nieprzeczytane: {{error}}",
-    "markasreadfail": "Nie można oznaczyć wiadomości jako przeczytane: {{error}}"
+    "markasreadfail": "Nie można oznaczyć wiadomości jako przeczytane: {{error}}",
+    "unstar": "Odznacz gwiazdą",
+    "starsuccess": "Wiadomości oznaczone gwiazdą pomyślnie",
+    "starfail": "Nie można oznaczyć wiadomości gwiazdą: {{error}}",
+    "unstarsuccess": "Wiadomości odznaczone gwiazdą pomyślnie",
+    "unstarfail": "Nie można odznaczyć wiadomości gwiazdą: {{error}}"
 }

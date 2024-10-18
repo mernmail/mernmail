@@ -59,5 +59,10 @@
     "markasspamfail": "Can't mark message(s) as spam: {{error}}",
     "deletefail": "Can't delete message(s): {{error}}",
     "markasunreadfail": "Can't mark message(s) as unread: {{error}}",
-    "markasreadfail": "Can't mark message(s) as read: {{error}}"
+    "markasreadfail": "Can't mark message(s) as read: {{error}}",
+    "unstar": "Unstar",
+    "starsuccess": "Message(s) starred successfully",
+    "starfail": "Can't star message(s): {{error}}",
+    "unstarsuccess": "Message(s) unstarred successfully",
+    "unstarfail": "Can't unstar message(s): {{error}}"
 }

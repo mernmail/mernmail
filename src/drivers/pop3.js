@@ -330,6 +330,12 @@ module.exports = function init(email, password, callback) {
                     // POP3 supports only one mailbox
                     callback(null, null);
                   });
+                },
+                starMessages: (messages, callback) => {
+                  callback(new Error("POP3 doesn't support star flags"));
+                },
+                unstarMessages: (messages, callback) => {
+                  callback(new Error("POP3 doesn't support star flags"));
                 }
               };
               callback(null, receiveObject);

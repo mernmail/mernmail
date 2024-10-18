@@ -594,6 +594,24 @@ module.exports = function init(email, password, callback) {
             }
           }
         });
+      },
+      starMessages: (messages, callback) => {
+        imap.addFlags(messages, ["\\Flagged"], (err) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null);
+          }
+        });
+      },
+      unstarMessages: (messages, callback) => {
+        imap.delFlags(messages, ["\\Flagged"], (err) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null);
+          }
+        });
       }
     };
     callback(null, receiveObject);

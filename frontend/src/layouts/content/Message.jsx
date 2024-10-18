@@ -52,6 +52,7 @@ function MessageContent() {
   const messageData = useSelector((state) => state.message.messageData);
   const loading = useSelector((state) => state.message.loading);
   const error = useSelector((state) => state.message.error);
+  const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch();
   const messagesToRender = [...messageData.messages];
 
@@ -70,6 +71,27 @@ function MessageContent() {
       if (controller) controller.abort();
     };
   }, [dispatch]);
+
+  useEffect(() => {
+    if (refresh) {
+      if (loading) {
+        const controller =
+          typeof window.AbortController != "undefined"
+            ? new AbortController()
+            : undefined;
+        const signal = controller ? controller.signal : undefined;
+
+        dispatch(loadMessage(signal));
+        dispatch(setMailboxes);
+
+        return () => {
+          if (controller) controller.abort();
+        };
+      } else {
+        setRefresh(false);
+      }
+    }
+  }, [refresh, loading, dispatch]);
 
   const replaceCIDsOnIframeLoad = (iframeRefContents, attachments) => {
     return () => {
@@ -262,10 +284,66 @@ function MessageContent() {
           {canStar ? (
             <li className="inline-block mx-0.5">
               <button
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.preventDefault();
+
+                  try {
+                    const res = await fetch(
+                      `/api/receive/${messagesToRender[messagesToRender.length - 1].starred ? "unstar" : "star"}/${mailboxId}`,
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                          messages: [
+                            messagesToRender[messagesToRender.length - 1].id
+                          ]
+                        }),
+                        credentials: "include"
+                      }
+                    );
+                    const data = await res.json();
+                    if (res.status == 200) {
+                      toast(
+                        t(
+                          messagesToRender[messagesToRender.length - 1].starred
+                            ? "unstarsuccess"
+                            : "starsuccess"
+                        )
+                      );
+                      dispatch(resetLoading());
+                      setRefresh(true);
+                    } else {
+                      toast(
+                        t(
+                          messagesToRender[messagesToRender.length - 1].starred
+                            ? "unstarfail"
+                            : "starfail",
+                          {
+                            error: data.message
+                          }
+                        )
+                      );
+                    }
+                  } catch (err) {
+                    toast(
+                      t(
+                        messagesToRender[messagesToRender.length - 1].starred
+                          ? "unstarfail"
+                          : "starfail",
+                        {
+                          error: err.message
+                        }
+                      )
+                    );
+                  }
                 }}
-                title={t("star")}
+                title={t(
+                  messagesToRender[messagesToRender.length - 1].starred
+                    ? "unstar"
+                    : "star"
+                )}
                 className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
               >
                 <Star

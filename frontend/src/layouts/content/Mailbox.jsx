@@ -569,11 +569,51 @@ function EmailContent() {
                             />
                             {canStar ? (
                               <button
-                                onClick={(e) => {
+                                onClick={async (e) => {
                                   e.preventDefault();
                                   e.stopPropagation();
+
+                                  try {
+                                    const res = await fetch(
+                                      `/api/receive/${starred ? "unstar" : "star"}/${mailboxId}`,
+                                      {
+                                        method: "POST",
+                                        headers: {
+                                          "Content-Type": "application/json"
+                                        },
+                                        body: JSON.stringify({
+                                          messages: [id]
+                                        }),
+                                        credentials: "include"
+                                      }
+                                    );
+                                    const data = await res.json();
+                                    if (res.status == 200) {
+                                      toast(
+                                        t(
+                                          starred
+                                            ? "unstarsuccess"
+                                            : "starsuccess"
+                                        )
+                                      );
+                                      dispatch(resetLoading());
+                                      setRefresh(true);
+                                    } else {
+                                      toast(
+                                        t(starred ? "unstarfail" : "starfail", {
+                                          error: data.message
+                                        })
+                                      );
+                                    }
+                                  } catch (err) {
+                                    toast(
+                                      t(starred ? "unstarfail" : "starfail", {
+                                        error: err.message
+                                      })
+                                    );
+                                  }
                                 }}
-                                title={t("star")}
+                                title={t(starred ? "unstar" : "star")}
                                 className="inline-block align-middle shrink-0 w-8 h-8 p-1 mx-0.5 rounded-sm bg-inherit text-inherit hover:bg-accent/60 hover:text-accent-foreground transition-colors"
                               >
                                 <Star
