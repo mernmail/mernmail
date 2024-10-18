@@ -99,7 +99,7 @@ function LoginLayout() {
             </li>
           </ul>
         </div>
-        <form className="grow max-w-80 bg-accent text-base rounded-md hidden md:flex flex-row flex-nowrap">
+        <form className="grow max-w-md bg-accent text-base rounded-md hidden md:flex flex-row flex-nowrap">
           <input
             type="text"
             placeholder={t("search")}
