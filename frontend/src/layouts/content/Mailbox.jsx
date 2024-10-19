@@ -98,6 +98,7 @@ function EmailContent() {
       const signal = controller ? controller.signal : undefined;
 
       setMoveShown(false);
+      setSelectedMessages({});
       dispatch(resetLoading());
       dispatch(setMailboxes);
       dispatch(setMessages(signal));
