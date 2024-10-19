@@ -612,6 +612,10 @@ module.exports = function init(email, password, callback) {
             callback(null);
           }
         });
+      },
+      findInbox: (callback) => {
+        // Inbox in IMAP is always "INBOX".
+        callback(null, "INBOX");
       }
     };
     callback(null, receiveObject);

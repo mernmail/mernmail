@@ -66,5 +66,7 @@
     "unstarsuccess": "Message(s) unstarred successfully",
     "unstarfail": "Can't unstar message(s): {{error}}",
     "movesuccess": "Message(s) moved successfully",
-    "movefail": "Can't move message(s): {{error}}"
+    "movefail": "Can't move message(s): {{error}}",
+    "notspamsuccess": "Message(s) unmarked as spam successfully",
+    "notspamfail": "Can't unmark message(s) as spam: {{error}}"
 }

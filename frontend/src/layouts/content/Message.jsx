@@ -374,31 +374,40 @@ function MessageContent() {
                 <button
                   onClick={async (e) => {
                     e.preventDefault();
-
-                    /*try {
-                    const res = await fetch(
-                      `/api/receive/spam/${mailboxId}`,
-                      {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                          messages: getMessageIds()
-                        }),
-                        credentials: "include"
-                      }
-                    );
-                    if (res.status == 200) {
+                    try {
+                      const res = await fetch(
+                        `/api/receive/toinbox/${mailboxId}`,
+                        {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json"
+                          },
+                          body: JSON.stringify({
+                            messages: getMessageIds()
+                          }),
+                          credentials: "include"
+                        }
+                      );
                       const data = await res.json();
-                      document.location.hash = encodeURI(
-                        `#mailbox/${data.spamMailbox}`
+                      if (res.status == 200) {
+                        toast(t("notspamsuccess"));
+                        document.location.hash = encodeURI(
+                          `#mailbox/${data.inbox}`
+                        );
+                      } else {
+                        toast(
+                          t("notspamfail", {
+                            error: data.message
+                          })
+                        );
+                      }
+                    } catch (err) {
+                      toast(
+                        t("notspamfail", {
+                          error: err.message
+                        })
                       );
                     }
-                    // eslint-disable-next-line no-unused-vars
-                  } catch (err) {
-                    // Can't set the message as spam
-                  }*/
                   }}
                   title={t("notspam")}
                   className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"

@@ -237,10 +237,10 @@ function EmailContent() {
                     <button
                       onClick={async (e) => {
                         e.preventDefault();
-                        /*const messages = getSelectedMessages();
+                        const messages = getSelectedMessages();
                         try {
                           const res = await fetch(
-                            `/api/receive/spam/${mailboxId}`,
+                            `/api/receive/toinbox/${mailboxId}`,
                             {
                               method: "POST",
                               headers: {
@@ -254,22 +254,25 @@ function EmailContent() {
                           );
                           const data = await res.json();
                           if (res.status == 200) {
-                            toast(t("markasspamsuccess"));
+                            toast(t("notspamsuccess"));
                             setSelectedMessages({});
                             document.location.hash = encodeURI(
-                              `#mailbox/${data.spamMailbox}`
+                              `#mailbox/${data.inbox}`
                             );
                           } else {
-                            toast(t("markasspamfail", {
-                              error: data.message
-                            }));
+                            toast(
+                              t("notspamfail", {
+                                error: data.message
+                              })
+                            );
                           }
-                          // eslint-disable-next-line no-unused-vars
                         } catch (err) {
-                          toast(t("markasspamfail", {
-                            error: err.message
-                          }));
-                        }*/
+                          toast(
+                            t("notspamfail", {
+                              error: err.message
+                            })
+                          );
+                        }
                       }}
                       title={t("notspam")}
                       className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
