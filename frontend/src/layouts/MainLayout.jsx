@@ -22,6 +22,7 @@ import { setView } from "@/slices/viewSlice.js";
 function LoginLayout() {
   const { t } = useTranslation();
   const [query, setQuery] = useState("");
+  const view = useSelector((state) => state.view.view);
   const email = useSelector((state) => state.auth.email);
   const menuShown = useSelector((state) => state.menu.shown);
   const dispatch = useDispatch();
@@ -78,7 +79,7 @@ function LoginLayout() {
                   )
                     document.location.hash = encodeURI("#mailbox");
                 }}
-                className="inline-block align-middle bg-primary-foreground text-primary px-1 py-1 w-9 h-8 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
+                className={`inline-block align-middle ${view == "mailbox" || view == "message" || view == "search" ? "bg-primary-foreground text-primary" : "text-inherit"} px-1 py-1 w-9 h-8 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors`}
               >
                 <Mail className="inline-block w-full align-top">
                   <title>{t("email")}</title>
@@ -143,7 +144,7 @@ function LoginLayout() {
               )
                 document.location.hash = encodeURI("#settings");
             }}
-            className="inline-block text-inherit w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
+            className={`inline-block ${view == "settings" ? "bg-primary-foreground text-primary" : "text-inherit"} w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors`}
           >
             <Settings className="inline-block w-full align-top">
               <title>{t("settings")}</title>
