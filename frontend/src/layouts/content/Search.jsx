@@ -52,6 +52,10 @@ function SearchContent() {
     }
   }, [view, dispatch]);
 
+  useEffect(() => {
+    document.title = `${t("search")} - MERNMail`;
+  }, [t]);
+
   if (loading) {
     return <p className="text-center">{t("loading")}</p>;
   } else if (error) {
