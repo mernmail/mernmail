@@ -134,9 +134,14 @@ function LoginLayout() {
           </span>
           <span className="hidden md:inline select-none align-middle">|</span>
           <a
-            href="#"
+            href="#settings"
             onClick={(e) => {
               e.preventDefault();
+              if (
+                document.location.hash &&
+                !document.location.hash.match(/^#settings(?=$|\/)/)
+              )
+                document.location.hash = encodeURI("#settings");
             }}
             className="inline-block text-inherit w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
           >

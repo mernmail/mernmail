@@ -5,6 +5,7 @@ import messageSlice from "@/slices/messageSlice.js";
 import messagesSlice from "@/slices/messagesSlice.js";
 import menuSlice from "@/slices/menuSlice.js";
 import searchSlice from "@/slices/searchSlice.js";
+import settingsSlice from "@/slices/settingsSlice.js";
 import viewSlice from "@/slices/viewSlice.js";
 import capabilitiesSlice from "@/slices/capabilitiesSlice";
 
@@ -17,6 +18,7 @@ export default configureStore({
     messages: messagesSlice,
     menu: menuSlice,
     search: searchSlice,
+    settings: settingsSlice,
     view: viewSlice
   }
 });

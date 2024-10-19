@@ -68,5 +68,6 @@
     "movesuccess": "Wiadomości przeniesione pomyślnie",
     "movefail": "Nie można przenieść wiadomości: {{error}}",
     "notspamsuccess": "Wiadomości oznaczone jako nie spam pomyślnie",
-    "notspamfail": "Nie można oznaczyć wiadomości jako nie spam: {{error}}"
+    "notspamfail": "Nie można oznaczyć wiadomości jako nie spam: {{error}}",
+    "settingsguide": "Wybierz kategorię z paska bocznego lub z mobilnego menu nawigacyjnego."
 }
