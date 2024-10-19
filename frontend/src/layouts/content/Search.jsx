@@ -84,7 +84,7 @@ function SearchContent() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t("search")}
-              className="bg-inherit h-full w-full pl-2 pr-0 rtl:pl-0 rtl:pr-2 rounded-md focus:outline-accent-foreground focus:outline-2 focus:outline"
+              className="bg-inherit h-full w-full pl-2 pr-0 rtl:pl-0 rtl:pr-2 rounded-md focus:outline-primary focus:outline-2 focus:outline"
             />
             <button
               type="submit"
