@@ -620,10 +620,44 @@ function MessageContent() {
                         <li key={id}>
                           <a
                             href={encodeURI(`#mailbox/${id}`)}
-                            onClick={(e) => {
+                            onClick={async (e) => {
                               e.preventDefault();
                               if (openable) {
-                                alert(`Move to mailbox ${id}`);
+                                try {
+                                  const res = await fetch(
+                                    `/api/receive/move/${mailboxId}`,
+                                    {
+                                      method: "POST",
+                                      headers: {
+                                        "Content-Type": "application/json"
+                                      },
+                                      body: JSON.stringify({
+                                        messages: getMessageIds(),
+                                        destination: id
+                                      }),
+                                      credentials: "include"
+                                    }
+                                  );
+                                  const data = await res.json();
+                                  if (res.status == 200) {
+                                    toast(t("movesuccess"));
+                                    document.location.hash = encodeURI(
+                                      `#mailbox/${id}`
+                                    );
+                                  } else {
+                                    toast(
+                                      t("movefail", {
+                                        error: data.message
+                                      })
+                                    );
+                                  }
+                                } catch (err) {
+                                  toast(
+                                    t("movefail", {
+                                      error: err.message
+                                    })
+                                  );
+                                }
                                 setMoveShown(false);
                               }
                             }}

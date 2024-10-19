@@ -64,5 +64,7 @@
     "starsuccess": "Message(s) starred successfully",
     "starfail": "Can't star message(s): {{error}}",
     "unstarsuccess": "Message(s) unstarred successfully",
-    "unstarfail": "Can't unstar message(s): {{error}}"
+    "unstarfail": "Can't unstar message(s): {{error}}",
+    "movesuccess": "Message(s) moved successfully",
+    "movefail": "Can't move message(s): {{error}}"
 }

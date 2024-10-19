@@ -64,5 +64,7 @@
     "starsuccess": "Wiadomości oznaczone gwiazdą pomyślnie",
     "starfail": "Nie można oznaczyć wiadomości gwiazdą: {{error}}",
     "unstarsuccess": "Wiadomości odznaczone gwiazdą pomyślnie",
-    "unstarfail": "Nie można odznaczyć wiadomości gwiazdą: {{error}}"
+    "unstarfail": "Nie można odznaczyć wiadomości gwiazdą: {{error}}",
+    "movesuccess": "Wiadomości przeniesione pomyślnie",
+    "movefail": "Nie można przenieść wiadomości: {{error}}"
 }

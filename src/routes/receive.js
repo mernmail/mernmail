@@ -298,4 +298,50 @@ router.post("/unstar/:mailbox*", (req, res) => {
   });
 });
 
+router.post("/move/:mailbox*", (req, res) => {
+  if (
+    !req.body ||
+    !req.body.messages ||
+    !req.body.destination ||
+    (!Array.isArray(req.body.messages) &&
+      typeof req.body.messages != "string") ||
+    req.body.messages.length === 0
+  ) {
+    res.status(400).json({
+      message: "You need to provide messages and destination to move"
+    });
+    req.receiveDriver.close();
+    return;
+  }
+  const mailbox = req.params.mailbox + req.params[0];
+  req.receiveDriver.openMailbox(mailbox, (err) => {
+    if (err) {
+      res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
+      return;
+    } else if (req.body.destination == mailbox) {
+      res.status(400).json({
+        message: "The destination mailbox is the same as the source mailbox"
+      });
+      req.receiveDriver.close();
+      return;
+    }
+    req.receiveDriver.moveMessages(
+      req.body.messages,
+      req.body.destination,
+      (err) => {
+        if (err) {
+          res.status(500).json({ message: err.message });
+          req.receiveDriver.close();
+          return;
+        }
+        res.json({
+          message: "Moved messages successfully"
+        });
+        req.receiveDriver.close();
+      }
+    );
+  });
+});
+
 module.exports = router;
