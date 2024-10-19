@@ -130,7 +130,7 @@ function LoginLayout() {
           <User className="hidden md:inline-block w-8 h-8 py-1">
             <title>{t("user")}</title>
           </User>
-          <span className="hidden md:inline mr-1 rtl:mr-0 rtl:ml-1 text-base align-middle">
+          <span className="hidden md:inline-block mr-1 rtl:mr-0 rtl:ml-1 text-base align-middle max-w-56 lg:max-w-96 overflow-hidden text-ellipsis">
             {email}
           </span>
           <span className="hidden md:inline select-none align-middle">|</span>
