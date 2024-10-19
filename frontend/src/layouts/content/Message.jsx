@@ -720,6 +720,7 @@ function MessageContent() {
             };
             const fromInitials = firstFrom.name
               ? firstFrom.name
+                  .replace(/[^\w\s]/g, "")
                   .split(" ")
                   .map((str) => {
                     return str[0];
