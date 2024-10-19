@@ -561,7 +561,7 @@ function EmailContent() {
                                   }
                                 }}
                                 title={title}
-                                className={`bg-background text-foreground block overflow-hidden text-ellipsis whitespace-nowrap ${level == 0 ? "" : level == 1 ? "ml-4 rtl:ml-0 rtl:mr-4" : "ml-8 rtl:ml-0 rtl:mr-8"} px-2 py-1 hover:bg-accent/60 hover:text-accent-foreground transition-colors rounded-md`}
+                                className={`bg-background text-foreground block overflow-hidden text-ellipsis whitespace-nowrap ${level == 0 ? "" : level == 1 ? "ml-4 rtl:ml-0 rtl:mr-4" : "ml-8 rtl:ml-0 rtl:mr-8"} px-2 py-0.5 hover:bg-accent/60 hover:text-accent-foreground transition-colors rounded-md`}
                               >
                                 {title}
                               </a>
