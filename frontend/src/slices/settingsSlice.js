@@ -17,7 +17,7 @@ export const settingsSlice = createSlice({
       } catch (err) {
         // Hash URL parse error, use the first category
       }
-      if (categoryName && state.currentCategory != categoryName)
+      if (state.currentCategory != categoryName)
         state.currentCategory = categoryName;
     }
   }
