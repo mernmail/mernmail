@@ -208,9 +208,7 @@ function MessageContent() {
 
   useEffect(() => {
     if (!loading && messageData && messageData.messages.length > 0)
-      document.title =
-        messageData.messages[messageData.messages.length - 1].subject +
-        " - MERNMail";
+      document.title = `${messageData.messages[messageData.messages.length - 1].subject} - MERNMail`;
   }, [messageData, loading]);
 
   useEffect(() => {

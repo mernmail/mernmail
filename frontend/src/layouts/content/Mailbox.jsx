@@ -137,7 +137,7 @@ function EmailContent() {
   }, [refresh, loading, dispatch]);
 
   useEffect(() => {
-    if (!mailboxesLoading) document.title = title + " - MERNMail";
+    if (!mailboxesLoading) document.title = `${title} - MERNMail`;
   }, [title, mailboxesLoading]);
 
   useEffect(() => {
