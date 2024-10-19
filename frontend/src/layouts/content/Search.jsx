@@ -31,14 +31,17 @@ function SearchContent() {
 
   useEffect(() => {
     if (view == "search") {
-      const controller =
-        typeof window.AbortController != "undefined"
-          ? new AbortController()
-          : undefined;
-      const signal = controller ? controller.signal : undefined;
+      let controller;
+      let signal;
 
       const onBackButtonEvent = () => {
         setTimeout(() => {
+          if (controller) controller.abort();
+          controller =
+            typeof window.AbortController != "undefined"
+              ? new AbortController()
+              : undefined;
+          signal = controller ? controller.signal : undefined;
           dispatch(resetLoading());
           dispatch(setSearchResults(signal));
         }, 0);
