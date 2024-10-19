@@ -18,6 +18,7 @@ const ThemeProvider = ({ children }) => {
   } else if (savedTheme == "light") {
     initialDarkMode = false;
   }
+  const [currentTheme, setCurrentTheme] = useState(savedTheme || "system");
   const [isDarkMode, setIsDarkMode] = useState(
     areThemesSupported ? initialDarkMode : false
   );
@@ -33,6 +34,7 @@ const ThemeProvider = ({ children }) => {
   const setTheme = (themeName) => {
     if (!areThemesSupported) throw new Error("Themes are not supported");
     localStorage.setItem("theme", themeName);
+    setCurrentTheme(themeName);
     if (themeName == "light") {
       setIsDarkMode(false);
     } else if (themeName == "dark") {
@@ -43,7 +45,9 @@ const ThemeProvider = ({ children }) => {
   };
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, setTheme, areThemesSupported }}>
+    <ThemeContext.Provider
+      value={{ currentTheme, setTheme, areThemesSupported }}
+    >
       {children}
     </ThemeContext.Provider>
   );

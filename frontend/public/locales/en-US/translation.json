@@ -69,5 +69,10 @@
     "movefail": "Can't move message(s): {{error}}",
     "notspamsuccess": "Message(s) unmarked as spam successfully",
     "notspamfail": "Can't unmark message(s) as spam: {{error}}",
-    "settingsguide": "Select a category from a sidebar or a mobile navigation menu."
+    "settingsguide": "Select a category from a sidebar or a mobile navigation menu.",
+    "theme": "Theme",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark",
+    "themesnotsupported": "Themes are not supported for this browser."
 }

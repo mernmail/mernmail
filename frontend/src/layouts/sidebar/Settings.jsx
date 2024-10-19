@@ -1,12 +1,12 @@
-import { CircleHelp } from "lucide-react";
-//import { useTranslation } from "react-i18next";
+import { CircleHelp, Palette } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { hideMenu } from "@/slices/menuSlice.js";
 import { setCurrentCategoryFromURL } from "@/slices/settingsSlice.js";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 
 function SettingsSidebar() {
-  //const { t } = useTranslation();
+  const { t } = useTranslation();
   const view = useSelector((state) => state.view.view);
   const currentCategory = useSelector(
     (state) => state.settings.currentCategory
@@ -20,9 +20,9 @@ function SettingsSidebar() {
       icon: CircleHelp
     },
     {
-      id: "example2",
-      name: "Example 2",
-      icon: CircleHelp
+      id: "theme",
+      name: t("theme"),
+      icon: Palette
     }
   ];
 
