@@ -12,7 +12,7 @@ import {
 import { logout } from "@/slices/authSlice.js";
 import { showMenu, hideMenu } from "@/slices/menuSlice.js";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Sidebar from "@/components/Sidebar.jsx";
 import ActionButton from "@/components/ActionButton.jsx";
@@ -20,10 +20,11 @@ import Content from "@/components/Content.jsx";
 import { setView } from "@/slices/viewSlice.js";
 
 function LoginLayout() {
+  const { t } = useTranslation();
+  const [query, setQuery] = useState("");
   const email = useSelector((state) => state.auth.email);
   const menuShown = useSelector((state) => state.menu.shown);
   const dispatch = useDispatch();
-  const { t } = useTranslation();
 
   useEffect(() => {
     document.title = "MERNMail";
@@ -99,17 +100,30 @@ function LoginLayout() {
             </li>
           </ul>
         </div>
-        <form className="grow max-w-md bg-accent text-base rounded-md hidden md:flex flex-row flex-nowrap">
+        <form
+          className="grow max-w-md bg-accent text-base rounded-md hidden md:flex flex-row flex-nowrap"
+          onSubmit={(e) => {
+            e.preventDefault();
+            document.location.hash = encodeURI(`#search/${query}`);
+          }}
+        >
           <input
             type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder={t("search")}
             className="bg-inherit h-full w-full pl-2 pr-0 rtl:pl-0 rtl:pr-2 mb-2 rounded-md focus:outline-accent-foreground focus:outline-2 focus:outline"
           />
-          <Search
-            width={32}
-            height={32}
-            className="inline-block h-full p-1 text-accent-foreground"
-          />
+          <button
+            type="submit"
+            className="bg-transparent text-inherit shrink-0"
+          >
+            <Search
+              width={32}
+              height={32}
+              className="inline-block h-full p-1 text-accent-foreground"
+            />
+          </button>
         </form>
         <span className="self-center whitespace-nowrap text-right">
           <User className="hidden md:inline-block w-8 h-8 py-1">

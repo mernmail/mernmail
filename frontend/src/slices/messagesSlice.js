@@ -59,7 +59,7 @@ export function setMessages(signal) {
       }
     } catch (err) {
       if (err.name == "AbortError") aborted = true;
-      state.errored = err.message;
+      state.error = err.message;
     }
     if (!aborted) dispatch(messagesSlice.actions.setMessages(state));
   };

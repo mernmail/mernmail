@@ -437,6 +437,7 @@ router.get("/search/:query*", (req, res) => {
             ...allMessages,
             ...messages.map((message) => {
               message.id = mailboxesToOpen[_id].id + "/" + message.id;
+              message.mailboxType = mailboxesToOpen[_id].type;
               return message;
             })
           ];
