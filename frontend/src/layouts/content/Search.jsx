@@ -71,9 +71,9 @@ function SearchContent() {
         <h1 className="text-3xl md:text-4xl mt-2 mb-2.5 pb-0.5 md:mb-2 md:pb-1 font-bold content-center overflow-hidden text-ellipsis">
           {t("search")}
         </h1>
-        <div className="flex w-full">
+        <div className="flex mx-2 mb-2">
           <form
-            className="w-full bg-accent text-base rounded-md flex flex-row flex-nowrap mb-2"
+            className="w-full bg-accent text-base rounded-md flex flex-row flex-nowrap"
             onSubmit={(e) => {
               e.preventDefault();
               document.location.hash = encodeURI(`#search/${query}`);
