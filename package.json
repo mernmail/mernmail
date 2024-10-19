@@ -27,6 +27,7 @@
     "imap-node": "^0.9.9",
     "jsonwebtoken": "^9.0.2",
     "mailparser": "^3.7.1",
+    "minisearch": "^7.1.0",
     "mongoose": "^8.7.1",
     "node-pop3": "^0.9.0",
     "nodemailer": "^6.9.15",

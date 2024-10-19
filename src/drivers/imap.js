@@ -616,6 +616,130 @@ module.exports = function init(email, password, callback) {
       findInbox: (callback) => {
         // Inbox in IMAP is always "INBOX".
         callback(null, "INBOX");
+      },
+      closeMailbox: (callback) => {
+        imap.closeBox((err) => {
+          if (err) {
+            callback(err);
+            return;
+          }
+          currentMailbox = null;
+          callback(null);
+        });
+      },
+      getRealAllMessages: (callback) => {
+        imap.search(["ALL"], (err, messages) => {
+          if (err) {
+            callback(err);
+            return;
+          }
+          const finalMessages = [];
+          if (messages.length == 0) {
+            callback(null, []);
+            return;
+          }
+          const imapFetch = imap.fetch(messages, {
+            bodies: "HEADER.FIELDS (FROM TO SUBJECT MESSAGE-ID IN-REPLY-TO)"
+          });
+          imapFetch.on("message", (msg) => {
+            let attributesSet = false;
+            let bodyParsed = false;
+            const finalAttributes = {
+              seen: false,
+              starred: false,
+              answered: false,
+              date: new Date(),
+              id: -1,
+              subject: "Unknown email",
+              from: "Unknown",
+              to: "Unknown",
+              messageId: null
+            };
+
+            msg.on("body", (bodyStream) => {
+              simpleParser(bodyStream)
+                .then((parsed) => {
+                  const fromArray =
+                    parsed.from && parsed.from.value
+                      ? parsed.from.value || []
+                      : [];
+                  const fromArray2 = [];
+                  fromArray.forEach((fromObject) => {
+                    fromArray2.push(
+                      fromObject
+                        ? fromObject.name
+                          ? fromObject.name
+                          : fromObject.address
+                        : "Unknown"
+                    );
+                  });
+                  const from = fromArray2.join(", ");
+                  finalAttributes.from = from;
+                  const toArray =
+                    parsed.to && parsed.to.value ? parsed.to.value || [] : [];
+                  const toArray2 = [];
+                  toArray.forEach((toObject) => {
+                    toArray2.push(
+                      toObject
+                        ? toObject.name
+                          ? toObject.name
+                          : toObject.address
+                        : "Unknown"
+                    );
+                  });
+                  const to = toArray2.join(", ");
+                  finalAttributes.to = to;
+                  finalAttributes.subject = parsed.subject;
+                  finalAttributes.messageId = parsed.messageId;
+                  if (attributesSet) {
+                    finalMessages.push(finalAttributes);
+                    if (finalMessages.length == messages.length) {
+                      finalMessages.sort((a, b) => {
+                        return messages.indexOf(a.id) - messages.indexOf(b.id);
+                      });
+                      finalMessages.sort((a, b) => {
+                        return a.date - b.date;
+                      });
+                      callback(null, finalMessages);
+                    }
+                  }
+                  bodyParsed = true;
+                })
+                .catch(() => {
+                  bodyParsed = true;
+                });
+            });
+            msg.on("attributes", (attributes) => {
+              attributes.flags.forEach((flag) => {
+                if (flag == "\\Seen") {
+                  finalAttributes.seen = true;
+                } else if (flag == "\\Flagged") {
+                  finalAttributes.starred = true;
+                } else if (flag == "\\Answered") {
+                  finalAttributes.answered = true;
+                }
+              });
+              finalAttributes.id = attributes.uid;
+              finalAttributes.date = attributes.date;
+              if (bodyParsed) {
+                finalMessages.push(finalAttributes);
+                if (finalMessages.length == messages.length) {
+                  finalMessages.sort((a, b) => {
+                    return messages.indexOf(a.id) - messages.indexOf(b.id);
+                  });
+                  finalMessages.sort((a, b) => {
+                    return a.date - b.date;
+                  });
+                  callback(null, finalMessages);
+                }
+              }
+              attributesSet = true;
+            });
+          });
+          imapFetch.on("error", (err) => {
+            callback(err);
+          });
+        });
       }
     };
     callback(null, receiveObject);

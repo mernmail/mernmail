@@ -114,8 +114,27 @@ module.exports = function init(email, password, callback) {
                                 finalAttributes.to = to;
                                 finalAttributes.subject = parsed.subject;
                                 finalAttributes.messageId = parsed.messageId;
-                                if (parsed.inReplyTo)
+                                if (parsed.date)
+                                  finalAttributes.date = parsed.date;
+                                if (parsed.inReplyTo) {
+                                  for (
+                                    let i = 0;
+                                    i < finalMessages.length;
+                                    i++
+                                  ) {
+                                    if (
+                                      finalMessages[i].messageId ==
+                                      parsed.inReplyTo
+                                    ) {
+                                      finalAttributes.otherIds = [
+                                        ...finalMessages[i].otherIds,
+                                        finalMessages[i].id
+                                      ];
+                                      break;
+                                    }
+                                  }
                                   replyIds.push(parsed.inReplyTo);
+                                }
                                 finalMessages.push(finalAttributes);
                                 getMessageContents(callback2, _id + 1);
                               })
@@ -340,6 +359,97 @@ module.exports = function init(email, password, callback) {
                 findInbox: (callback) => {
                   // POP3 supports only one mailbox.
                   callback(null, "Inbox");
+                },
+                closeMailbox: (callback) => {
+                  // POP3 supports only one mailbox.
+                  callback(null);
+                },
+                getRealAllMessages: (callback) => {
+                  pop3
+                    .command("LIST")
+                    .then((listArray) => {
+                      const listInfo = listArray[0];
+                      const listified = Pop3Command.listify(listInfo);
+                      const finalMessages = [];
+                      const getMessageContents = (callback2, _id) => {
+                        if (!_id) _id = 0;
+                        if (_id >= listified.length) {
+                          callback2();
+                          return;
+                        }
+                        pop3
+                          .TOP(parseInt(listified[_id][0]), 0)
+                          .then((header) => {
+                            const finalAttributes = {
+                              seen: true,
+                              starred: false,
+                              answered: false,
+                              date: new Date(),
+                              id: parseInt(listified[_id][0]),
+                              subject: "Unknown email",
+                              from: "Unknown",
+                              to: "Unknown",
+                              messageId: null
+                            };
+                            simpleParser(header)
+                              .then((parsed) => {
+                                const fromArray =
+                                  parsed.from && parsed.from.value
+                                    ? parsed.from.value || []
+                                    : [];
+                                const fromArray2 = [];
+                                fromArray.forEach((fromObject) => {
+                                  fromArray2.push(
+                                    fromObject
+                                      ? fromObject.name
+                                        ? fromObject.name
+                                        : fromObject.address
+                                      : "Unknown"
+                                  );
+                                });
+                                const from = fromArray2.join(", ");
+                                finalAttributes.from = from;
+                                const toArray =
+                                  parsed.to && parsed.to.value
+                                    ? parsed.to.value || []
+                                    : [];
+                                const toArray2 = [];
+                                toArray.forEach((toObject) => {
+                                  toArray2.push(
+                                    toObject
+                                      ? toObject.name
+                                        ? toObject.name
+                                        : toObject.address
+                                      : "Unknown"
+                                  );
+                                });
+                                const to = toArray2.join(", ");
+                                finalAttributes.to = to;
+                                finalAttributes.subject = parsed.subject;
+                                finalAttributes.messageId = parsed.messageId;
+                                if (parsed.date)
+                                  finalAttributes.date = parsed.date;
+                                finalMessages.push(finalAttributes);
+                                getMessageContents(callback2, _id + 1);
+                              })
+                              .catch(() => {
+                                getMessageContents(callback2, _id + 1);
+                              });
+                          })
+                          .catch((err) => {
+                            callback(err);
+                          });
+                      };
+                      getMessageContents(() => {
+                        finalMessages.sort((a, b) => {
+                          return a.date - b.date;
+                        });
+                        callback(null, finalMessages);
+                      });
+                    })
+                    .catch((err) => {
+                      callback(err);
+                    });
                 }
               };
               callback(null, receiveObject);
