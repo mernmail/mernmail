@@ -65,7 +65,7 @@ function LoginLayout() {
           <LogoMonochrome
             width={160}
             height={35}
-            className="inline mr-2 md:mr-4 rtl:mr-0 rtl:ml-2 rtl:md:ml-4 h-6 md:h-8 w-auto"
+            className="inline mr-2 md:mr-3 rtl:mr-0 rtl:ml-2 rtl:md:ml-3 h-6 md:h-8 w-auto"
           />
           <ul className="inline list-none">
             <li className="inline">
