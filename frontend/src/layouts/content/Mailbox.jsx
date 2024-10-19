@@ -24,6 +24,7 @@ function EmailContent() {
   const [selectedMessages, setSelectedMessages] = useState({});
   const [selectedAll, setSelectedAll] = useState(false);
   const [selectedAny, setSelectedAny] = useState(false);
+  const [moveShown, setMoveShown] = useState(false);
   const hasMoreThanOneMailbox = useSelector(
     (state) => state.mailboxes.mailboxes.length > 1
   );
@@ -40,6 +41,7 @@ function EmailContent() {
   const canStar = useSelector(
     (state) => state.capabilities.receiveCapabilities.star
   );
+  const mailboxes = useSelector((state) => state.mailboxes.mailboxes);
   const mailboxId = useSelector((state) => state.mailboxes.currentMailbox);
   const mailboxType = useSelector(
     (state) => state.mailboxes.currentMailboxType
@@ -95,6 +97,7 @@ function EmailContent() {
           : undefined;
       const signal = controller ? controller.signal : undefined;
 
+      setMoveShown(false);
       dispatch(resetLoading());
       dispatch(setMailboxes);
       dispatch(setMessages(signal));
@@ -119,6 +122,7 @@ function EmailContent() {
             : undefined;
         const signal = controller ? controller.signal : undefined;
 
+        setMoveShown(false);
         dispatch(setMailboxes);
         dispatch(setMessages(signal));
 
@@ -147,6 +151,10 @@ function EmailContent() {
         messages.find((message) => selectedMessages[message.id])
     );
   }, [selectedMessages, messages]);
+
+  useEffect(() => {
+    if (!selectedAny) setMoveShown(false);
+  }, [selectedAny]);
 
   if (loading) {
     return <p className="text-center">{t("loading")}</p>;
@@ -496,10 +504,11 @@ function EmailContent() {
                 ""
               )}
               {hasMoreThanOneMailbox ? (
-                <li className="inline-block mx-0.5">
+                <li className="relative inline-block mx-0.5">
                   <button
                     onClick={(e) => {
                       e.preventDefault();
+                      setMoveShown(!moveShown);
                     }}
                     title={t("move")}
                     className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
@@ -510,6 +519,59 @@ function EmailContent() {
                       className="inline w-6 h-6 align-top"
                     />
                   </button>
+                  {moveShown ? (
+                    <ul className="block list-none absolute whitespace-nowrap top-full -right-16 rtl:right-auto rtl:-left-16 md:right-auto md:left-0 rtl:md:left-auto rtl:md:right-0 bg-background text-foreground border-border border rounded-md z-10">
+                      {mailboxes
+                        .filter((mailbox) => {
+                          return mailbox.id != mailboxId;
+                        })
+                        .map((mailbox) => {
+                          let title = mailbox.name;
+                          let type = mailbox.type;
+                          const id = mailbox.id;
+                          const level = mailbox.level;
+                          const openable = mailbox.openable;
+                          if (type == "inbox") {
+                            title = t("inbox");
+                          } else if (type == "starred") {
+                            title = t("starred");
+                          } else if (type == "important") {
+                            title = t("important");
+                          } else if (type == "sent") {
+                            title = t("sent");
+                          } else if (type == "drafts") {
+                            title = t("drafts");
+                          } else if (type == "all") {
+                            title = t("all");
+                          } else if (type == "spam") {
+                            title = t("spam");
+                          } else if (type == "trash") {
+                            title = t("trash");
+                          }
+                          return (
+                            <li key={id}>
+                              <a
+                                href={encodeURI(`#mailbox/${id}`)}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  if (openable) {
+                                    alert(`Move to mailbox ${id}`);
+
+                                    setMoveShown(false);
+                                  }
+                                }}
+                                title={title}
+                                className={`bg-background text-foreground block overflow-hidden text-ellipsis whitespace-nowrap ${level == 0 ? "" : level == 1 ? "ml-4 rtl:ml-0 rtl:mr-4" : "ml-8 rtl:ml-0 rtl:mr-8"} px-2 py-1 hover:bg-accent/60 hover:text-accent-foreground transition-colors rounded-md`}
+                              >
+                                {title}
+                              </a>
+                            </li>
+                          );
+                        })}
+                    </ul>
+                  ) : (
+                    ""
+                  )}
                 </li>
               ) : (
                 ""

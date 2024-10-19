@@ -129,7 +129,7 @@ function EmailSidebar() {
                     }
                   }}
                   title={title}
-                  className={`${(view == "mailbox" || view == "message") && currentMailbox == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block my-1 ${level == 0 ? "ml-" + level * 4 + " rtl:ml-0 rtl:mr-" + level * 4 : ""} px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}
+                  className={`${(view == "mailbox" || view == "message") && currentMailbox == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block my-1 ${level == 0 ? "" : level == 1 ? "ml-4 rtl:ml-0 rtl:mr-4" : "ml-8 rtl:ml-0 rtl:mr-8"} px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}
                 >
                   <div className="flex flex-row w-auto">
                     <DisplayedIcon

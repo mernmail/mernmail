@@ -12,7 +12,7 @@ import {
   Trash,
   TriangleAlert
 } from "lucide-react";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Iframe from "@/components/Iframe.jsx";
 import { useTranslation } from "react-i18next";
 import DOMPurify from "dompurify";
@@ -28,6 +28,7 @@ function MessageContent() {
   const [iframeHeights, setIframeHeights] = useState({});
   const { t } = useTranslation();
   const { toast } = useContext(ToastContext);
+  const [moveShown, setMoveShown] = useState(false);
   const view = useSelector((state) => state.view.view);
   const hasMoreThanOneMailbox = useSelector(
     (state) => state.mailboxes.mailboxes.length > 1
@@ -39,6 +40,7 @@ function MessageContent() {
       })
     )
   );
+  const mailboxes = useSelector((state) => state.mailboxes.mailboxes);
   const mailboxId = useSelector((state) => state.mailboxes.currentMailbox);
   const mailboxType = useSelector(
     (state) => state.mailboxes.currentMailboxType
@@ -63,6 +65,7 @@ function MessageContent() {
         : undefined;
     const signal = controller ? controller.signal : undefined;
 
+    setMoveShown(false);
     dispatch(resetLoading());
     dispatch(loadMessage(signal));
     dispatch(setMailboxes);
@@ -81,6 +84,7 @@ function MessageContent() {
             : undefined;
         const signal = controller ? controller.signal : undefined;
 
+        setMoveShown(false);
         dispatch(loadMessage(signal));
         dispatch(setMailboxes);
 
@@ -162,21 +166,24 @@ function MessageContent() {
     };
   };
 
-  const resizeOnIframeLoad = (iframeRefContents, id) => {
-    return () => {
-      const body = iframeRefContents.contentWindow.document.body;
-      const html = iframeRefContents.contentWindow.document.documentElement;
-      const newIframeHeights = Object.assign({}, iframeHeights);
-      newIframeHeights[id] = Math.max(
-        html.scrollHeight > parseInt(iframeRefContents.height)
-          ? html.scrollHeight
-          : 0,
-        body.offsetHeight,
-        html.offsetHeight
-      );
-      setIframeHeights(newIframeHeights);
-    };
-  };
+  const resizeOnIframeLoad = useCallback(
+    (iframeRefContents, id) => {
+      return () => {
+        const body = iframeRefContents.contentWindow.document.body;
+        const html = iframeRefContents.contentWindow.document.documentElement;
+        const newIframeHeights = Object.assign({}, iframeHeights);
+        newIframeHeights[id] = Math.max(
+          html.scrollHeight > parseInt(iframeRefContents.height)
+            ? html.scrollHeight
+            : 0,
+          body.offsetHeight,
+          html.offsetHeight
+        );
+        setIframeHeights(newIframeHeights);
+      };
+    },
+    [iframeHeights]
+  );
 
   const getMessageIds = () => {
     return messagesToRender
@@ -197,7 +204,7 @@ function MessageContent() {
     return () => {
       window.removeEventListener("resize", resizeOnIframeLoadAllRefs);
     };
-  }, []);
+  }, [resizeOnIframeLoad]);
 
   useEffect(() => {
     if (!loading && messageData && messageData.messages.length > 0)
@@ -565,10 +572,11 @@ function MessageContent() {
             ""
           )}
           {hasMoreThanOneMailbox ? (
-            <li className="inline-block mx-0.5">
+            <li className="relative inline-block mx-0.5">
               <button
                 onClick={(e) => {
                   e.preventDefault();
+                  setMoveShown(!moveShown);
                 }}
                 title={t("move")}
                 className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
@@ -579,6 +587,58 @@ function MessageContent() {
                   className="inline w-6 h-6 align-top"
                 />
               </button>
+              {moveShown ? (
+                <ul className="block list-none absolute whitespace-nowrap top-full -right-16 rtl:right-auto rtl:-left-16 md:right-auto md:left-0 rtl:md:left-auto rtl:md:right-0 bg-background text-foreground border-border border rounded-md z-10">
+                  {mailboxes
+                    .filter((mailbox) => {
+                      return mailbox.id != mailboxId;
+                    })
+                    .map((mailbox) => {
+                      let title = mailbox.name;
+                      let type = mailbox.type;
+                      const id = mailbox.id;
+                      const level = mailbox.level;
+                      const openable = mailbox.openable;
+                      if (type == "inbox") {
+                        title = t("inbox");
+                      } else if (type == "starred") {
+                        title = t("starred");
+                      } else if (type == "important") {
+                        title = t("important");
+                      } else if (type == "sent") {
+                        title = t("sent");
+                      } else if (type == "drafts") {
+                        title = t("drafts");
+                      } else if (type == "all") {
+                        title = t("all");
+                      } else if (type == "spam") {
+                        title = t("spam");
+                      } else if (type == "trash") {
+                        title = t("trash");
+                      }
+                      return (
+                        <li key={id}>
+                          <a
+                            href={encodeURI(`#mailbox/${id}`)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (openable) {
+                                alert(`Move to mailbox ${id}`);
+                                setMoveShown(false);
+                              }
+                            }}
+                            title={title}
+                            className={`bg-background text-foreground block overflow-hidden text-ellipsis whitespace-nowrap ${level == 0 ? "" : level == 1 ? "ml-4 rtl:ml-0 rtl:mr-4" : "ml-8 rtl:ml-0 rtl:mr-8"} px-2 py-1 hover:bg-accent/60 hover:text-accent-foreground transition-colors rounded-md`}
+                          >
+                            {title}
+                          </a>
+                        </li>
+                      );
+                    })}
+                </ul>
+              ) : (
+                ""
+              )}
             </li>
           ) : (
             ""
