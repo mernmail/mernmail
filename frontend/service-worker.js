@@ -1,4 +1,13 @@
-import "unfetch/polyfill";
-import "abortcontroller-polyfill/dist/polyfill-patch-fetch";
+function getNewMessages() {
+    if(self.Notification.permission == "granted") {
+        self.registration.showNotification("New email message", { body: "From: a\nTo: b\nSubject: test", icon: "/icon.png"});
+    }
+}
 
-console.log("Hey, I am a service worker.");
+self.addEventListener('activate', async () => {
+  setInterval(() => {
+    getNewMessages();
+  }, 10000);
+
+  getNewMessages();
+});

@@ -74,5 +74,10 @@
     "system": "System",
     "light": "Light",
     "dark": "Dark",
-    "themesnotsupported": "Themes are not supported for this browser."
+    "themesnotsupported": "Themes are not supported for this browser.",
+    "notifications": "Notifications",
+    "notificationsunsupported": "Your browser doesn't support push notifications.",
+    "grantpermission": "Allow",
+    "notificationsdenied": "The access to push notifications is denied.",
+    "notificationsgranted": "The access to push notifications is granted."
 }

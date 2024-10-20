@@ -74,5 +74,10 @@
     "system": "Systemowy",
     "light": "Jasny",
     "dark": "Ciemny",
-    "themesnotsupported": "Motywy nie są wspierane dla tej przeglądarki."
+    "themesnotsupported": "Motywy nie są wspierane dla tej przeglądarki.",
+    "notifications": "Powiadomienia",
+    "notificationsunsupported": "Twoja przeglądarka nie wspiera powiadomień.",
+    "grantpermission": "Zezwól",
+    "notificationsdenied": "Odmówiono dostępu do powiadomień.",
+    "notificationsgranted": "Zezwolono na dostęp do powiadomień."
 }

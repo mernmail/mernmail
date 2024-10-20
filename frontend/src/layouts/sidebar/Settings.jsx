@@ -1,4 +1,4 @@
-import { CircleHelp, Palette } from "lucide-react";
+import { Bell, CircleHelp, Palette } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { hideMenu } from "@/slices/menuSlice.js";
 import { setCurrentCategoryFromURL } from "@/slices/settingsSlice.js";
@@ -18,6 +18,11 @@ function SettingsSidebar() {
       id: "example",
       name: "Example",
       icon: CircleHelp
+    },
+    {
+      id: "notifications",
+      name: t("notifications"),
+      icon: Bell
     },
     {
       id: "theme",
