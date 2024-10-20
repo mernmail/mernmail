@@ -1,12 +1,16 @@
 import { useTranslation } from "react-i18next";
 import { ThemeContext } from "@/contexts/ThemeContext.jsx";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Moon, Sun, SunMoon } from "lucide-react";
 
 function ThemeSettings() {
   const { t } = useTranslation();
   const { currentTheme, setTheme, areThemesSupported } =
     useContext(ThemeContext);
+
+  useEffect(() => {
+    document.title = `${t("theme")} - MERNMail`;
+  }, [t]);
 
   const themes = [
     { id: "system", name: t("system"), icon: SunMoon },
