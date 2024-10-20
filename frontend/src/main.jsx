@@ -13,6 +13,7 @@ import store from "./store.js";
 import { Provider } from "react-redux";
 import { ErrorBoundary } from "react-error-boundary";
 import "./i18n.js";
+import { register } from "register-service-worker";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -29,3 +30,5 @@ createRoot(document.getElementById("root")).render(
     </ErrorBoundary>
   </StrictMode>
 );
+
+register(`/service-worker.js`);
