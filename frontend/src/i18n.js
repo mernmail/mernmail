@@ -1,27 +1,25 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-import Backend from "i18next-http-backend";
+import enUSLang from "@/locales/en-US/translation.json";
+import plLang from "@/locales/pl/translation.json";
 import LanguageDetector from "i18next-browser-languagedetector";
-// don't want to use this?
-// have a look at the Quick start guide
-// for passing in lng and translations on init
+
+const resources = {
+  "en-US": {
+    translation: enUSLang
+  },
+  pl: {
+    translation: plLang
+  }
+};
 
 i18n
-  // load translation using http -> see /public/locales (i.e. https://github.com/i18next/react-i18next/tree/master/example/react/public/locales)
-  // learn more: https://github.com/i18next/i18next-http-backend
-  // want your translations to be loaded from a professional CDN? => https://github.com/locize/react-tutorial#step-2---use-the-locize-cdn
-  .use(Backend)
-  // detect user language
-  // learn more: https://github.com/i18next/i18next-browser-languageDetector
   .use(LanguageDetector)
-  // pass the i18n instance to react-i18next.
   .use(initReactI18next)
-  // init i18next
-  // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     fallbackLng: "en-US",
-
+    resources: resources,
     interpolation: {
       escapeValue: false // not needed for react as it escapes by default
     }
@@ -31,5 +29,7 @@ i18n.on("languageChanged", (lng) => {
   document.documentElement.lang = lng;
   document.documentElement.dir = i18n.dir(lng);
 });
+
+export { resources };
 
 export default i18n;
