@@ -82,5 +82,6 @@
     "notificationsgranted": "The access to push notifications is granted.",
     "newmessage": "New email message!",
     "from": "From: {{from}}",
-    "subject": "Subject: {{subject}}"
+    "subject": "Subject: {{subject}}",
+    "language": "Language"
 }

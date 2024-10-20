@@ -82,5 +82,6 @@
     "notificationsgranted": "Zezwolono na dostęp do powiadomień.",
     "newmessage": "Nowa wiadomość e-mail!",
     "from": "Od: {{from}}",
-    "subject": "Temat: {{subject}}"
+    "subject": "Temat: {{subject}}",
+    "language": "Język"
 }
