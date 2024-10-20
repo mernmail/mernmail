@@ -68,9 +68,7 @@ function App() {
                     notification.addEventListener("click", (event) => {
                       event.preventDefault();
                       window.open(
-                        document.location.origin +
-                          document.location.pathname +
-                          `#message/${message.id}`,
+                        `${document.location.origin}${document.location.pathname}#message/${message.id}`,
                         "_blank"
                       );
                     });
