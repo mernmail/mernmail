@@ -1,4 +1,4 @@
-import { Bell, CircleHelp, Languages, Palette, Signature } from "lucide-react";
+import { Bell, Languages, Palette, Signature } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { hideMenu } from "@/slices/menuSlice.js";
 import { setCurrentCategoryFromURL } from "@/slices/settingsSlice.js";
@@ -14,11 +14,6 @@ function SettingsSidebar() {
   const dispatch = useDispatch();
 
   const categories = [
-    {
-      id: "example",
-      name: "Example",
-      icon: CircleHelp
-    },
     {
       id: "language",
       name: t("language"),

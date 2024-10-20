@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import ExampleSettings from "@/layouts/settings/Example.jsx";
 import LanguageSettings from "@/layouts/settings/Language.jsx";
 import NotificationsSettings from "@/layouts/settings/Notifications.jsx";
 import SignatureSettings from "@/layouts/settings/Signature.jsx";
@@ -10,9 +9,7 @@ function SettingsContent() {
   const currentCategory = useSelector(
     (state) => state.settings.currentCategory
   );
-  if (currentCategory == "example") {
-    return <ExampleSettings />;
-  } else if (currentCategory == "theme") {
+  if (currentCategory == "theme") {
     return <ThemeSettings />;
   } else if (currentCategory == "notifications") {
     return <NotificationsSettings />;
