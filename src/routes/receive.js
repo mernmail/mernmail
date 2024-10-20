@@ -477,4 +477,66 @@ router.get("/search/:query*", (req, res) => {
   });
 });
 
+router.get("/allmessages", (req, res) => {
+  let allMessages = [];
+  req.receiveDriver.getMailboxes((err, mailboxes) => {
+    if (err) {
+      res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
+      return;
+    }
+    const mailboxesToOpen = mailboxes.filter(
+      (mailbox) =>
+        mailbox.openable &&
+        mailbox.type != "spam" &&
+        mailbox.type != "trash" &&
+        mailbox.type != "starred" &&
+        mailbox.type != "important"
+    );
+    const getAllMessages = (callback, _id) => {
+      if (!_id) _id = 0;
+      if (_id >= mailboxesToOpen.length) {
+        callback();
+        return;
+      }
+      req.receiveDriver.openMailbox(mailboxesToOpen[_id].id, (err) => {
+        if (err) {
+          res.status(500).json({ message: err.message });
+          req.receiveDriver.close();
+          return;
+        }
+        req.receiveDriver.getRealAllMessages((err, messages) => {
+          if (err) {
+            res.status(500).json({ message: err.message });
+            req.receiveDriver.close();
+            return;
+          }
+          allMessages = [
+            ...allMessages,
+            ...messages.map((message) => {
+              message.id = mailboxesToOpen[_id].id + "/" + message.id;
+              message.mailboxType = mailboxesToOpen[_id].type;
+              return message;
+            })
+          ];
+          req.receiveDriver.closeMailbox((err) => {
+            if (err) {
+              res.status(500).json({ message: err.message });
+              req.receiveDriver.close();
+              return;
+            }
+            getAllMessages(callback, _id + 1);
+          });
+        });
+      });
+    };
+    getAllMessages(() => {
+      res.json({
+        messages: allMessages
+      });
+      req.receiveDriver.close();
+    });
+  });
+});
+
 module.exports = router;
