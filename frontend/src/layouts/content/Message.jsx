@@ -262,6 +262,15 @@ function MessageContent() {
           ) : (
             ""
           )}
+          {messagesToRender[messagesToRender.length - 1].draft ? (
+            <File
+              width={32}
+              height={32}
+              className="inline w-9 h-9 md:w-10 md:h-10 mr-2 rtl:mr-0 rtl:ml-2 align-top"
+            />
+          ) : (
+            ""
+          )}
           {messagesToRender[messagesToRender.length - 1].subject !==
             undefined &&
           messagesToRender[messagesToRender.length - 1].subject !== null

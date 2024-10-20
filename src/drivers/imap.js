@@ -135,6 +135,7 @@ module.exports = function init(email, password, callback) {
               seen: false,
               starred: false,
               answered: false,
+              draft: false,
               date: new Date(),
               id: -1,
               subject: "Unknown email",
@@ -220,6 +221,8 @@ module.exports = function init(email, password, callback) {
                   finalAttributes.starred = true;
                 } else if (flag == "\\Answered") {
                   finalAttributes.answered = true;
+                } else if (flag == "\\Draft") {
+                  finalAttributes.draft = true;
                 }
               });
               finalAttributes.id = attributes.uid;
@@ -281,6 +284,7 @@ module.exports = function init(email, password, callback) {
                 seen: false,
                 starred: false,
                 answered: false,
+                draft: false,
                 date: new Date(),
                 id: -1,
                 subject: "Unknown email",
@@ -409,6 +413,8 @@ module.exports = function init(email, password, callback) {
                     finalAttributes.starred = true;
                   } else if (flag == "\\Answered") {
                     finalAttributes.answered = true;
+                  } else if (flag == "\\Draft") {
+                    finalAttributes.draft = true;
                   }
                 });
                 finalAttributes.date = attributes.date;
@@ -648,6 +654,7 @@ module.exports = function init(email, password, callback) {
               seen: false,
               starred: false,
               answered: false,
+              draft: false,
               date: new Date(),
               id: -1,
               subject: "Unknown email",
@@ -717,6 +724,8 @@ module.exports = function init(email, password, callback) {
                   finalAttributes.starred = true;
                 } else if (flag == "\\Answered") {
                   finalAttributes.answered = true;
+                } else if (flag == "\\Draft") {
+                  finalAttributes.draft = true;
                 }
               });
               finalAttributes.id = attributes.uid;

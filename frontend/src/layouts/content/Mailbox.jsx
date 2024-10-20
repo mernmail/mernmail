@@ -10,7 +10,8 @@ import {
   FolderInput,
   Mail,
   MailOpen,
-  ThumbsUp
+  ThumbsUp,
+  File
 } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { setMessages, resetLoading } from "@/slices/messagesSlice.js";
@@ -632,6 +633,7 @@ function EmailContent() {
                 const id = message.id;
                 const starred = message.starred;
                 const seen = message.seen;
+                const draft = message.draft;
                 const answered = message.answered;
                 return (
                   <li className="block border-border border-b-2" key={id}>
@@ -742,6 +744,15 @@ function EmailContent() {
                               e.preventDefault();
                             }}
                           >
+                            {draft ? (
+                              <File
+                                width={24}
+                                height={24}
+                                className="inline w-6 h-6 mr-2 rtl:mr-0 rtl:ml-2 align-top"
+                              />
+                            ) : (
+                              ""
+                            )}
                             {answered ? (
                               <Reply
                                 width={24}
