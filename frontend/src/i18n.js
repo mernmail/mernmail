@@ -7,10 +7,12 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 const resources = {
   "en-US": {
-    translation: enUSLang
+    translation: enUSLang,
+    name: "English (United States)"
   },
   pl: {
-    translation: plLang
+    translation: plLang,
+    name: "Polski"
   }
 };
 
