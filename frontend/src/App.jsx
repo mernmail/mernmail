@@ -4,11 +4,13 @@ import MainLayout from "@/layouts/MainLayout.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { checkAuth } from "@/slices/authSlice.js";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 let firstTime = true;
 let oldAllMessages = [];
 
 function App() {
+  const { t } = useTranslation();
   const loading = useSelector((state) => state.auth.loading);
   const email = useSelector((state) => state.auth.email);
   const dispatch = useDispatch();
@@ -57,9 +59,9 @@ function App() {
                 try {
                   if (window.Notification.permission == "granted") {
                     const notification = new window.Notification(
-                      "New email message",
+                      t("newmessage"),
                       {
-                        body: `From: ${message.from}\nTo: ${message.to}\nSubject: ${message.subject}`,
+                        body: `${t("from", { from: message.from })}\n${t("to", { to: message.to })}${message.cc ? "\n" + t("cc", { cc: message.cc }) : ""}\n${t("subject", { subject: message.subject ? message.subject : t("nosubject") })}`,
                         icon: "/icon.png"
                       }
                     );

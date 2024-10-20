@@ -79,5 +79,8 @@
     "notificationsunsupported": "Twoja przeglądarka nie wspiera powiadomień.",
     "grantpermission": "Zezwól",
     "notificationsdenied": "Odmówiono dostępu do powiadomień.",
-    "notificationsgranted": "Zezwolono na dostęp do powiadomień."
+    "notificationsgranted": "Zezwolono na dostęp do powiadomień.",
+    "newmessage": "Nowa wiadomość e-mail!",
+    "from": "Od: {{from}}",
+    "subject": "Temat: {{subject}}"
 }

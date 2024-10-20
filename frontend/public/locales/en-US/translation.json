@@ -79,5 +79,8 @@
     "notificationsunsupported": "Your browser doesn't support push notifications.",
     "grantpermission": "Allow",
     "notificationsdenied": "The access to push notifications is denied.",
-    "notificationsgranted": "The access to push notifications is granted."
+    "notificationsgranted": "The access to push notifications is granted.",
+    "newmessage": "New email message!",
+    "from": "From: {{from}}",
+    "subject": "Subject: {{subject}}"
 }
