@@ -4,9 +4,7 @@ import { useTranslation } from "react-i18next";
 
 function NotificationsSettings() {
   const { t } = useTranslation();
-  const notificationsSupported = !!(
-    window.Notification && window.ServiceWorker
-  );
+  const notificationsSupported = !!window.Notification;
   const [status, setStatus] = useState(
     notificationsSupported ? window.Notification.permission : "unsupported"
   );
