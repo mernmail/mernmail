@@ -1,4 +1,4 @@
-import { Bell, CircleHelp, Languages, Palette } from "lucide-react";
+import { Bell, CircleHelp, Languages, Palette, Signature } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { hideMenu } from "@/slices/menuSlice.js";
 import { setCurrentCategoryFromURL } from "@/slices/settingsSlice.js";
@@ -33,6 +33,11 @@ function SettingsSidebar() {
       id: "theme",
       name: t("theme"),
       icon: Palette
+    },
+    {
+      id: "signature",
+      name: t("signature"),
+      icon: Signature
     }
   ];
 

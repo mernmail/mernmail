@@ -83,5 +83,6 @@
     "newmessage": "New email message!",
     "from": "From: {{from}}",
     "subject": "Subject: {{subject}}",
-    "language": "Language"
+    "language": "Language",
+    "signature": "Podpis"
 }

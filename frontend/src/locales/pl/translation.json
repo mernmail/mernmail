@@ -83,5 +83,6 @@
     "newmessage": "Nowa wiadomość e-mail!",
     "from": "Od: {{from}}",
     "subject": "Temat: {{subject}}",
-    "language": "Język"
+    "language": "Język",
+    "signature": "Podpis"
 }
