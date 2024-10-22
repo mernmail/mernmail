@@ -90,15 +90,20 @@ function App() {
       }
     };
 
-    getNewMessages();
+    if (email !== null) {
+      getNewMessages();
 
-    const interval = setInterval(async () => {
-      await getNewMessages();
-    }, 10000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+      const interval = setInterval(async () => {
+        await getNewMessages();
+      }, 10000);
+      return () => {
+        clearInterval(interval);
+      };
+    } else {
+      firstTime = true;
+      oldAllMessages = [];
+    }
+  }, [email]);
 
   if (loading) {
     return <Loading />;
