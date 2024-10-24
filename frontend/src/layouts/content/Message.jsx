@@ -97,7 +97,7 @@ function MessageContent() {
     }
   }, [refresh, loading, dispatch]);
 
-  const replaceCIDsOnIframeLoad = (iframeRefContents, attachments) => {
+  const replaceCIDsOnIframeLoad = (iframeRefContents, id, attachments) => {
     return () => {
       const srcElements =
         iframeRefContents.contentWindow.document.querySelectorAll("[src]");
@@ -113,7 +113,7 @@ function MessageContent() {
               srcElement.src = `/api/receive/attachment/${attachment.id}`;
               // Add onload event listener to images with CIDs, so that iframe heights are not broken
               srcElement.addEventListener("load", () => {
-                resizeOnIframeLoad(iframeRefContents)();
+                resizeOnIframeLoad(iframeRefContents, id)();
               });
             }
           }
@@ -865,6 +865,7 @@ function MessageContent() {
                     setTimeout(() => {
                       replaceCIDsOnIframeLoad(
                         iframeRef.current[id],
+                        id,
                         attachments
                       )();
                       processLinksAndFormsOnIframeLoad(iframeRef.current[id])();
