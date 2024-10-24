@@ -64,6 +64,7 @@ function MailboxesSettings() {
               >
                 <input
                   type="text"
+                  required={true}
                   className="bg-inherit h-full w-full pl-2 pr-0 rtl:pl-0 rtl:pr-2 rounded-md focus:outline-primary focus:outline-2 focus:outline"
                 />
                 <button
@@ -74,7 +75,9 @@ function MailboxesSettings() {
                     width={32}
                     height={32}
                     className="inline-block h-full p-1 text-accent-foreground"
-                  />
+                  >
+                    <title>{t("addmailbox")}</title>
+                  </Plus>
                 </button>
               </form>
             </div>

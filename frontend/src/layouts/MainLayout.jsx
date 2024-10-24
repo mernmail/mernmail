@@ -123,7 +123,9 @@ function LoginLayout() {
               width={32}
               height={32}
               className="inline-block h-full p-1 text-accent-foreground"
-            />
+            >
+              <title>{t("search")}</title>
+            </Search>
           </button>
         </form>
         <span className="self-center whitespace-nowrap text-right">
