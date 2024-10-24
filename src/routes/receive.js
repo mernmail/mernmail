@@ -1,6 +1,10 @@
 const express = require("express");
 const MiniSearch = require("minisearch");
-const { getAttachment } = require("../utils/attachments");
+const dns = require("dns");
+const { getAttachment } = require("../utils/attachments.js");
+const defaultAvatar = require("../res/avatar.js");
+const http = require("http");
+const https = require("https");
 const router = express.Router();
 
 router.get("/mailboxes", (req, res) => {
@@ -536,6 +540,72 @@ router.get("/allmessages", (req, res) => {
       });
       req.receiveDriver.close();
     });
+  });
+});
+
+router.get("/avatar/:email/avatar.svg", (req, res) => {
+  const emailDomainMatch = req.params.email.match(/@([^@]+)/);
+  const emailDomain = emailDomainMatch ? emailDomainMatch[1] : "";
+  if (!emailDomain) {
+    res.end(defaultAvatar);
+    return;
+  }
+  dns.resolveTxt(`default._bimi.${emailDomain}`, (err, records) => {
+    if (err) {
+      res.end(defaultAvatar);
+      return;
+    }
+    let hasBIMIRecord = false;
+    let logoPath = "https://example.com";
+    records.every((recordArray) => {
+      const record = recordArray.join(" ");
+      const recordMatch = record.match(/(?:^|; *)([^; =]+)=([^;]*)(?=;|$)/g);
+      if (!recordMatch) return true;
+      recordMatch.forEach((property) => {
+        const propertyMatch = property.match(
+          /(?:^|; *)([^; =]+)=([^;]*)(?=;|$)/
+        );
+        if (propertyMatch) {
+          if (propertyMatch[1] == "v" && propertyMatch[2] == "BIMI1") {
+            hasBIMIRecord = true;
+          } else if (propertyMatch[1] == "l") {
+            logoPath = propertyMatch[2];
+          }
+        }
+      });
+      return !hasBIMIRecord;
+    });
+    if (!hasBIMIRecord) {
+      res.end(defaultAvatar);
+      return;
+    }
+    let logoPathURLObject = {};
+    try {
+      logoPathURLObject = new URL(logoPath);
+      // eslint-disable-next-line no-unused-vars
+    } catch (err) {
+      res.end(defaultAvatar);
+      return;
+    }
+    if (
+      logoPathURLObject.protocol != "http:" &&
+      logoPathURLObject.protocol != "https:"
+    ) {
+      res.end(defaultAvatar);
+      return;
+    }
+    (logoPathURLObject.protocol == "https:" ? https : http)
+      .get(logoPath, (clientRes) => {
+        if (clientRes.statusCode !== 200) {
+          res.end(defaultAvatar);
+          return;
+        } else {
+          clientRes.pipe(res);
+        }
+      })
+      .on("error", () => {
+        res.end(defaultAvatar);
+      });
   });
 });
 

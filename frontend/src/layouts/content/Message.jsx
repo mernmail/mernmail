@@ -727,23 +727,19 @@ function MessageContent() {
             const firstFrom = message.from[0] || {
               address: "unknown@example.com"
             };
-            const fromInitials = firstFrom.name
-              ? firstFrom.name
-                  .replace(/[^\w\s]/g, "")
-                  .split(" ")
-                  .map((str) => {
-                    return str[0];
-                  })
-                  .join("")
-                  .toUpperCase()
-              : firstFrom.address[0].toUpperCase();
+            const firstFromAddress = firstFrom.address || "unknown@example.com";
 
             return (
               <div className="border-b-2 border-border" key={id}>
                 <div className="flex flex-col lg:flex-row mb-2">
-                  <div className="shrink-0 w-16 h-16 py-3 m-1 leading-10 text-2xl overflow-hidden text-ellipsis rounded-full bg-accent text-accent-foreground font-bold text-center items-center select-none">
-                    {fromInitials}
-                  </div>
+                  <img
+                    src={`/api/receive/avatar/${firstFromAddress
+                      .replace(/(?:^|[/\\])\.\.(?=[/\\])/g, "")
+                      .replace(/^[/\\]+/g, "")
+                      .replace(/[/\\]+$/g, "")}/avatar.svg`}
+                    alt={firstFrom.name || "Avatar"}
+                    className="shrink-0 w-16 h-16 m-1 bg-accent text-accent-foreground rounded-full font-bold"
+                  ></img>
                   <div className="grow overflow-hidden text-ellipsis ml-1 rtl:ml-0 rtl:mr-1 lg:mx-0 lg:self-center">
                     <p className="block overflow-hidden text-ellipsis">
                       {firstFrom.name ? (
