@@ -84,5 +84,9 @@
     "from": "From: {{from}}",
     "subject": "Subject: {{subject}}",
     "language": "Language",
-    "signature": "Podpis"
+    "signature": "Signature",
+    "mailboxes": "Mailboxes",
+    "mailboxsettingsdisabled": "Mailbox settings are disabled for this instance.",
+    "deletemailbox": "Delete mailbox",
+    "renamemailbox": "Rename mailbox"
 }

@@ -84,5 +84,9 @@
     "from": "Od: {{from}}",
     "subject": "Temat: {{subject}}",
     "language": "Język",
-    "signature": "Podpis"
+    "signature": "Podpis",
+    "mailboxes": "Skrzynki pocztowe",
+    "mailboxsettingsdisabled": "Ustawienia skrzynek pocztowych są wyłączone dla tej instancji.",
+    "deletemailbox": "Usuń skrzynkę pocztową",
+    "renamemailbox": "Zmień nazwę skrzynki pocztowej"
 }
