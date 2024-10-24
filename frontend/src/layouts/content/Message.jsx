@@ -738,7 +738,7 @@ function MessageContent() {
                       .replace(/^[/\\]+/g, "")
                       .replace(/[/\\]+$/g, "")}/avatar.svg`}
                     alt={firstFrom.name || "Avatar"}
-                    className="shrink-0 w-16 h-16 m-1 bg-accent text-accent-foreground rounded-full font-bold"
+                    className="shrink-0 w-16 h-16 m-1 mr-2 rtl:mr-1 rtl:ml-2 bg-accent text-accent-foreground rounded-full font-bold"
                   ></img>
                   <div className="grow overflow-hidden text-ellipsis ml-1 rtl:ml-0 rtl:mr-1 lg:mx-0 lg:self-center">
                     <p className="block overflow-hidden text-ellipsis">
