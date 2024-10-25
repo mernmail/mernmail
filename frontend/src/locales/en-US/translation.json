@@ -89,5 +89,8 @@
     "mailboxsettingsdisabled": "Mailbox settings are disabled for this instance.",
     "deletemailbox": "Delete mailbox",
     "renamemailbox": "Rename mailbox",
-    "addmailbox": "Add mailbox"
+    "addmailbox": "Add mailbox",
+    "reallyremovemailbox": "Do you really want to remove this mailbox?",
+    "cancel": "Cancel",
+    "mailboxname": "Mailbox name"
 }

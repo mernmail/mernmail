@@ -89,5 +89,8 @@
     "mailboxsettingsdisabled": "Ustawienia skrzynek pocztowych są wyłączone dla tej instancji.",
     "deletemailbox": "Usuń skrzynkę pocztową",
     "renamemailbox": "Zmień nazwę skrzynki pocztowej",
-    "addmailbox": "Dodaj skrzynkę pocztową"
+    "addmailbox": "Dodaj skrzynkę pocztową",
+    "reallyremovemailbox": "Czy naprawdę chcesz usunąć tę skrzynkę pocztową?",
+    "cancel": "Anuluj",
+    "mailboxname": "Nazwa skrzynki pocztowej"
 }
