@@ -103,7 +103,7 @@ function App() {
       firstTime = true;
       oldAllMessages = [];
     }
-  }, [email]);
+  }, [email, t]);
 
   if (loading) {
     return <Loading />;
