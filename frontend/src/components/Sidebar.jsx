@@ -4,7 +4,12 @@ import SettingsSidebar from "@/layouts/sidebar/Settings.jsx";
 
 function Sidebar() {
   const view = useSelector((state) => state.view.view);
-  if (view == "mailbox" || view == "message" || view == "search") {
+  if (
+    view == "mailbox" ||
+    view == "message" ||
+    view == "search" ||
+    view == "compose"
+  ) {
     return <EmailSidebar />;
   } else if (view == "settings") {
     return <SettingsSidebar />;

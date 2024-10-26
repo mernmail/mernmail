@@ -79,7 +79,7 @@ function LoginLayout() {
                   )
                     document.location.hash = encodeURI("#mailbox");
                 }}
-                className={`inline-block align-middle ${view == "mailbox" || view == "message" || view == "search" ? "bg-primary-foreground text-primary" : "text-inherit"} px-1 py-1 w-9 h-8 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors`}
+                className={`inline-block align-middle ${view == "mailbox" || view == "message" || view == "search" || view == "compose" ? "bg-primary-foreground text-primary" : "text-inherit"} px-1 py-1 w-9 h-8 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors`}
               >
                 <Mail className="inline-block w-full align-top">
                   <title>{t("email")}</title>
@@ -180,7 +180,7 @@ function LoginLayout() {
       </header>
       <div className="h-full pt-12 md:flex md:flex-row">
         <aside
-          className={`bg-background w-full h-full p-2 overflow-auto z-20 fixed top-0 ${menuShown ? "left-0" : "left-full"} transition-[left] shrink-0 duration-1000 md:static md:w-72 md:border-r-2 rtl:md:border-r-0 rtl:md:border-l-2 md:border-border md:transition-none`}
+          className={`bg-background w-full h-full p-2 overflow-auto z-20 md:z-auto fixed top-0 ${menuShown ? "left-0" : "left-full"} transition-[left] shrink-0 duration-1000 md:static md:w-72 md:border-r-2 rtl:md:border-r-0 rtl:md:border-l-2 md:border-border md:transition-none`}
         >
           <button
             onClick={(e) => {
@@ -196,7 +196,7 @@ function LoginLayout() {
           <Sidebar />
         </aside>
         <main
-          className={`overflow-auto ${menuShown ? "overflow-hidden md:overflow-auto" : ""} grow p-2`}
+          className={`overflow-auto ${menuShown ? "overflow-hidden md:overflow-auto" : ""} h-full grow p-2`}
         >
           <Content />
         </main>

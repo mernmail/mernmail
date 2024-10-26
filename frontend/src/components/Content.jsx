@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import ComposeContent from "@/layouts/content/Compose.jsx";
 import MailboxContent from "@/layouts/content/Mailbox.jsx";
 import MessageContent from "@/layouts/content/Message.jsx";
 import SearchContent from "@/layouts/content/Search.jsx";
@@ -14,6 +15,8 @@ function Content() {
     return <SearchContent />;
   } else if (view == "settings") {
     return <SettingsContent />;
+  } else if (view == "compose") {
+    return <ComposeContent />;
   }
 }
 
