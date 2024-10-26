@@ -59,7 +59,7 @@ export function loadMessage(signal) {
     if (mailboxName && messageId) {
       try {
         const res = await fetch(
-          `/api/receive/message/${mailboxName}/${messageId}`,
+          `/api/receive/message/${encodeURI(mailboxName)}/${encodeURI(messageId)}`,
           {
             method: "GET",
             credentials: "include",

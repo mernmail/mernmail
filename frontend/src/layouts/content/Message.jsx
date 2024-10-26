@@ -303,7 +303,7 @@ function MessageContent() {
 
                   try {
                     const res = await fetch(
-                      `/api/receive/${messagesToRender[messagesToRender.length - 1].starred ? "unstar" : "star"}/${mailboxId}`,
+                      `/api/receive/${messagesToRender[messagesToRender.length - 1].starred ? "unstar" : "star"}/${encodeURI(mailboxId)}`,
                       {
                         method: "POST",
                         headers: {
@@ -383,7 +383,7 @@ function MessageContent() {
                     e.preventDefault();
                     try {
                       const res = await fetch(
-                        `/api/receive/toinbox/${mailboxId}`,
+                        `/api/receive/toinbox/${encodeURI(mailboxId)}`,
                         {
                           method: "POST",
                           headers: {
@@ -434,7 +434,7 @@ function MessageContent() {
 
                     try {
                       const res = await fetch(
-                        `/api/receive/spam/${mailboxId}`,
+                        `/api/receive/spam/${encodeURI(mailboxId)}`,
                         {
                           method: "POST",
                           headers: {
@@ -486,16 +486,19 @@ function MessageContent() {
               onClick={async (e) => {
                 e.preventDefault();
                 try {
-                  const res = await fetch(`/api/receive/delete/${mailboxId}`, {
-                    method: "DELETE",
-                    headers: {
-                      "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                      messages: getMessageIds()
-                    }),
-                    credentials: "include"
-                  });
+                  const res = await fetch(
+                    `/api/receive/delete/${encodeURI(mailboxId)}`,
+                    {
+                      method: "DELETE",
+                      headers: {
+                        "Content-Type": "application/json"
+                      },
+                      body: JSON.stringify({
+                        messages: getMessageIds()
+                      }),
+                      credentials: "include"
+                    }
+                  );
                   const data = await res.json();
                   if (res.status == 200) {
                     toast(t("deletesuccess"));
@@ -541,7 +544,7 @@ function MessageContent() {
 
                   try {
                     const res = await fetch(
-                      `/api/receive/unread/${mailboxId}`,
+                      `/api/receive/unread/${encodeURI(mailboxId)}`,
                       {
                         method: "POST",
                         headers: {
@@ -643,7 +646,7 @@ function MessageContent() {
                               if (openable) {
                                 try {
                                   const res = await fetch(
-                                    `/api/receive/move/${mailboxId}`,
+                                    `/api/receive/move/${encodeURI(mailboxId)}`,
                                     {
                                       method: "POST",
                                       headers: {
@@ -903,7 +906,7 @@ function MessageContent() {
                               onClick={async () => {
                                 try {
                                   const res = await fetch(
-                                    `/api/receive/attachment/${id}`,
+                                    `/api/receive/attachment/${encodeURI(id)}`,
                                     {
                                       method: "GET",
                                       credentials: "include"

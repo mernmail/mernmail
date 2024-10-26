@@ -244,7 +244,7 @@ function EmailContent() {
                         const messages = getSelectedMessages();
                         try {
                           const res = await fetch(
-                            `/api/receive/toinbox/${mailboxId}`,
+                            `/api/receive/toinbox/${encodeURI(mailboxId)}`,
                             {
                               method: "POST",
                               headers: {
@@ -296,7 +296,7 @@ function EmailContent() {
                         const messages = getSelectedMessages();
                         try {
                           const res = await fetch(
-                            `/api/receive/spam/${mailboxId}`,
+                            `/api/receive/spam/${encodeURI(mailboxId)}`,
                             {
                               method: "POST",
                               headers: {
@@ -351,7 +351,7 @@ function EmailContent() {
                     const messages = getSelectedMessages();
                     try {
                       const res = await fetch(
-                        `/api/receive/delete/${mailboxId}`,
+                        `/api/receive/delete/${encodeURI(mailboxId)}`,
                         {
                           method: "DELETE",
                           headers: {
@@ -413,7 +413,7 @@ function EmailContent() {
                         const messages = getSelectedMessages();
                         try {
                           const res = await fetch(
-                            `/api/receive/unread/${mailboxId}`,
+                            `/api/receive/unread/${encodeURI(mailboxId)}`,
                             {
                               method: "POST",
                               headers: {
@@ -463,7 +463,7 @@ function EmailContent() {
                         const messages = getSelectedMessages();
                         try {
                           const res = await fetch(
-                            `/api/receive/read/${mailboxId}`,
+                            `/api/receive/read/${encodeURI(mailboxId)}`,
                             {
                               method: "POST",
                               headers: {
@@ -565,7 +565,7 @@ function EmailContent() {
                                     const messages = getSelectedMessages();
                                     try {
                                       const res = await fetch(
-                                        `/api/receive/move/${mailboxId}`,
+                                        `/api/receive/move/${encodeURI(mailboxId)}`,
                                         {
                                           method: "POST",
                                           headers: {
@@ -680,7 +680,7 @@ function EmailContent() {
 
                                   try {
                                     const res = await fetch(
-                                      `/api/receive/${starred ? "unstar" : "star"}/${mailboxId}`,
+                                      `/api/receive/${starred ? "unstar" : "star"}/${encodeURI(mailboxId)}`,
                                       {
                                         method: "POST",
                                         headers: {

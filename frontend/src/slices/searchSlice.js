@@ -54,11 +54,14 @@ export function setSearchResults(signal) {
     let aborted = false;
     if (searchQuery) {
       try {
-        const res = await fetch(`/api/receive/search/${searchQuery}`, {
-          method: "GET",
-          credentials: "include",
-          signal: signal
-        });
+        const res = await fetch(
+          `/api/receive/search/${encodeURI(searchQuery)}`,
+          {
+            method: "GET",
+            credentials: "include",
+            signal: signal
+          }
+        );
         if (res.status != 404) {
           const data = await res.json();
           if (res.status == 200) {

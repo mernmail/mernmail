@@ -43,11 +43,14 @@ export function setMessages(signal) {
       .replace(/[/\\]+$/g, ""); // Sanitize the current mailbox ID
     let aborted = false;
     try {
-      const res = await fetch(`/api/receive/mailbox/${currentMailbox}`, {
-        method: "GET",
-        credentials: "include",
-        signal: signal
-      });
+      const res = await fetch(
+        `/api/receive/mailbox/${encodeURI(currentMailbox)}`,
+        {
+          method: "GET",
+          credentials: "include",
+          signal: signal
+        }
+      );
       const data = await res.json();
       if (res.status == 200) {
         state.messages = data.messages;

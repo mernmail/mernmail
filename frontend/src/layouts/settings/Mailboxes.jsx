@@ -194,7 +194,7 @@ function MailboxesSettings() {
                                   e.preventDefault();
                                   try {
                                     const res = await fetch(
-                                      `/api/receive/mailbox/${id}`,
+                                      `/api/receive/mailbox/${encodeURI(id)}`,
                                       {
                                         method: "DELETE",
                                         credentials: "include"
@@ -265,7 +265,7 @@ function MailboxesSettings() {
                                   if (newMailboxName) {
                                     try {
                                       const res = await fetch(
-                                        `/api/receive/mailbox/${id}`,
+                                        `/api/receive/mailbox/${encodeURI(id)}`,
                                         {
                                           method: "POST",
                                           headers: {
