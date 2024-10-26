@@ -98,5 +98,6 @@
     "deletemailboxsuccess": "Usunięto skrzynkę pocztową pomyślnie",
     "deletemailboxfail": "Nie można usunąć skrzynki pocztowej: {{error}}",
     "addmailboxsuccess": "Dodano skrzynkę pocztową pomyślnie",
-    "addmailboxfail": "Nie można dodać skrzynki pocztowej: {{error}}"
+    "addmailboxfail": "Nie można dodać skrzynki pocztowej: {{error}}",
+    "archive": "Archiwum"
 }

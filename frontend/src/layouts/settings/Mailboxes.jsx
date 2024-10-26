@@ -11,7 +11,8 @@ import {
   X,
   Pencil,
   Plus,
-  Check
+  Check,
+  Archive
 } from "lucide-react";
 import { useEffect, useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
@@ -153,6 +154,9 @@ function MailboxesSettings() {
                 } else if (type == "trash") {
                   title = t("trash");
                   DisplayedIcon = Trash;
+                } else if (type == "archive") {
+                  title = t("archive");
+                  DisplayedIcon = Archive;
                 }
                 return (
                   <li key={id}>

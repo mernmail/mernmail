@@ -64,6 +64,8 @@ module.exports = function init(email, password, callback) {
                       type = "spam";
                     } else if (attrib == "\\Trash") {
                       type = "trash";
+                    } else if (attrib == "\\Archive") {
+                      type = "archive";
                     }
                   });
                 }

@@ -98,5 +98,6 @@
     "deletemailboxsuccess": "Mailbox deleted successfully",
     "deletemailboxfail": "Can't delete a mailbox: {{error}}",
     "addmailboxsuccess": "Mailbox added successfully",
-    "addmailboxfail": "Can't add a mailbox: {{error}}"
+    "addmailboxfail": "Can't add a mailbox: {{error}}",
+    "archive": "Archive"
 }

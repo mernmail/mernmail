@@ -73,6 +73,8 @@ function EmailContent() {
     title = t("spam");
   } else if (type == "trash") {
     title = t("trash");
+  } else if (type == "archive") {
+    title = t("archive");
   } else {
     title = titleSelected;
   }

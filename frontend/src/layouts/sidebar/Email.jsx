@@ -8,7 +8,8 @@ import {
   Ban,
   Trash,
   CircleAlert,
-  Mail
+  Mail,
+  Archive
 } from "lucide-react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -116,6 +117,9 @@ function EmailSidebar() {
             } else if (type == "trash") {
               title = t("trash");
               DisplayedIcon = Trash;
+            } else if (type == "archive") {
+              title = t("archive");
+              DisplayedIcon = Archive;
             }
             return (
               <li key={id}>

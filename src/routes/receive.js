@@ -632,31 +632,65 @@ router.post("/mailbox/:mailbox*", (req, res) => {
     return;
   }
   const mailbox = req.params.mailbox + req.params[0];
-  req.receiveDriver.renameMailbox(mailbox, req.body.name, (err) => {
+  req.receiveDriver.getMailboxes((err, mailboxes) => {
     if (err) {
       res.status(500).json({ message: err.message });
       req.receiveDriver.close();
       return;
+    } else if (
+      mailboxes.find(
+        (mailboxFromTheList) =>
+          mailboxFromTheList.id == mailbox &&
+          mailboxFromTheList.type != "normal"
+      )
+    ) {
+      res.status(403).json({ message: "Operation not allowed" });
+      req.receiveDriver.close();
+      return;
     }
-    res.json({
-      message: "Renamed mailbox successfully"
+    req.receiveDriver.renameMailbox(mailbox, req.body.name, (err) => {
+      if (err) {
+        res.status(500).json({ message: err.message });
+        req.receiveDriver.close();
+        return;
+      }
+      res.json({
+        message: "Renamed mailbox successfully"
+      });
+      req.receiveDriver.close();
     });
-    req.receiveDriver.close();
   });
 });
 
 router.delete("/mailbox/:mailbox*", (req, res) => {
   const mailbox = req.params.mailbox + req.params[0];
-  req.receiveDriver.deleteMailbox(mailbox, (err) => {
+  req.receiveDriver.getMailboxes((err, mailboxes) => {
     if (err) {
       res.status(500).json({ message: err.message });
       req.receiveDriver.close();
       return;
+    } else if (
+      mailboxes.find(
+        (mailboxFromTheList) =>
+          mailboxFromTheList.id == mailbox &&
+          mailboxFromTheList.type != "normal"
+      )
+    ) {
+      res.status(403).json({ message: "Operation not allowed" });
+      req.receiveDriver.close();
+      return;
     }
-    res.json({
-      message: "Deleted mailbox successfully"
+    req.receiveDriver.deleteMailbox(mailbox, (err) => {
+      if (err) {
+        res.status(500).json({ message: err.message });
+        req.receiveDriver.close();
+        return;
+      }
+      res.json({
+        message: "Deleted mailbox successfully"
+      });
+      req.receiveDriver.close();
     });
-    req.receiveDriver.close();
   });
 });
 
