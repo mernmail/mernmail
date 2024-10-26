@@ -13,13 +13,15 @@ import {
   Plus,
   Check
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { setMailboxes } from "@/slices/mailboxesSlice.js";
+import { ToastContext } from "@/contexts/ToastContext.jsx";
 
 function MailboxesSettings() {
   const { t } = useTranslation();
+  const { toast } = useContext(ToastContext);
   const loading = useSelector((state) => state.mailboxes.loading);
   const error = useSelector((state) => state.mailboxes.error);
   const mailboxes = useSelector((state) => state.mailboxes.mailboxes);
@@ -28,7 +30,7 @@ function MailboxesSettings() {
   );
   const [actions, setActions] = useState({});
   const [mailboxName, setMailboxName] = useState("");
-  const [newNewMailboxName, setNewMailboxName] = useState("");
+  const [newMailboxName, setNewMailboxName] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -62,9 +64,37 @@ function MailboxesSettings() {
             <div className="flex mx-2 mb-1">
               <form
                 className="w-full bg-accent text-base rounded-md flex flex-row flex-nowrap"
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
-                  alert(`Add mailbox ${mailboxName}`);
+                  try {
+                    const res = await fetch(`/api/receive/mailbox`, {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json"
+                      },
+                      body: JSON.stringify({
+                        name: mailboxName
+                      }),
+                      credentials: "include"
+                    });
+                    const data = await res.json();
+                    if (res.status == 200) {
+                      toast(t("addmailboxsuccess"));
+                      dispatch(setMailboxes);
+                    } else {
+                      toast(
+                        t("addmailboxfail", {
+                          error: data.message
+                        })
+                      );
+                    }
+                  } catch (err) {
+                    toast(
+                      t("addmailboxfail", {
+                        error: err.message
+                      })
+                    );
+                  }
                   setMailboxName("");
                 }}
               >
@@ -156,9 +186,34 @@ function MailboxesSettings() {
                                 />
                               </button>
                               <button
-                                onClick={(e) => {
+                                onClick={async (e) => {
                                   e.preventDefault();
-                                  alert(`Delete mailbox ${id}`);
+                                  try {
+                                    const res = await fetch(
+                                      `/api/receive/mailbox/${id}`,
+                                      {
+                                        method: "DELETE",
+                                        credentials: "include"
+                                      }
+                                    );
+                                    const data = await res.json();
+                                    if (res.status == 200) {
+                                      toast(t("deletemailboxsuccess"));
+                                      dispatch(setMailboxes);
+                                    } else {
+                                      toast(
+                                        t("deletemailboxfail", {
+                                          error: data.message
+                                        })
+                                      );
+                                    }
+                                  } catch (err) {
+                                    toast(
+                                      t("deletemailboxfail", {
+                                        error: err.message
+                                      })
+                                    );
+                                  }
                                   setActions({});
                                 }}
                                 title={t("deletemailbox")}
@@ -180,7 +235,7 @@ function MailboxesSettings() {
                               onChange={(e) => {
                                 setNewMailboxName(e.target.value);
                               }}
-                              value={newNewMailboxName}
+                              value={newMailboxName}
                               required={true}
                               className="bg-inherit w-full pl-2 pr-0 rtl:pl-0 rtl:pr-2 rounded-md focus:outline-primary self-center focus:outline-2 focus:outline"
                             />
@@ -201,12 +256,41 @@ function MailboxesSettings() {
                                 />
                               </button>
                               <button
-                                onClick={(e) => {
+                                onClick={async (e) => {
                                   e.preventDefault();
-                                  if (newNewMailboxName) {
-                                    alert(
-                                      `Rename mailbox ${id} to ${newNewMailboxName}`
-                                    );
+                                  if (newMailboxName) {
+                                    try {
+                                      const res = await fetch(
+                                        `/api/receive/mailbox/${id}`,
+                                        {
+                                          method: "POST",
+                                          headers: {
+                                            "Content-Type": "application/json"
+                                          },
+                                          body: JSON.stringify({
+                                            name: newMailboxName
+                                          }),
+                                          credentials: "include"
+                                        }
+                                      );
+                                      const data = await res.json();
+                                      if (res.status == 200) {
+                                        toast(t("renamemailboxsuccess"));
+                                        dispatch(setMailboxes);
+                                      } else {
+                                        toast(
+                                          t("renamemailboxfail", {
+                                            error: data.message
+                                          })
+                                        );
+                                      }
+                                    } catch (err) {
+                                      toast(
+                                        t("renamemailboxfail", {
+                                          error: err.message
+                                        })
+                                      );
+                                    }
                                     setNewMailboxName("");
                                     setActions({});
                                   }

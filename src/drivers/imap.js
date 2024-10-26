@@ -760,7 +760,7 @@ module.exports = function init(email, password, callback) {
         });
       },
       deleteMailbox: (mailboxName, callback) => {
-        imap.deleteMailbox(mailboxName, (err) => {
+        imap.delBox(mailboxName, (err) => {
           if (err) {
             callback(err);
           } else {
@@ -769,7 +769,7 @@ module.exports = function init(email, password, callback) {
         });
       },
       renameMailbox: (mailboxName, newMailboxName, callback) => {
-        imap.renameMailbox(mailboxName, newMailboxName, (err) => {
+        imap.renameBox(mailboxName, newMailboxName, (err) => {
           if (err) {
             callback(err);
           } else {

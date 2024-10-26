@@ -92,5 +92,11 @@
     "addmailbox": "Dodaj skrzynkę pocztową",
     "reallyremovemailbox": "Czy naprawdę chcesz usunąć tę skrzynkę pocztową?",
     "cancel": "Anuluj",
-    "mailboxname": "Nazwa skrzynki pocztowej"
+    "mailboxname": "Nazwa skrzynki pocztowej",
+    "renamemailboxsuccess": "Zmieniono nazwę skrzynki pocztowej pomyślnie",
+    "renamemailboxfail": "Nie można zmienić nazwy skrzynki pocztowej: {{error}}",
+    "deletemailboxsuccess": "Usunięto skrzynkę pocztową pomyślnie",
+    "deletemailboxfail": "Nie można usunąć skrzynki pocztowej: {{error}}",
+    "addmailboxsuccess": "Dodano skrzynkę pocztową pomyślnie",
+    "addmailboxfail": "Nie można dodać skrzynki pocztowej: {{error}}"
 }
