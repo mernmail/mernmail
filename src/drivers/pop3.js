@@ -453,6 +453,21 @@ module.exports = function init(email, password, callback) {
                     .catch((err) => {
                       callback(err);
                     });
+                },
+                createMailbox: (mailboxName, callback) => {
+                  callback(
+                    new Error("POP3 doesn't support multiple mailboxes.")
+                  );
+                },
+                deleteMailbox: (mailboxName, callback) => {
+                  callback(
+                    new Error("POP3 doesn't support multiple mailboxes.")
+                  );
+                },
+                renameMailbox: (mailboxName, newMailboxName, callback) => {
+                  callback(
+                    new Error("POP3 doesn't support multiple mailboxes.")
+                  );
                 }
               };
               callback(null, receiveObject);

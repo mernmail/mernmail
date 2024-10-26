@@ -749,6 +749,33 @@ module.exports = function init(email, password, callback) {
             callback(err);
           });
         });
+      },
+      createMailbox: (mailboxName, callback) => {
+        imap.addBox(mailboxName, (err) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null);
+          }
+        });
+      },
+      deleteMailbox: (mailboxName, callback) => {
+        imap.deleteMailbox(mailboxName, (err) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null);
+          }
+        });
+      },
+      renameMailbox: (mailboxName, newMailboxName, callback) => {
+        imap.renameMailbox(mailboxName, newMailboxName, (err) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null);
+          }
+        });
       }
     };
     callback(null, receiveObject);

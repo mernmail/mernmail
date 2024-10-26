@@ -602,4 +602,62 @@ router.get("/avatar/:email/avatar.svg", (req, res) => {
   });
 });
 
+router.post("/mailbox", (req, res) => {
+  if (!req.body || !req.body.name) {
+    res.status(400).json({
+      message: "You need to provide a name for a mailbox"
+    });
+    req.receiveDriver.close();
+    return;
+  }
+  req.receiveDriver.createMailbox(req.body.name, (err) => {
+    if (err) {
+      res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
+      return;
+    }
+    res.json({
+      message: "Created mailbox successfully"
+    });
+    req.receiveDriver.close();
+  });
+});
+
+router.post("/mailbox/:mailbox*", (req, res) => {
+  if (!req.body || !req.body.name) {
+    res.status(400).json({
+      message: "You need to provide a new name for a mailbox"
+    });
+    req.receiveDriver.close();
+    return;
+  }
+  const mailbox = req.params.mailbox + req.params[0];
+  req.receiveDriver.renameMailbox(mailbox, req.body.name, (err) => {
+    if (err) {
+      res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
+      return;
+    }
+    res.json({
+      message: "Renamed mailbox successfully"
+    });
+    req.receiveDriver.close();
+  });
+});
+
+router.delete("/mailbox/:mailbox*", (req, res) => {
+  const mailbox = req.params.mailbox + req.params[0];
+  req.receiveDriver.deleteMailbox(mailbox, (err) => {
+    if (err) {
+      res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
+      return;
+    }
+    res.json({
+      message: "Deleted mailbox successfully"
+    });
+    req.receiveDriver.close();
+  });
+});
+
 module.exports = router;
