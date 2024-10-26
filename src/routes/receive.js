@@ -207,7 +207,7 @@ router.post("/spam/:mailbox*", (req, res) => {
   });
 });
 
-router.post("/delete/:mailbox*", (req, res) => {
+router.delete("/delete/:mailbox*", (req, res) => {
   if (
     !req.body ||
     !req.body.messages ||

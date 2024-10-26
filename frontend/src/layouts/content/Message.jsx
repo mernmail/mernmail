@@ -487,7 +487,7 @@ function MessageContent() {
                 e.preventDefault();
                 try {
                   const res = await fetch(`/api/receive/delete/${mailboxId}`, {
-                    method: "POST",
+                    method: "DELETE",
                     headers: {
                       "Content-Type": "application/json"
                     },
