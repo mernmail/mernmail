@@ -1,5 +1,5 @@
-import { useState } from "react";
-import ReactQuill from "react-quill-new";
+import { useState, lazy } from "react";
+const ReactQuill = lazy(() => import("react-quill-new"));
 
 function ComposeContent() {
   const [value, setValue] = useState("");
