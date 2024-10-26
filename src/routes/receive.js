@@ -489,14 +489,7 @@ router.get("/allmessages", (req, res) => {
       req.receiveDriver.close();
       return;
     }
-    const mailboxesToOpen = mailboxes.filter(
-      (mailbox) =>
-        mailbox.openable &&
-        mailbox.type != "spam" &&
-        mailbox.type != "trash" &&
-        mailbox.type != "starred" &&
-        mailbox.type != "important"
-    );
+    const mailboxesToOpen = mailboxes.filter((mailbox) => mailbox.openable);
     const getAllMessages = (callback, _id) => {
       if (!_id) _id = 0;
       if (_id >= mailboxesToOpen.length) {
