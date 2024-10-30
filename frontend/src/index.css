@@ -1257,7 +1257,6 @@ html, body {
   border-top-left-radius: calc(var(--radius) - 2px);
   border-top-right-radius: calc(var(--radius) - 2px);
   box-sizing: border-box;
-  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   padding: 8px;
   background-color: hsl(var(--card));
   color: hsl(var(--card-foreground));
