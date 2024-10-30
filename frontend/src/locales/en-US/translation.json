@@ -100,5 +100,6 @@
     "addmailboxsuccess": "Mailbox added successfully",
     "addmailboxfail": "Can't add a mailbox: {{error}}",
     "archive": "Archive",
-    "send": "Send"
+    "send": "Send",
+    "attach": "Attach"
 }

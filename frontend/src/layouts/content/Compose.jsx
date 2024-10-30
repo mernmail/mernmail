@@ -1,7 +1,8 @@
-import { Send, X } from "lucide-react";
-import { useState, lazy, Suspense, useEffect } from "react";
+import { File, Paperclip, Send, X } from "lucide-react";
+import { useState, lazy, Suspense, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+import { filesize } from "filesize";
 import isEmail from "validator/lib/isEmail";
 import Loading from "@/components/Loading.jsx";
 
@@ -20,6 +21,8 @@ function ComposeContent() {
   const [bccField, setBccField] = useState("");
   const [bccValues, setBccValues] = useState([]);
   const [subject, setSubject] = useState("");
+  const [attachments, setAttachments] = useState([]);
+  const attachmentsRef = useRef();
   const email = useSelector((state) => state.auth.email);
 
   useEffect(() => {
@@ -35,7 +38,7 @@ function ComposeContent() {
         onSubmit={(e) => {
           e.preventDefault();
           alert(
-            `To: ${toValues}\nCC: ${ccValues}\nBCC: ${bccValues}\nSubject: ${subject}\nContents in HTML: ${contents}`
+            `To: ${toValues}\nCC: ${ccValues}\nBCC: ${bccValues}\nSubject: ${subject}\nContents in HTML: ${contents}\nAttachments: ${attachments}`
           );
         }}
       >
@@ -313,6 +316,83 @@ function ComposeContent() {
             setContents(value);
           }}
         />
+        <input
+          type="file"
+          className="hidden"
+          ref={attachmentsRef}
+          onChange={(e) => {
+            if (e.target.files.length > 0) {
+              setAttachments([...attachments, e.target.files[0]]);
+            }
+          }}
+        />
+        <div>
+          <button
+            className="bg-primary text-primary-foreground p-2 mt-2 mr-2 rtl:mr-0 rtl:ml-2 rounded-md hover:bg-primary/75 disabled:bg-primary/50 transition-colors"
+            onClick={(e) => {
+              e.preventDefault();
+              attachmentsRef.current.click();
+            }}
+          >
+            <Paperclip
+              className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
+              size={24}
+            />
+            <span className="align-middle">{t("attach")}</span>
+          </button>
+        </div>
+        {attachments && attachments.length > 0 ? (
+          <>
+            <ul className="list-none border-border border-t-2 mx-2 mt-2">
+              {attachments.map((attachment, index) => {
+                const id = URL.createObjectURL(attachment);
+                const size = attachment.size;
+                const filename = attachment.name;
+                return (
+                  <li className="block border-border border-b-2" key={index}>
+                    <div className="block bg-background px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5 text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const newAttachments = [...attachments];
+                          newAttachments.splice(index, 1);
+                          setAttachments(newAttachments);
+                        }}
+                        title={t("delete")}
+                        className="float-right inline-block align-middle w-6 h-6 my-1 ml-1 rtl:ml-0 rtl:mr-1 rounded-sm hover:bg-accent/60 hover:text-accent-foreground transition-colors md:self-center shrink-0"
+                      >
+                        <X
+                          width={16}
+                          height={16}
+                          className="inline w-6 h-6 align-top"
+                        />
+                      </button>
+                      <div className="flex flex-col md:flex-row">
+                        <File
+                          width={24}
+                          height={24}
+                          className="inline-block w-6 h-6 my-1 align-top"
+                        />
+                        <p className="whitespace-nowrap font-bold overflow-hidden text-ellipsis md:self-center px-1 grow">
+                          {filename ? filename : id}
+                        </p>
+                        {size ? (
+                          <p className="whitespace-nowrap overflow-hidden text-ellipsis md:self-center px-1 shrink-0">
+                            {filesize(size, { standard: "jedec" })}
+                          </p>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        ) : (
+          ""
+        )}
         <button
           type="submit"
           className="bg-primary text-primary-foreground p-2 mt-2 mr-2 rtl:mr-0 rtl:ml-2 rounded-md hover:bg-primary/75 disabled:bg-primary/50 transition-colors"

@@ -100,5 +100,6 @@
     "addmailboxsuccess": "Dodano skrzynkę pocztową pomyślnie",
     "addmailboxfail": "Nie można dodać skrzynki pocztowej: {{error}}",
     "archive": "Archiwum",
-    "send": "Wyślij"
+    "send": "Wyślij",
+    "attach": "Załącz"
 }
