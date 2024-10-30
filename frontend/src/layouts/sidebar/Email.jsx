@@ -20,6 +20,7 @@ import {
   setCurrentMailboxFromURL
 } from "@/slices/mailboxesSlice.js";
 import { hideMenu } from "@/slices/menuSlice.js";
+import Loading from "@/components/Loading.jsx";
 
 function EmailSidebar() {
   const { t } = useTranslation();
@@ -63,7 +64,7 @@ function EmailSidebar() {
   }, [view, loading, dispatch]);
 
   if (loading) {
-    return <p className="text-center">{t("loading")}</p>;
+    return <Loading />;
   } else if (error) {
     return (
       <p className="text-red-500 block text-center">{t("unexpectederror")}</p>

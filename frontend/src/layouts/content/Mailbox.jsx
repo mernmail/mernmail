@@ -17,6 +17,7 @@ import { useContext, useEffect, useState } from "react";
 import { setMessages, resetLoading } from "@/slices/messagesSlice.js";
 import { setMailboxes } from "@/slices/mailboxesSlice";
 import { ToastContext } from "@/contexts/ToastContext";
+import Loading from "@/components/Loading.jsx";
 
 function EmailContent() {
   const { t } = useTranslation();
@@ -161,7 +162,7 @@ function EmailContent() {
   }, [selectedAny]);
 
   if (loading) {
-    return <p className="text-center">{t("loading")}</p>;
+    return <Loading />;
   } else if (error) {
     return (
       <p className="text-red-500 block text-center">

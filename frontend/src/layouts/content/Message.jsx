@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadMessage, resetLoading } from "@/slices/messageSlice.js";
 import { setMailboxes } from "@/slices/mailboxesSlice.js";
 import { ToastContext } from "@/contexts/ToastContext.jsx";
+import Loading from "@/components/Loading.jsx";
 import download from "downloadjs";
 
 function MessageContent() {
@@ -236,7 +237,7 @@ function MessageContent() {
   }, [view, dispatch]);
 
   if (loading) {
-    return <p className="text-center">{t("loading")}</p>;
+    return <Loading />;
   } else if (error) {
     return (
       <p className="text-red-500 block text-center">

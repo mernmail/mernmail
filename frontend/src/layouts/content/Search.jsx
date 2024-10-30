@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { resetLoading, setSearchResults } from "@/slices/searchSlice.js";
+import Loading from "@/components/Loading.jsx";
 
 function SearchContent() {
   const { t } = useTranslation();
@@ -60,7 +61,7 @@ function SearchContent() {
   }, [t]);
 
   if (loading) {
-    return <p className="text-center">{t("loading")}</p>;
+    return <Loading />;
   } else if (error) {
     return (
       <p className="text-red-500 block text-center">{t("unexpectederror")}</p>
