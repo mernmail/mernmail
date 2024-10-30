@@ -82,6 +82,12 @@ function ComposeContent() {
                 setToValues(newToValues);
               }
             }}
+            onBlur={() => {
+              if (isEmail(toField)) {
+                setToValues([...toValues, toField]);
+                setToField("");
+              }
+            }}
           />
           {toValues.length > 0 ? (
             <ul>
@@ -136,6 +142,12 @@ function ComposeContent() {
                   const newCcValues = [...ccValues];
                   newCcValues.pop();
                   setCcValues(newCcValues);
+                }
+              }}
+              onBlur={() => {
+                if (isEmail(ccField)) {
+                  setCcValues([...ccValues, ccField]);
+                  setCcField("");
                 }
               }}
             />
@@ -195,6 +207,12 @@ function ComposeContent() {
                   const newBccValues = [...bccValues];
                   newBccValues.pop();
                   setBccValues(newBccValues);
+                }
+              }}
+              onBlur={() => {
+                if (isEmail(bccField)) {
+                  setBccValues([...bccValues, bccField]);
+                  setBccField("");
                 }
               }}
             />
