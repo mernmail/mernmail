@@ -142,6 +142,7 @@ function EmailContent() {
 
   useEffect(() => {
     if (!mailboxesLoading) document.title = `${title} - MERNMail`;
+    else document.title = "MERNMail";
   }, [title, mailboxesLoading]);
 
   useEffect(() => {

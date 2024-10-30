@@ -28,10 +28,6 @@ function LoginLayout() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    document.title = "MERNMail";
-  }, [t]);
-
-  useEffect(() => {
     const onBackButtonEvent = () => {
       let view = "mailbox";
       try {

@@ -210,6 +210,7 @@ function MessageContent() {
   useEffect(() => {
     if (!loading && messageData && messageData.messages.length > 0)
       document.title = `${messageData.messages[messageData.messages.length - 1].subject} - MERNMail`;
+    else document.title = "MERNMail";
   }, [messageData, loading]);
 
   useEffect(() => {
