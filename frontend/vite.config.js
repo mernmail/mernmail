@@ -2,8 +2,6 @@ import { defineConfig } from 'vite';
 
 import react from '@vitejs/plugin-react-swc';
 import legacy from '@vitejs/plugin-legacy';
-import { join } from "node:path";
-import { buildSync } from "esbuild";
 
 // https://vitejs.dev/config/
 export default defineConfig({
