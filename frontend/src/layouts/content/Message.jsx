@@ -819,7 +819,7 @@ function MessageContent() {
                       ""
                     )}
                   </div>
-                  <p className="px-1 lg:self-center">
+                  <p className="px-1 shrink-0 lg:self-center">
                     {t("datetime", {
                       val: date,
                       formatParams: {
