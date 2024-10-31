@@ -346,39 +346,12 @@ function ComposeContent() {
       setLoading(false);
     };
 
-    let oldHash = document.location.hash;
-    let oldHash2 = document.location.hash;
-    let previouslyCancelled = false;
-    const popstateHandler = (e) => {
-      if (
-        (previouslyCancelled &&
-          String(oldHash) == String(document.location.hash)) ||
-        String(oldHash2) == String(document.location.hash)
-      ) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        previouslyCancelled = false;
-        return;
-      }
-      oldHash2 = oldHash;
-      const confirmResults = sending ? true : confirm(t("exitcomposer"));
-      previouslyCancelled = !confirmResults;
-      if (!confirmResults) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        history.go(1);
-        return;
-      }
-      oldHash = document.location.hash;
-      loadComposer();
-    };
-
     loadComposer();
 
-    window.addEventListener("popstate", popstateHandler);
+    window.addEventListener("popstate", loadComposer);
 
     return () => {
-      window.removeEventListener("popstate", popstateHandler);
+      window.removeEventListener("popstate", loadComposer);
     };
   }, [email, t]);
 
