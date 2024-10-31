@@ -72,19 +72,25 @@ function EmailSidebar() {
   } else {
     return (
       <>
-        <button
+        <a
+          href="#compose"
           onClick={(e) => {
             e.preventDefault();
-            alert("Compose pressed");
+            dispatch(hideMenu());
+            if (
+              document.location.hash &&
+              !document.location.hash.match(/^#compose(?=$|\/)/)
+            )
+              document.location.hash = encodeURI(`#compose`);
           }}
-          className="w-full bg-primary text-primary-foreground p-2 mt-2 rounded-md hover:bg-primary/75 transition-colors"
+          className="inline-block text-center w-full bg-primary text-primary-foreground p-2 mt-2 rounded-md hover:bg-primary/75 transition-colors"
         >
           <MailPlus
             className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
             size={24}
           />
           <span className="align-middle">{t("compose")}</span>
-        </button>
+        </a>
         <ul className="mt-4">
           {mailboxes.map((mailbox) => {
             let title = mailbox.name;
