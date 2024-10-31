@@ -8,5 +8,17 @@ Quill.register(Quill.import("attributors/style/direction"), true);
 Quill.register(Quill.import("attributors/style/font"), true);
 Quill.register(Quill.import("attributors/style/size"), true);
 
+console.log(Quill.import("attributors/style/size"));
+
+// Use <pre> tags for code blocks
+const Block = Quill.import("blots/block");
+
+class CustomCode extends Block {
+  static blotName = "code-block";
+  static tagName = "pre";
+}
+
+Quill.register("formats/code-block", CustomCode);
+
 export { Quill };
 export default ReactQuill;
