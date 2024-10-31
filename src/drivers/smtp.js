@@ -32,6 +32,7 @@ module.exports = function init(email, password, callback) {
               cc: message.cc,
               bcc: message.bcc,
               subject: message.subject,
+              replyTo: message.replyTo,
               inReplyTo: message.inReplyTo,
               html: message.content,
               text: htmlToText(message.contents).replace(

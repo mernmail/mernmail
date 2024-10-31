@@ -302,7 +302,8 @@ module.exports = function init(email, password, callback) {
                 body: "",
                 attachments: [],
                 messageId: null,
-                inReplyToHeader: null
+                inReplyToHeader: null,
+                replyTo: null
               };
               let messageDate = null;
               let replyTo = null;
@@ -361,6 +362,25 @@ module.exports = function init(email, password, callback) {
                         : { name: "Unknown", address: "unknown@example.com" }
                     );
                   });
+                  const replyToArray =
+                    headers.get("reply-to") && headers.get("reply-to").value
+                      ? headers.get("reply-to").value || []
+                      : [];
+                  const replyToT = [];
+                  replyToArray.forEach((replyToObject) => {
+                    replyToT.push(
+                      replyToObject
+                        ? {
+                            name: replyToObject.name,
+                            address: replyToObject.address
+                          }
+                        : {
+                            name: "Unknown",
+                            address: "unknown@example.com"
+                          }
+                    );
+                  });
+                  finalAttributes.replyTo = replyToT;
                   finalAttributes.bcc = bcc;
                   finalAttributes.subject = headers.get("subject");
                   messageDate = headers.get("date");

@@ -198,7 +198,8 @@ module.exports = function init(email, password, callback) {
                         body: "",
                         attachments: [],
                         messageId: null,
-                        inReplyToHeader: null
+                        inReplyToHeader: null,
+                        replyTo: null
                       };
                       let messageDate = null;
 
@@ -280,6 +281,26 @@ module.exports = function init(email, password, callback) {
                           );
                         });
                         finalAttributes.bcc = bcc;
+                        const replyToArray =
+                          headers.get("reply-to") &&
+                          headers.get("reply-to").value
+                            ? headers.get("reply-to").value || []
+                            : [];
+                        const replyToT = [];
+                        replyToArray.forEach((replyToObject) => {
+                          replyToT.push(
+                            replyToObject
+                              ? {
+                                  name: replyToObject.name,
+                                  address: replyToObject.address
+                                }
+                              : {
+                                  name: "Unknown",
+                                  address: "unknown@example.com"
+                                }
+                          );
+                        });
+                        finalAttributes.replyTo = replyToT;
                         finalAttributes.subject = headers.get("subject");
                         messageDate = headers.get("date");
                         finalAttributes.messageId = headers.get("message-id");

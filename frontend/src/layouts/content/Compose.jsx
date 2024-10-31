@@ -246,7 +246,10 @@ function ComposeContent() {
           } else if (action == "reply") {
             setSubject(t("re", { subject: message.subject }));
             setToValues(
-              message.from.map((address) =>
+              (message.replyTo && message.replyTo.length > 0
+                ? message.replyTo
+                : message.from
+              ).map((address) =>
                 address.name
                   ? `${address.name} <${address.address}>`
                   : address.address
@@ -282,7 +285,10 @@ function ComposeContent() {
           } else if (action == "replyall") {
             setSubject(t("re", { subject: message.subject }));
             setToValues([
-              ...message.from
+              ...(message.replyTo && message.replyTo.length > 0
+                ? message.replyTo
+                : message.from
+              )
                 .filter(
                   (address) => address.address && address.address != email
                 )
