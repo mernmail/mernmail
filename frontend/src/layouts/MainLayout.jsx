@@ -12,7 +12,7 @@ import {
 import { logout } from "@/slices/authSlice.js";
 import { showMenu, hideMenu } from "@/slices/menuSlice.js";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Sidebar from "@/components/Sidebar.jsx";
 import ActionButton from "@/components/ActionButton.jsx";
@@ -26,6 +26,12 @@ function LoginLayout() {
   const email = useSelector((state) => state.auth.email);
   const menuShown = useSelector((state) => state.menu.shown);
   const dispatch = useDispatch();
+
+  const onBeforeUnloadHandler = useCallback((e) => {
+    e.preventDefault();
+    e.returnValue = "MERNMail";
+    return "MERNMail";
+  }, []);
 
   useEffect(() => {
     const onBackButtonEvent = () => {
@@ -50,6 +56,16 @@ function LoginLayout() {
       window.removeEventListener("popstate", onBackButtonEvent);
     };
   }, [dispatch]);
+
+  useEffect(() => {
+    if (view == "compose") {
+      window.addEventListener("beforeunload", onBeforeUnloadHandler);
+    }
+
+    return () => {
+      window.removeEventListener("beforeunload", onBeforeUnloadHandler);
+    };
+  }, [view, onBeforeUnloadHandler]);
 
   return (
     <div
