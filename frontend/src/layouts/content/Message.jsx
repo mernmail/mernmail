@@ -172,15 +172,16 @@ function MessageContent() {
       return () => {
         const body = iframeRefContents.contentWindow.document.body;
         const html = iframeRefContents.contentWindow.document.documentElement;
-        const newIframeHeights = Object.assign({}, iframeHeights);
-        newIframeHeights[id] = Math.max(
-          html.scrollHeight > parseInt(iframeRefContents.height)
-            ? html.scrollHeight
-            : 0,
-          body.offsetHeight,
-          html.offsetHeight
-        );
-        setIframeHeights(newIframeHeights);
+        setIframeHeights((iframeHeights) => {
+          iframeHeights[id] = Math.max(
+            html.scrollHeight > parseInt(iframeRefContents.height)
+              ? html.scrollHeight
+              : 0,
+            body.offsetHeight,
+            html.offsetHeight
+          );
+          return iframeHeights;
+        });
       };
     },
     [iframeHeights]
