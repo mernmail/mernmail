@@ -108,5 +108,6 @@
     "re": "Re: {{subject}}",
     "fwd": "Fwd: {{subject}}",
     "forwardedmessage": "Forwarded message",
-    "replymessage": "On {{date}}, {{senders}} writes:"
+    "replymessage": "On {{date}}, {{senders}} writes:",
+    "exitcomposer": "Are you sure to cancel composing the message? Press OK to cancel, or press Cancel to continue composing."
 }
