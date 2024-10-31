@@ -179,13 +179,11 @@ function MessageContent() {
           body.offsetHeight,
           html.offsetHeight
         );
-        setIframeHeights((iframeHeights) => {
-          iframeHeights[id] = newHeight;
-          return iframeHeights;
+        setIframeHeights((iframeHeightsO) => {
+          const newIframeHeights = { ...iframeHeightsO };
+          newIframeHeights[id] = newHeight;
+          return newIframeHeights;
         });
-        const newIframeHeights = { ...iframeHeights };
-        newIframeHeights[id] = newHeight;
-        setIframeHeights(newIframeHeights);
       };
     },
     [iframeHeights]
