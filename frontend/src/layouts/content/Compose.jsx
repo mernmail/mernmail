@@ -1,16 +1,18 @@
 import { File, Paperclip, Send, X } from "lucide-react";
-import { useState, lazy, Suspense, useEffect, useRef } from "react";
+import { useState, lazy, Suspense, useEffect, useRef, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { filesize } from "filesize";
 import isEmail from "validator/lib/isEmail";
 import Loading from "@/components/Loading.jsx";
+import { ToastContext } from "@/contexts/ToastContext.jsx";
 
 // Lazy load Quill WYSIWYG editor due to its bundled script size
 const ReactQuill = lazy(() => import("@/components/ReactQuill.jsx"));
 
 function ComposeContent() {
   const { t } = useTranslation();
+  const { toast } = useContext(ToastContext);
   const [contents, setContents] = useState("");
   const [toField, setToField] = useState("");
   const [toValues, setToValues] = useState([]);
@@ -22,8 +24,10 @@ function ComposeContent() {
   const [bccValues, setBccValues] = useState([]);
   const [subject, setSubject] = useState("");
   const [attachments, setAttachments] = useState([]);
+  const [sending, setSending] = useState(false);
   const attachmentsRef = useRef();
   const email = useSelector((state) => state.auth.email);
+  const maxAttachmentSize = 26214400;
 
   useEffect(() => {
     document.title = `${t("compose")} - MERNMail`;
@@ -35,11 +39,73 @@ function ComposeContent() {
         {t("compose")}
       </h1>
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          alert(
-            `To: ${toValues}\nCC: ${ccValues}\nBCC: ${bccValues}\nSubject: ${subject}\nContents in HTML: ${contents}\nAttachments: ${attachments}`
-          );
+
+          const blobToAttachmentEntry = (blob) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            return new Promise((resolve) => {
+              reader.onloadend = () => {
+                resolve({
+                  filename: blob.name,
+                  content: reader.result.split(",")[1],
+                  contentType: blob.type
+                });
+              };
+            });
+          };
+
+          setSending(true);
+
+          try {
+            const finalAttachments = [];
+            for (let i = 0; i < attachments.length; i++) {
+              const attachmentToPush = await blobToAttachmentEntry(
+                attachments[i]
+              );
+              finalAttachments.push(attachmentToPush);
+            }
+
+            const dataToSend = {
+              from: email,
+              to: toValues,
+              cc: ccValues,
+              bcc: bccValues,
+              subject: subject,
+              content: contents,
+              attachments: finalAttachments
+            };
+
+            const res = await fetch("/api/send/send", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(dataToSend),
+              credentials: "include"
+            });
+            const data = await res.json();
+            if (res.status == 200) {
+              toast(t("sendsuccess"));
+              setSending(false);
+              document.location.hash = encodeURI("#mailbox");
+            } else {
+              setSending(false);
+              toast(
+                t("sendfail", {
+                  error: data.message
+                })
+              );
+            }
+          } catch (err) {
+            setSending(false);
+            toast(
+              t("sendfail", {
+                error: err.message
+              })
+            );
+          }
         }}
       >
         <div className="flex flex-col md:flex-row mb-2">
@@ -325,20 +391,27 @@ function ComposeContent() {
             }
           }}
         />
-        <div>
-          <button
-            className="bg-primary text-primary-foreground p-2 mt-2 mr-2 rtl:mr-0 rtl:ml-2 rounded-md hover:bg-primary/75 disabled:bg-primary/50 transition-colors"
-            onClick={(e) => {
-              e.preventDefault();
-              attachmentsRef.current.click();
-            }}
-          >
-            <Paperclip
-              className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
-              size={24}
-            />
-            <span className="align-middle">{t("attach")}</span>
-          </button>
+        <div className="flex flex-col md:flex-row mt-2">
+          <div className="mr-2 rtl:mr-0 rtl:ml-2 md:self-center">
+            <button
+              className="bg-primary text-primary-foreground p-2 rounded-md hover:bg-primary/75 disabled:bg-primary/50 transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                attachmentsRef.current.click();
+              }}
+            >
+              <Paperclip
+                className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
+                size={24}
+              />
+              <span className="align-middle">{t("attach")}</span>
+            </button>
+          </div>
+          <span className="mt-1 md:mt-0 md:self-center">
+            {t("maxattachmentsize", {
+              size: filesize(maxAttachmentSize, { standard: "jedec" })
+            })}
+          </span>
         </div>
         {attachments && attachments.length > 0 ? (
           <>
@@ -396,9 +469,14 @@ function ComposeContent() {
           type="submit"
           className="bg-primary text-primary-foreground p-2 mt-2 mr-2 rtl:mr-0 rtl:ml-2 rounded-md hover:bg-primary/75 disabled:bg-primary/50 transition-colors"
           disabled={
-            toValues.length == 0 &&
-            ccValues.length == 0 &&
-            bccValues.length == 0
+            (toValues.length == 0 &&
+              ccValues.length == 0 &&
+              bccValues.length == 0) ||
+            attachments.reduce(
+              (partialSum, attachment) => partialSum + (attachment.size || 0),
+              0
+            ) > maxAttachmentSize ||
+            sending
           }
         >
           <Send className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top" size={24} />

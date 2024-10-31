@@ -101,5 +101,8 @@
     "addmailboxfail": "Can't add a mailbox: {{error}}",
     "archive": "Archive",
     "send": "Send",
-    "attach": "Attach"
+    "attach": "Attach",
+    "maxattachmentsize": "Maximum combined attachment size: {{size}}",
+    "sendsuccess": "Message sent successfully",
+    "sendfail": "Can't send a message: {{error}}"
 }

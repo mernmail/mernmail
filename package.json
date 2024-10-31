@@ -24,6 +24,7 @@
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "html-to-text": "^9.0.5",
     "imap-node": "^0.9.9",
     "jsonwebtoken": "^9.0.2",
     "mailparser": "^3.7.1",

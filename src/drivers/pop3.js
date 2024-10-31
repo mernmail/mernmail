@@ -7,7 +7,12 @@ module.exports = function init(email, password, callback) {
   const pop3 = new Pop3Command({
     host: process.env.EMAIL_RECV_HOST,
     port: process.env.EMAIL_RECV_PORT,
-    tls: parseInt(process.env.EMAIL_RECV_TLS) > 0
+    tls: parseInt(process.env.EMAIL_RECV_TLS) > 0,
+    tlsOptions: {
+      rejectUnauthorized: !(
+        parseInt(process.env.EMAIL_RECV_ALLOWBADCERTIFICATES) > 0
+      )
+    }
   });
 
   pop3

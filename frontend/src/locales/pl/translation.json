@@ -101,5 +101,8 @@
     "addmailboxfail": "Nie można dodać skrzynki pocztowej: {{error}}",
     "archive": "Archiwum",
     "send": "Wyślij",
-    "attach": "Załącz"
+    "attach": "Załącz",
+    "maxattachmentsize": "Maksymalny łączny rozmiar załączników: {{size}}",
+    "sendsuccess": "Wysłano wiadomość pomyślnie",
+    "sendfail": "Nie można wysłać wiadomości: {{error}}"
 }
