@@ -298,8 +298,10 @@ module.exports = function init(email, password, callback) {
                 from: [{ name: "Unknown", address: "unknown@example.com" }],
                 to: [{ name: "Unknown", address: "unknown@example.com" }],
                 cc: [],
+                bcc: [],
                 body: "",
                 attachments: [],
+                messageId: null,
                 inReplyToHeader: null
               };
               let messageDate = null;
@@ -347,8 +349,22 @@ module.exports = function init(email, password, callback) {
                     );
                   });
                   finalAttributes.cc = cc;
+                  const bccArray =
+                    headers.get("bcc") && headers.get("bcc").value
+                      ? headers.get("bcc").value || []
+                      : [];
+                  const bcc = [];
+                  bccArray.forEach((bccObject) => {
+                    bcc.push(
+                      bccObject
+                        ? { name: bccObject.name, address: bccObject.address }
+                        : { name: "Unknown", address: "unknown@example.com" }
+                    );
+                  });
+                  finalAttributes.bcc = bcc;
                   finalAttributes.subject = headers.get("subject");
                   messageDate = headers.get("date");
+                  finalAttributes.messageId = headers.get("message-id");
                   replyTo = headers.get("in-reply-to");
                   finalAttributes.inReplyToHeader = replyTo;
                 });

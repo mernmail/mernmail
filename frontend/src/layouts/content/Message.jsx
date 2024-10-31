@@ -720,6 +720,7 @@ function MessageContent() {
             const from = message.from;
             const to = message.to;
             const cc = message.cc;
+            const bcc = message.bcc;
             const date = new Date(message.date);
             const id = message.id;
             const body = message.body;
@@ -801,6 +802,21 @@ function MessageContent() {
                     ) : (
                       ""
                     )}
+                    {bcc && bcc.length > 0 ? (
+                      <p className="block text-foreground/50 overflow-hidden text-ellipsis">
+                        {t("bcc", {
+                          bcc: bcc
+                            .map((bccObject) => {
+                              return bccObject.name
+                                ? `${bccObject.name} <${bccObject.address}>`
+                                : bccObject.address;
+                            })
+                            .join(", ")
+                        })}
+                      </p>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <p className="px-1 lg:self-center">
                     {t("datetime", {
@@ -818,9 +834,13 @@ function MessageContent() {
                   </p>
                   <ul className="mx-0.5 list-none shrink-0 lg:self-center">
                     <li className="inline-block mx-0.5">
-                      <button
+                      <a
+                        href={`#compose/reply/${encodeURI(mailboxId)}/${encodeURI(message.id)}`}
                         onClick={(e) => {
                           e.preventDefault();
+                          document.location.href = encodeURI(
+                            `#compose/reply/${mailboxId}/${message.id}`
+                          );
                         }}
                         title={t("reply")}
                         className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
@@ -830,13 +850,16 @@ function MessageContent() {
                           height={24}
                           className="inline w-6 h-6 align-top"
                         />
-                      </button>
+                      </a>
                     </li>
                     <li className="inline-block mx-0.5">
-                      <button
-                        href="#"
+                      <a
+                        href={`#compose/replyall/${encodeURI(mailboxId)}/${encodeURI(message.id)}`}
                         onClick={(e) => {
                           e.preventDefault();
+                          document.location.href = encodeURI(
+                            `#compose/replyall/${mailboxId}/${message.id}`
+                          );
                         }}
                         title={t("replyall")}
                         className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
@@ -846,13 +869,16 @@ function MessageContent() {
                           height={24}
                           className="inline w-6 h-6 align-top"
                         />
-                      </button>
+                      </a>
                     </li>
                     <li className="inline-block mx-0.5">
-                      <button
-                        href="#"
+                      <a
+                        href={`#compose/forward/${encodeURI(mailboxId)}/${encodeURI(message.id)}`}
                         onClick={(e) => {
                           e.preventDefault();
+                          document.location.href = encodeURI(
+                            `#compose/forward/${mailboxId}/${message.id}`
+                          );
                         }}
                         title={t("forward")}
                         className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
@@ -862,7 +888,7 @@ function MessageContent() {
                           height={24}
                           className="inline w-6 h-6 align-top"
                         />
-                      </button>
+                      </a>
                     </li>
                   </ul>
                 </div>
@@ -955,42 +981,54 @@ function MessageContent() {
                 )}
                 {firstMessage ? (
                   <div className="border-t-2 border-border my-2">
-                    <button
+                    <a
+                      href={`#compose/reply/${encodeURI(mailboxId)}/${encodeURI(messagesToRender[messagesToRender.length - 1].id)}`}
                       onClick={(e) => {
                         e.preventDefault();
+                        document.location.href = encodeURI(
+                          `#compose/reply/${mailboxId}/${messagesToRender[messagesToRender.length - 1].id}`
+                        );
                       }}
-                      className="bg-primary text-primary-foreground p-2 mt-2 mr-2 rtl:mr-0 rtl:ml-2 rounded-md hover:bg-primary/75 transition-colors"
+                      className="inline-block text-center bg-primary text-primary-foreground p-2 mt-2 mr-2 rtl:mr-0 rtl:ml-2 rounded-md hover:bg-primary/75 transition-colors"
                     >
                       <Reply
                         className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
                         size={24}
                       />
                       <span className="align-middle">{t("reply")}</span>
-                    </button>
-                    <button
+                    </a>
+                    <a
+                      href={`#compose/replyall/${encodeURI(mailboxId)}/${encodeURI(messagesToRender[messagesToRender.length - 1].id)}`}
                       onClick={(e) => {
                         e.preventDefault();
+                        document.location.href = encodeURI(
+                          `#compose/replyall/${mailboxId}/${messagesToRender[messagesToRender.length - 1].id}`
+                        );
                       }}
-                      className="bg-primary text-primary-foreground p-2 mt-2 mr-2 rtl:mr-0 rtl:ml-2 rounded-md hover:bg-primary/75 transition-colors"
+                      className="inline-block text-center bg-primary text-primary-foreground p-2 mt-2 mr-2 rtl:mr-0 rtl:ml-2 rounded-md hover:bg-primary/75 transition-colors"
                     >
                       <ReplyAll
                         className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
                         size={24}
                       />
                       <span className="align-middle">{t("replyall")}</span>
-                    </button>
-                    <button
+                    </a>
+                    <a
+                      href={`#compose/forward/${encodeURI(mailboxId)}/${encodeURI(messagesToRender[messagesToRender.length - 1].id)}`}
                       onClick={(e) => {
                         e.preventDefault();
+                        document.location.href = encodeURI(
+                          `#compose/forward/${mailboxId}/${messagesToRender[messagesToRender.length - 1].id}`
+                        );
                       }}
-                      className="bg-primary text-primary-foreground p-2 mt-2 mr-2 rtl:mr-0 rtl:ml-2 rounded-md hover:bg-primary/75 transition-colors"
+                      className="inline-block text-center bg-primary text-primary-foreground p-2 mt-2 mr-2 rtl:mr-0 rtl:ml-2 rounded-md hover:bg-primary/75 transition-colors"
                     >
                       <Forward
                         className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
                         size={24}
                       />
                       <span className="align-middle">{t("forward")}</span>
-                    </button>
+                    </a>
                   </div>
                 ) : (
                   ""

@@ -104,5 +104,9 @@
     "attach": "Załącz",
     "maxattachmentsize": "Maksymalny łączny rozmiar załączników: {{size}}",
     "sendsuccess": "Wysłano wiadomość pomyślnie",
-    "sendfail": "Nie można wysłać wiadomości: {{error}}"
+    "sendfail": "Nie można wysłać wiadomości: {{error}}",
+    "re": "Odp: {{subject}}",
+    "fwd": "Pd: {{subject}}",
+    "forwardedmessage": "Przekazana wiadomość",
+    "replymessage": "W {{date}}, {{senders}} pisze:"
 }

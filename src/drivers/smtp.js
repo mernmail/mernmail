@@ -24,7 +24,7 @@ module.exports = function init(email, password, callback) {
         close: () => {
           transporter.close();
         },
-        compose: (message, callback) => {
+        compose: (message, keepBcc, callback) => {
           try {
             const messageObj = {
               from: message.from,
@@ -54,7 +54,7 @@ module.exports = function init(email, password, callback) {
                 : undefined
             };
             const mail = new MailComposer(messageObj).compile();
-            mail.keepBcc = true;
+            mail.keepBcc = keepBcc;
             mail.build((err, contents) => {
               if (err) {
                 callback(err);

@@ -16,7 +16,7 @@ router.post("/send", (req, res) => {
         req.receiveDriver.close();
         return;
       }
-      sendDriver.compose(req.body, (err, messageBody) => {
+      sendDriver.compose(req.body, false, (err, messageBody) => {
         if (err) {
           res.status(500).json({ message: err.message });
           req.receiveDriver.close();
