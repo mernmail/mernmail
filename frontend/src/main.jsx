@@ -12,6 +12,8 @@ import store from "./store.js";
 import { Provider } from "react-redux";
 import { ErrorBoundary } from "react-error-boundary";
 import "./i18n.js";
+
+// eslint-disable-next-line react-refresh/only-export-components
 const App = lazy(() => import("./App.jsx"));
 
 createRoot(document.getElementById("root")).render(

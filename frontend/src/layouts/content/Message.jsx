@@ -167,27 +167,24 @@ function MessageContent() {
     };
   };
 
-  const resizeOnIframeLoad = useCallback(
-    (iframeRefContents, id) => {
-      return () => {
-        const body = iframeRefContents.contentWindow.document.body;
-        const html = iframeRefContents.contentWindow.document.documentElement;
-        const newHeight = Math.max(
-          html.scrollHeight > parseInt(iframeRefContents.height)
-            ? html.scrollHeight
-            : 0,
-          body.offsetHeight,
-          html.offsetHeight
-        );
-        setIframeHeights((iframeHeightsO) => {
-          const newIframeHeights = { ...iframeHeightsO };
-          newIframeHeights[id] = newHeight;
-          return newIframeHeights;
-        });
-      };
-    },
-    [iframeHeights]
-  );
+  const resizeOnIframeLoad = useCallback((iframeRefContents, id) => {
+    return () => {
+      const body = iframeRefContents.contentWindow.document.body;
+      const html = iframeRefContents.contentWindow.document.documentElement;
+      const newHeight = Math.max(
+        html.scrollHeight > parseInt(iframeRefContents.height)
+          ? html.scrollHeight
+          : 0,
+        body.offsetHeight,
+        html.offsetHeight
+      );
+      setIframeHeights((iframeHeightsO) => {
+        const newIframeHeights = { ...iframeHeightsO };
+        newIframeHeights[id] = newHeight;
+        return newIframeHeights;
+      });
+    };
+  }, []);
 
   const getMessageIds = () => {
     return messagesToRender
