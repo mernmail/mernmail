@@ -299,7 +299,8 @@ module.exports = function init(email, password, callback) {
                 to: [{ name: "Unknown", address: "unknown@example.com" }],
                 cc: [],
                 body: "",
-                attachments: []
+                attachments: [],
+                inReplyToHeader: null
               };
               let messageDate = null;
               let replyTo = null;
@@ -349,6 +350,7 @@ module.exports = function init(email, password, callback) {
                   finalAttributes.subject = headers.get("subject");
                   messageDate = headers.get("date");
                   replyTo = headers.get("in-reply-to");
+                  finalAttributes.inReplyToHeader = replyTo;
                 });
                 parser.on("data", (data) => {
                   if (data.type === "text") {

@@ -195,7 +195,8 @@ module.exports = function init(email, password, callback) {
                         ],
                         cc: [],
                         body: "",
-                        attachments: []
+                        attachments: [],
+                        inReplyToHeader: null
                       };
                       let messageDate = null;
 
@@ -260,6 +261,8 @@ module.exports = function init(email, password, callback) {
                         finalAttributes.cc = cc;
                         finalAttributes.subject = headers.get("subject");
                         messageDate = headers.get("date");
+                        finalAttributes.inReplyToHeader =
+                          headers.get("in-reply-to");
                       });
                       parser.on("data", (data) => {
                         if (data.type === "text") {
