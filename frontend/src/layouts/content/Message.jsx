@@ -5,6 +5,7 @@ import {
   FolderInput,
   Forward,
   Mail,
+  MailPlus,
   Reply,
   ReplyAll,
   Star,
@@ -302,6 +303,25 @@ function MessageContent() {
               />
             </a>
           </li>
+          {messagesToRender[messagesToRender.length - 1].draft ? (
+            <li className="inline-block mx-0.5">
+              <a
+                href={`#compose/draft/${encodeURI(mailboxId)}/${encodeURI(messagesToRender[messagesToRender.length - 1].id)}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.location.hash = encodeURI(
+                    `#compose/draft/${mailboxId}/${messagesToRender[messagesToRender.length - 1].id}`
+                  );
+                }}
+                title={t("compose")}
+                className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
+              >
+                <MailPlus className="inline w-6 h-6 align-top" />
+              </a>
+            </li>
+          ) : (
+            ""
+          )}
           {canStar ? (
             <li className="inline-block mx-0.5">
               <button
