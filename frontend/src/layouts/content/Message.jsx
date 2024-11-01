@@ -780,7 +780,7 @@ function MessageContent() {
                           <span className="font-bold text-lg align-middle">
                             {firstFrom.name}{" "}
                           </span>
-                          <span className="text-foreground/50 align-middle">{`<${firstFrom.address}>`}</span>
+                          <span className="text-muted-foreground align-middle">{`<${firstFrom.address}>`}</span>
                         </>
                       ) : (
                         <span className="font-bold text-lg align-middle">
@@ -790,7 +790,7 @@ function MessageContent() {
                       {from.slice(1, from.length).map((fromObject) => {
                         return (
                           <span
-                            className="text-foreground/50 align-middle"
+                            className="text-muted-foreground align-middle"
                             key={fromObject.address}
                           >
                             {", " +
@@ -801,7 +801,7 @@ function MessageContent() {
                         );
                       })}
                     </p>
-                    <p className="block text-foreground/50 overflow-hidden text-ellipsis">
+                    <p className="block text-muted-foreground overflow-hidden text-ellipsis">
                       {t("to", {
                         to: to
                           .map((toObject) => {
@@ -813,7 +813,7 @@ function MessageContent() {
                       })}
                     </p>
                     {cc && cc.length > 0 ? (
-                      <p className="block text-foreground/50 overflow-hidden text-ellipsis">
+                      <p className="block text-muted-foreground overflow-hidden text-ellipsis">
                         {t("cc", {
                           cc: cc
                             .map((ccObject) => {
@@ -828,7 +828,7 @@ function MessageContent() {
                       ""
                     )}
                     {bcc && bcc.length > 0 ? (
-                      <p className="block text-foreground/50 overflow-hidden text-ellipsis">
+                      <p className="block text-muted-foreground overflow-hidden text-ellipsis">
                         {t("bcc", {
                           bcc: bcc
                             .map((bccObject) => {

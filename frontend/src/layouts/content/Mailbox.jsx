@@ -177,7 +177,7 @@ function EmailContent() {
           <h1 className="text-3xl md:text-4xl mb-0.5 pb-0.5 md:mb-0 md:pb-1 font-bold content-center grow overflow-hidden text-ellipsis">
             {title}
           </h1>
-          <p className="md:text-xl text-foreground/50 content-center whitespace-nowrap shrink-0">
+          <p className="md:text-xl text-muted-foreground content-center whitespace-nowrap shrink-0">
             {t(messages.length == 1 ? "1message" : "nummessages", {
               count: messages.length
             })}
@@ -739,7 +739,7 @@ function EmailContent() {
                           {address}
                         </p>
                         <p
-                          className={`whitespace-nowrap grow ${!seen ? "font-bold" : "opacity-70"} md:self-center px-1 overflow-hidden text-ellipsis`}
+                          className={`whitespace-nowrap grow ${!seen ? "font-bold" : "text-muted-foreground"} md:self-center px-1 overflow-hidden text-ellipsis`}
                         >
                           <a
                             href={encodeURI(`#message/${mailboxId}/${id}`)}
