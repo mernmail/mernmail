@@ -209,7 +209,12 @@ function MessageContent() {
 
   useEffect(() => {
     if (!loading && messageData && messageData.messages.length > 0)
-      document.title = `${messageData.messages[messageData.messages.length - 1].subject} - MERNMail`;
+      document.title = `${
+        messagesToRender[messagesToRender.length - 1].subject !== undefined &&
+        messagesToRender[messagesToRender.length - 1].subject !== null
+          ? messagesToRender[messagesToRender.length - 1].subject
+          : t("nosubject")
+      } - MERNMail`;
     else document.title = "MERNMail";
   }, [messageData, loading]);
 
