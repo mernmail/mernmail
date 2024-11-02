@@ -209,7 +209,7 @@ router.get("/signature", (req, res) => {
         signatureModel
           .create({
             email: req.credentials.email,
-            signature: "<br><p>Sent with <b>MERNMail</b></p>"
+            signature: "<p>Sent with <strong>MERNMail</strong></p>"
           })
           .then(() => {
             signatureModel
@@ -259,7 +259,7 @@ router.post("/signature", (req, res) => {
         signatureModel
           .create({
             email: req.credentials.email,
-            identity: req.body.identity
+            signature: req.body.signature
           })
           .then(finalCallback)
           .catch((err) => {
@@ -273,7 +273,7 @@ router.post("/signature", (req, res) => {
               email: req.credentials.email
             },
             {
-              identity: req.body.identity
+              signature: req.body.signature
             }
           )
           .then(finalCallback)
