@@ -88,7 +88,7 @@ function ComposeContent() {
       setInReplyTo(null);
       setDraftMailbox(null);
       setDraftId(null);
-      setIdentity(defaultIdentity);
+      setIdentity(defaultIdentity.identity);
 
       let messageData = null;
       let mailboxName = "";
