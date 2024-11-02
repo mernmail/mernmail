@@ -113,5 +113,11 @@
     "savetodrafts": "Save draft",
     "savetodraftssuccess": "Draft saved successfully",
     "savetodraftsfail": "Can't save draft: {{error}}",
-    "identities": "Identities"
+    "identities": "Identities",
+    "name": "Name: {{name}}",
+    "emailaddress2": "Email address: {{address}",
+    "deleteidentity": "Delete identity",
+    "addidentity": "Add identity",
+    "reallyremoveidentity": "Do you really want to remove this identity?",
+    "setdefaultidentity": "Set default identity"
 }

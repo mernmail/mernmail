@@ -113,5 +113,11 @@
     "savetodrafts": "Zapisz wersję roboczą",
     "savetodraftssuccess": "Wersja robocza zapisana pomyślnie",
     "savetodraftsfail": "Nie można zapisać wersji roboczej: {{error}}",
-    "identities": "Tożsamości"
+    "identities": "Tożsamości",
+    "name": "Imię i nazwisko: {{name}}",
+    "emailaddress2": "Adres e-mail: {{address}}",
+    "addidentity": "Dodaj tożsamość",
+    "deleteidentity": "Usuń tożsamość",
+    "reallyremoveidentity": "Czy naprawdę chcesz usunąć tę tożsamość?",
+    "setdefaultidentity": "Ustaw domyślną tożsamość"
 }
