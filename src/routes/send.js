@@ -97,7 +97,7 @@ router.post("/draft", (req, res) => {
           sendDriver.close();
           return;
         }
-        req.receiveDriver.appendDraft(messageBody, (err, draftMailbox) => {
+        req.receiveDriver.appendDraft(messageBody, (err, draftsMailbox) => {
           if (err) {
             res.status(500).json({ message: err.message });
             req.receiveDriver.close();
@@ -106,7 +106,7 @@ router.post("/draft", (req, res) => {
           } else {
             res.json({
               message: "Draft saved successfully",
-              draftMailbox: draftMailbox
+              draftsMailbox: draftsMailbox
             });
             req.receiveDriver.close();
             sendDriver.close();
