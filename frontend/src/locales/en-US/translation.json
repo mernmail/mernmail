@@ -115,7 +115,7 @@
     "savetodraftsfail": "Can't save draft: {{error}}",
     "identities": "Identities",
     "name": "Name: {{name}}",
-    "emailaddress2": "Email address: {{address}",
+    "emailaddress2": "Email address: {{address}}",
     "deleteidentity": "Delete identity",
     "addidentity": "Add identity",
     "reallyremoveidentity": "Do you really want to remove this identity?",
