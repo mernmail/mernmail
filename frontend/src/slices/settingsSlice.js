@@ -6,6 +6,7 @@ export const settingsSlice = createSlice({
   initialState: {
     loading: true,
     identities: [],
+    signature: "",
     error: null
   },
   reducers: {
@@ -16,6 +17,8 @@ export const settingsSlice = createSlice({
     setSettings: (state, action) => {
       if (action.payload && action.payload.identities !== undefined)
         state.identities = action.payload.identities;
+      if (action.payload && action.payload.signature !== undefined)
+        state.signature = action.payload.signature;
       if (state.loading) state.loading = false;
       if (action.payload && action.payload.error !== undefined)
         state.error = action.payload.error;
@@ -44,6 +47,40 @@ export function setIdentities(signal) {
       const data = await res.json();
       if (res.status == 200) {
         state.identities = data.identities;
+      } else {
+        if (res.status == 401) {
+          dispatch(verificationFailed());
+        }
+        state.error = data.message;
+      }
+    } catch (err) {
+      if (err.name == "AbortError") aborted = true;
+      state.error = err.message;
+    }
+
+    if (!aborted) dispatch(settingsSlice.actions.setSettings(state));
+  };
+}
+
+export function setSignature(signal) {
+  return async (dispatch, getState) => {
+    const state = { error: null };
+    let email = getState().auth.email;
+    if (email === null) {
+      return;
+    }
+
+    let aborted = false;
+
+    try {
+      const res = await fetch(`/api/settings/signature`, {
+        method: "GET",
+        credentials: "include",
+        signal: signal
+      });
+      const data = await res.json();
+      if (res.status == 200) {
+        state.signature = data.signature;
       } else {
         if (res.status == 401) {
           dispatch(verificationFailed());

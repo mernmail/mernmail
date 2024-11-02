@@ -125,5 +125,8 @@
     "deleteidentitysuccess": "Usunięto tożsamość pomyślnie",
     "deleteidentityfail": "Nie można usunąć tożsamości: {{error}}",
     "addidentitysuccess": "Dodano tożsamość pomyślnie",
-    "addidentityfail": "Nie można dodać tożsamości: {{error}}"
+    "addidentityfail": "Nie można dodać tożsamości: {{error}}",
+    "savesignature": "Zapisz podpis",
+    "savesignaturesuccess": "Podpis zapisano pomyślnie",
+    "savesignaturefail": "Nie można zapisać podpisu: {{error}}"
 }

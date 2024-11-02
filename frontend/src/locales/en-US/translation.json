@@ -125,5 +125,8 @@
     "deleteidentitysuccess": "Identity deleted successfully",
     "deleteidentityfail": "Can't delete an identity: {{error}}",
     "addidentitysuccess": "Identity added successfully",
-    "addidentityfail": "Can't add an identity: {{error}}"
+    "addidentityfail": "Can't add an identity: {{error}}",
+    "savesignature": "Save signature",
+    "savesignaturesuccess": "Signature saved successfully",
+    "savesignaturefail": "Can't save signature: {{error}}"
 }
