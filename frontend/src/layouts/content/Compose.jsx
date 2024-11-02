@@ -674,7 +674,6 @@ function ComposeContent() {
                 onChange={(e) => setSubject(e.target.value)}
                 value={subject}
                 id="compose-subject"
-                required
                 className="w-full bg-accent text-accent-foreground px-2 py-1 rounded-md focus:outline-primary focus:outline-2 focus:outline"
                 onKeyDown={(e) => {
                   if (e.key == "Enter") {
