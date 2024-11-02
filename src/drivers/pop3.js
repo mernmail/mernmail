@@ -519,6 +519,40 @@ module.exports = function init(email, password, callback) {
                   callback(
                     new Error("POP3 doesn't support multiple mailboxes.")
                   );
+                },
+                permanentlyDeleteMessages: (messages, callback) => {
+                  const messagesArray = Array.isArray(messages)
+                    ? messages
+                    : [messages];
+                  const deleteMultipleMessages = (callback2, _id) => {
+                    if (!_id) _id = 0;
+                    if (_id >= messagesArray.length) {
+                      callback2();
+                      return;
+                    }
+                    pop3
+                      .command("DELE", messagesArray[_id])
+                      .then(() => {
+                        deleteMultipleMessages(callback2, _id);
+                      })
+                      .catch((err) => {
+                        callback(err);
+                      });
+                  };
+                  deleteMultipleMessages(() => {
+                    // POP3 supports only one mailbox
+                    callback(null, null);
+                  });
+                },
+                appendDraft: (mailboxName, callback) => {
+                  callback(
+                    new Error("POP3 doesn't support multiple mailboxes.")
+                  );
+                },
+                appendSentMessage: (mailboxName, callback) => {
+                  callback(
+                    new Error("POP3 doesn't support multiple mailboxes.")
+                  );
                 }
               };
               callback(null, receiveObject);

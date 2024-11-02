@@ -109,5 +109,8 @@
     "fwd": "Fwd: {{subject}}",
     "forwardedmessage": "Forwarded message",
     "replymessage": "On {{date}}, {{senders}} writes:",
-    "exitcomposer": "Are you sure to cancel composing the message?"
+    "exitcomposer": "Are you sure to cancel composing the message?",
+    "savetodrafts": "Save draft",
+    "savetodraftssuccess": "Draft saved successfully",
+    "savetodraftsfail": "Can't save draft: {{error}}"
 }

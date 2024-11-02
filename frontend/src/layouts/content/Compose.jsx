@@ -29,8 +29,17 @@ function ComposeContent() {
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(true);
   const [inReplyTo, setInReplyTo] = useState(null);
+  const [draftMailbox, setDraftMailbox] = useState(null);
+  const [draftId, setDraftId] = useState(null);
   const attachmentsRef = useRef();
   const email = useSelector((state) => state.auth.email);
+  const hasDraftsMailbox = useSelector((state) =>
+    Boolean(
+      state.mailboxes.mailboxes.find((mailbox) => {
+        return mailbox.type == "drafts";
+      })
+    )
+  );
   const maxAttachmentSize = 26214400;
 
   useEffect(() => {
@@ -65,6 +74,8 @@ function ComposeContent() {
       setAttachments([]);
       setLoading(true);
       setInReplyTo(null);
+      setDraftMailbox(null);
+      setDraftId(null);
 
       let messageData = null;
       let mailboxName = "";
@@ -213,6 +224,8 @@ function ComposeContent() {
               attachmentBlobs.push(preparedBlob);
             }
             setAttachments(attachmentBlobs);
+            setDraftMailbox(mailboxName);
+            setDraftId(messageId);
           } else if (action == "forward") {
             setSubject(t("fwd", { subject: message.subject }));
             const info = `===== ${t("forwardedmessage")} =====\n${t("from", {
@@ -261,9 +274,6 @@ function ComposeContent() {
                 t("replymessage", {
                   date: new Date(message.date),
                   senders: message.from
-                    .filter(
-                      (address) => address.address && address.address != email
-                    )
                     .map((address) =>
                       address.name
                         ? `${address.name} <${address.address}>`
@@ -288,15 +298,11 @@ function ComposeContent() {
               ...(message.replyTo && message.replyTo.length > 0
                 ? message.replyTo
                 : message.from
-              )
-                .filter(
-                  (address) => address.address && address.address != email
-                )
-                .map((address) =>
-                  address.name
-                    ? `${address.name} <${address.address}>`
-                    : address.address
-                ),
+              ).map((address) =>
+                address.name
+                  ? `${address.name} <${address.address}>`
+                  : address.address
+              ),
               ...message.to
                 .filter(
                   (address) => address.address && address.address != email
@@ -404,7 +410,9 @@ function ComposeContent() {
                 subject: subject,
                 content: contents,
                 inReplyTo: inReplyTo,
-                attachments: finalAttachments
+                attachments: finalAttachments,
+                draftMailbox: draftMailbox,
+                draftId: draftId
               };
 
               const res = await fetch("/api/send/send", {
@@ -418,7 +426,9 @@ function ComposeContent() {
               const data = await res.json();
               if (res.status == 200) {
                 toast(t("sendsuccess"));
-                document.location.hash = encodeURI("#mailbox");
+                document.location.hash = encodeURI(
+                  data.sentMailbox ? `#mailbox/${data.sentMailbox}` : "#mailbox"
+                );
               } else {
                 setSending(false);
                 toast(
@@ -816,6 +826,100 @@ function ComposeContent() {
             />
             <span className="align-middle">{t("send")}</span>
           </button>
+          {hasDraftsMailbox ? (
+            <button
+              className="bg-primary text-primary-foreground p-2 mt-2 mr-2 rtl:mr-0 rtl:ml-2 rounded-md hover:bg-primary/75 disabled:bg-primary/50 transition-colors"
+              disabled={
+                attachments.reduce(
+                  (partialSum, attachment) =>
+                    partialSum + (attachment.size || 0),
+                  0
+                ) > maxAttachmentSize || sending
+              }
+              onClick={async (e) => {
+                e.preventDefault();
+
+                const blobToAttachmentEntry = (blob) => {
+                  const reader = new FileReader();
+                  reader.readAsDataURL(blob);
+                  return new Promise((resolve) => {
+                    reader.onloadend = () => {
+                      resolve({
+                        filename: blob.name,
+                        content: reader.result.split(",")[1],
+                        contentType: blob.type
+                      });
+                    };
+                  });
+                };
+
+                setSending(true);
+
+                try {
+                  const finalAttachments = [];
+                  for (let i = 0; i < attachments.length; i++) {
+                    const attachmentToPush = await blobToAttachmentEntry(
+                      attachments[i]
+                    );
+                    finalAttachments.push(attachmentToPush);
+                  }
+
+                  const dataToSend = {
+                    from: email,
+                    to: toValues,
+                    cc: ccValues,
+                    bcc: bccValues,
+                    subject: subject,
+                    content: contents,
+                    inReplyTo: inReplyTo,
+                    attachments: finalAttachments,
+                    draftMailbox: draftMailbox,
+                    draftId: draftId
+                  };
+
+                  const res = await fetch("/api/send/draft", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dataToSend),
+                    credentials: "include"
+                  });
+                  const data = await res.json();
+                  if (res.status == 200) {
+                    toast(t("savetodraftssuccess"));
+                    document.location.hash = encodeURI(
+                      data.draftsMailbox
+                        ? `#mailbox/${data.draftsMailbox}`
+                        : "#mailbox"
+                    );
+                  } else {
+                    setSending(false);
+                    toast(
+                      t("savetodraftsfail", {
+                        error: data.message
+                      })
+                    );
+                  }
+                } catch (err) {
+                  setSending(false);
+                  toast(
+                    t("savetodraftsfail", {
+                      error: err.message
+                    })
+                  );
+                }
+              }}
+            >
+              <File
+                className="inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
+                size={24}
+              />
+              <span className="align-middle">{t("savetodrafts")}</span>
+            </button>
+          ) : (
+            ""
+          )}
         </form>
       </Suspense>
     );

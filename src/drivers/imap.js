@@ -821,6 +821,124 @@ module.exports = function init(email, password, callback) {
             callback(null);
           }
         });
+      },
+      permanentlyDeleteMessages: (messages, callback) => {
+        try {
+          imap.addFlags(messages, ["\\Deleted"], (err) => {
+            if (err) {
+              callback(err);
+            } else {
+              try {
+                imap.expunge((err) => {
+                  if (err) {
+                    callback(err);
+                  } else {
+                    callback(null);
+                  }
+                });
+              } catch (err) {
+                callback(err);
+              }
+            }
+          });
+        } catch (err) {
+          callback(err);
+        }
+      },
+      appendDraft: (messageData, callback) => {
+        imap.getBoxes((err, mailboxes) => {
+          if (err) {
+            callback(err);
+            return;
+          }
+
+          const findDraftsMailbox = (mailboxes) => {
+            return Object.keys(mailboxes).reduce((result, mailboxName) => {
+              const mailbox = mailboxes[mailboxName];
+              if (
+                mailbox.attribs.indexOf("\\NOSELECT") == -1 &&
+                mailbox.attribs.indexOf("\\Drafts") != -1
+              ) {
+                return mailboxName;
+              }
+              if (mailbox.children) {
+                const childResult = findDraftsMailbox(mailbox.children);
+                if (childResult) {
+                  return `${mailboxName}${mailbox.delimiter}${childResult}`;
+                }
+              }
+              return result;
+            }, null);
+          };
+
+          const draftsMailbox = findDraftsMailbox(mailboxes);
+
+          if (!draftsMailbox) {
+            callback(new Error("Drafts mailbox not found"));
+          } else {
+            imap.append(
+              messageData,
+              {
+                mailbox: draftsMailbox,
+                flags: ["Seen", "Draft"]
+              },
+              (err) => {
+                if (err) {
+                  callback(err);
+                } else {
+                  callback(null, draftsMailbox);
+                }
+              }
+            );
+          }
+        });
+      },
+      appendSentMessage: (messageData, callback) => {
+        imap.getBoxes((err, mailboxes) => {
+          if (err) {
+            callback(err);
+            return;
+          }
+          const findSentMailbox = (mailboxes) => {
+            return Object.keys(mailboxes).reduce((result, mailboxName) => {
+              const mailbox = mailboxes[mailboxName];
+              if (
+                mailbox.attribs.indexOf("\\NOSELECT") == -1 &&
+                mailbox.attribs.indexOf("\\Sent") != -1
+              ) {
+                return mailboxName;
+              }
+              if (mailbox.children) {
+                const childResult = findSentMailbox(mailbox.children);
+                if (childResult) {
+                  return `${mailboxName}${mailbox.delimiter}${childResult}`;
+                }
+              }
+              return result;
+            }, null);
+          };
+
+          const sentMailbox = findSentMailbox(mailboxes);
+
+          if (!sentMailbox) {
+            callback(new Error("Sent mailbox not found"));
+          } else {
+            imap.append(
+              messageData,
+              {
+                mailbox: sentMailbox,
+                flags: ["Seen"]
+              },
+              (err) => {
+                if (err) {
+                  callback(err);
+                } else {
+                  callback(null, sentMailbox);
+                }
+              }
+            );
+          }
+        });
       }
     };
     callback(null, receiveObject);
