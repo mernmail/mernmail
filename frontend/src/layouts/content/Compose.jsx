@@ -503,7 +503,7 @@ function ComposeContent() {
             <select
               onChange={(e) => {
                 e.preventDefault();
-                setIdentity(identity);
+                setIdentity(e.target.value);
               }}
               value={identity}
               className="grow px-2 py-1 md:mr-1 rtl:md:mr-0 rtl:md:ml-1 bg-accent text-accent-foreground rounded-md box-border focus:outline-primary focus:outline-2 focus:outline"
