@@ -42,6 +42,7 @@ function App() {
                     message.mailboxType == "spam" ||
                     message.mailboxType == "sent" ||
                     message.mailboxType == "trash" ||
+                    message.mailboxType == "drafts" ||
                     message.mailboxType == "important" ||
                     message.mailboxType == "starred"
                   )
