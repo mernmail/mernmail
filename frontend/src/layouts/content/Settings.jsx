@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import IdentitiesSettings from "@/layouts/settings/Identities.jsx";
 import LanguageSettings from "@/layouts/settings/Language.jsx";
 import MailboxesSettings from "@/layouts/settings/Mailboxes.jsx";
 import NotificationsSettings from "@/layouts/settings/Notifications.jsx";
@@ -20,6 +21,8 @@ function SettingsContent() {
     return <SignatureSettings />;
   } else if (currentCategory == "mailboxes") {
     return <MailboxesSettings />;
+  } else if (currentCategory == "identities") {
+    return <IdentitiesSettings />;
   } else {
     return <WelcomeSettings />;
   }

@@ -112,5 +112,6 @@
     "exitcomposer": "Are you sure to cancel composing the message?",
     "savetodrafts": "Save draft",
     "savetodraftssuccess": "Draft saved successfully",
-    "savetodraftsfail": "Can't save draft: {{error}}"
+    "savetodraftsfail": "Can't save draft: {{error}}",
+    "identities": "Identities"
 }

@@ -112,5 +112,6 @@
     "exitcomposer": "Czy jesteś pewien aby anulować tworzenie wiadomości?",
     "savetodrafts": "Zapisz wersję roboczą",
     "savetodraftssuccess": "Wersja robocza zapisana pomyślnie",
-    "savetodraftsfail": "Nie można zapisać wersji roboczej: {{error}}"
+    "savetodraftsfail": "Nie można zapisać wersji roboczej: {{error}}",
+    "identities": "Tożsamości"
 }

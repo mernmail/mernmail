@@ -1,4 +1,11 @@
-import { Bell, Languages, Mailbox, Palette, Signature } from "lucide-react";
+import {
+  Bell,
+  IdCard,
+  Languages,
+  Mailbox,
+  Palette,
+  Signature
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { hideMenu } from "@/slices/menuSlice.js";
 import { setCurrentCategoryFromURL } from "@/slices/settingsSlice.js";
@@ -33,6 +40,11 @@ function SettingsSidebar() {
       id: "mailboxes",
       name: t("mailboxes"),
       icon: Mailbox
+    },
+    {
+      id: "identities",
+      name: t("identities"),
+      icon: IdCard
     },
     {
       id: "signature",
