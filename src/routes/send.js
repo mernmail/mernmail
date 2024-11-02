@@ -105,7 +105,7 @@ router.post("/draft", (req, res) => {
             return;
           } else {
             res.json({
-              message: "Message sent successfully",
+              message: "Draft saved successfully",
               draftMailbox: draftMailbox
             });
             req.receiveDriver.close();
