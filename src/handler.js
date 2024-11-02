@@ -21,6 +21,7 @@ const loginRoute = require("./routes/login.js");
 const logoutRoute = require("./routes/logout.js");
 const receiveRoute = require("./routes/receive.js");
 const sendRoute = require("./routes/send.js");
+const settingsRoute = require("./routes/settings.js");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
@@ -42,6 +43,7 @@ app.use("/api/logout", logoutRoute);
 app.use("/api/check", checkRoute);
 app.use("/api/send", sendRoute);
 app.use("/api/receive", receiveRoute);
+app.use("/api/settings", settingsRoute);
 app.use("/api", (req, res, next) => {
   if (req.receiveDriver) req.receiveDriver.close();
   next();
