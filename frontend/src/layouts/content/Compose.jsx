@@ -1,13 +1,17 @@
 import { File, Paperclip, Send, X } from "lucide-react";
 import { useState, lazy, Suspense, useEffect, useRef, useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { filesize } from "filesize";
 import isEmail from "validator/lib/isEmail";
 import Loading from "@/components/Loading.jsx";
 import { ToastContext } from "@/contexts/ToastContext.jsx";
 import escapeHTML from "validator/lib/escape";
 import DOMPurify from "dompurify";
+import {
+  resetLoading,
+  prepareSettingsForComposer
+} from "@/slices/settingsSlice.js";
 
 // Lazy load Quill WYSIWYG editor due to its bundled script size
 const ReactQuill = lazy(() => import("@/components/ReactQuill.jsx"));
@@ -31,8 +35,15 @@ function ComposeContent() {
   const [inReplyTo, setInReplyTo] = useState(null);
   const [draftMailbox, setDraftMailbox] = useState(null);
   const [draftId, setDraftId] = useState(null);
+  const [identity, setIdentity] = useState("");
   const attachmentsRef = useRef();
+  const settingsLoading = useSelector((state) => state.settings.loading);
+  const settingsError = useSelector((state) => state.settings.error);
+  const identities = useSelector((state) => state.settings.identities);
+  const signature = useSelector((state) => state.settings.signature);
   const email = useSelector((state) => state.auth.email);
+  const defaultIdentity =
+    identities.find((identity) => identity.default) || email;
   const hasDraftsMailbox = useSelector((state) =>
     Boolean(
       state.mailboxes.mailboxes.find((mailbox) => {
@@ -40,6 +51,7 @@ function ComposeContent() {
       })
     )
   );
+  const dispatch = useDispatch();
   const maxAttachmentSize = 26214400;
 
   useEffect(() => {
@@ -76,6 +88,7 @@ function ComposeContent() {
       setInReplyTo(null);
       setDraftMailbox(null);
       setDraftId(null);
+      setIdentity(defaultIdentity);
 
       let messageData = null;
       let mailboxName = "";
@@ -169,6 +182,19 @@ function ComposeContent() {
           const body = parsedBody.body.innerHTML;
 
           if (action == "draft") {
+            if (
+              message.from &&
+              message.from.length > 0 &&
+              identities.find(
+                (identity) =>
+                  identity.identity ==
+                  (message.from[0].name
+                    ? `${message.from[0].name} <${message.from[0].address}>`
+                    : message.from[0].address)
+              )
+            ) {
+              setIdentity(message.from);
+            }
             setSubject(message.subject);
             setToValues(
               message.to.map((address) =>
@@ -254,7 +280,7 @@ function ComposeContent() {
                 .join(", ")
             })}\n${t("subject", { subject: message.subject })}\n===== ${t("forwardedmessage")} =====`;
             setContents(
-              `<pre>${escapeHTML(info).replace(/\n/g, "<br>")}</pre>${body}`
+              `<br>${DOMPurify.sanitize(signature)}<pre>${escapeHTML(info).replace(/\n/g, "<br>")}</pre>${body}`
             );
           } else if (action == "reply") {
             setSubject(t("re", { subject: message.subject }));
@@ -270,7 +296,7 @@ function ComposeContent() {
             );
             setInReplyTo(message.messageId);
             setContents(
-              `<p>${escapeHTML(
+              `<br>${DOMPurify.sanitize(signature)}<p>${escapeHTML(
                 t("replymessage", {
                   date: new Date(message.date),
                   senders: message.from
@@ -324,7 +350,7 @@ function ComposeContent() {
             ]);
             setInReplyTo(message.messageId);
             setContents(
-              `<p>${escapeHTML(
+              `<br>${DOMPurify.sanitize(signature)}<p>${escapeHTML(
                 t("replymessage", {
                   date: new Date(message.date),
                   senders: message.from
@@ -348,18 +374,37 @@ function ComposeContent() {
             );
           }
         }
+      } else {
+        setContents(`<br>${DOMPurify.sanitize(signature)}`);
       }
       setLoading(false);
     };
 
-    loadComposer();
+    if (!settingsLoading) {
+      loadComposer();
 
-    window.addEventListener("popstate", loadComposer);
+      window.addEventListener("popstate", loadComposer);
+
+      return () => {
+        window.removeEventListener("popstate", loadComposer);
+      };
+    }
+  }, [email, t, settingsLoading, signature]);
+
+  useEffect(() => {
+    const controller =
+      typeof window.AbortController != "undefined"
+        ? new AbortController()
+        : undefined;
+    const signal = controller ? controller.signal : undefined;
+
+    dispatch(resetLoading());
+    dispatch(prepareSettingsForComposer(signal));
 
     return () => {
-      window.removeEventListener("popstate", loadComposer);
+      controller.abort();
     };
-  }, [email, t]);
+  }, [dispatch]);
 
   useEffect(() => {
     document.title = `${t("compose")} - MERNMail`;
@@ -367,6 +412,10 @@ function ComposeContent() {
 
   if (loading) {
     return <Loading />;
+  } else if (settingsError) {
+    return (
+      <p className="text-red-500 block text-center">{t("unexpectederror")}</p>
+    );
   } else {
     return (
       <Suspense fallback={<Loading />}>
@@ -403,7 +452,7 @@ function ComposeContent() {
               }
 
               const dataToSend = {
-                from: email,
+                from: identity,
                 to: toValues,
                 cc: ccValues,
                 bcc: bccValues,
@@ -451,7 +500,22 @@ function ComposeContent() {
             <span className="shrink-0  md:px-2 md:py-1">
               {t("from", { from: "" })}
             </span>
-            <span className="grow md:px-2 md:py-1">{email}</span>
+            <select
+              onChange={(e) => {
+                e.preventDefault();
+                setIdentity(identity);
+              }}
+              value={identity}
+              className="grow px-2 py-1 md:mr-1 rtl:md:mr-0 rtl:md:ml-1 bg-accent text-accent-foreground rounded-md box-border focus:outline-primary focus:outline-2 focus:outline"
+            >
+              {identities.map((identity, index) => {
+                return (
+                  <option key={index} value={identity.identity}>
+                    {identity.identity}
+                  </option>
+                );
+              })}
+            </select>
             <div className="shrink-0">
               {!ccShown ? (
                 <button
@@ -865,7 +929,7 @@ function ComposeContent() {
                   }
 
                   const dataToSend = {
-                    from: email,
+                    from: identity,
                     to: toValues,
                     cc: ccValues,
                     bcc: bccValues,

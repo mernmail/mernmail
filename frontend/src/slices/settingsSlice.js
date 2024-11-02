@@ -96,4 +96,60 @@ export function setSignature(signal) {
   };
 }
 
+export function prepareSettingsForComposer(signal) {
+  return async (dispatch, getState) => {
+    const state = { error: null };
+    let email = getState().auth.email;
+    if (email === null) {
+      return;
+    }
+
+    let aborted = false;
+
+    try {
+      const res = await fetch(`/api/settings/identities`, {
+        method: "GET",
+        credentials: "include",
+        signal: signal
+      });
+      const data = await res.json();
+      if (res.status == 200) {
+        state.identities = data.identities;
+      } else {
+        if (res.status == 401) {
+          dispatch(verificationFailed());
+        }
+        state.error = data.message;
+      }
+    } catch (err) {
+      if (err.name == "AbortError") aborted = true;
+      state.error = err.message;
+    }
+
+    if (aborted) return;
+
+    try {
+      const res = await fetch(`/api/settings/signature`, {
+        method: "GET",
+        credentials: "include",
+        signal: signal
+      });
+      const data = await res.json();
+      if (res.status == 200) {
+        state.signature = data.signature;
+      } else {
+        if (res.status == 401) {
+          dispatch(verificationFailed());
+        }
+        state.error = data.message;
+      }
+    } catch (err) {
+      if (err.name == "AbortError") aborted = true;
+      state.error = err.message;
+    }
+
+    if (!aborted) dispatch(settingsSlice.actions.setSettings(state));
+  };
+}
+
 export default settingsSlice.reducer;
