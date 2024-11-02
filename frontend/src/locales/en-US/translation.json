@@ -119,5 +119,11 @@
     "deleteidentity": "Delete identity",
     "addidentity": "Add identity",
     "reallyremoveidentity": "Do you really want to remove this identity?",
-    "setdefaultidentity": "Set default identity"
+    "setdefaultidentity": "Set default identity",
+    "setdefaultidentitysuccess": "Identity set as default successfully",
+    "setdefaultidentityfail": "Can't set an identity as default: {{error}}",
+    "deleteidentitysuccess": "Identity deleted successfully",
+    "deleteidentityfail": "Can't delete an identity: {{error}}",
+    "addidentitysuccess": "Identity added successfully",
+    "addidentityfail": "Can't add an identity: {{error}}"
 }

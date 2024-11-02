@@ -1,36 +1,62 @@
 import { Star, X, Plus, Check } from "lucide-react";
-import { useEffect, useState /*, useContext*/ } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch /*, useSelector*/ } from "react-redux";
-import { setMailboxes } from "@/slices/mailboxesSlice.js";
-//import { ToastContext } from "@/contexts/ToastContext.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContext } from "@/contexts/ToastContext.jsx";
 import Loading from "@/components/Loading";
-
-const identities = [
-  { id: 0, identity: "John Smith <john.smith@example.com>", default: true },
-  { id: 1, identity: "John Smith <john.smith@example.org>", default: false }
-];
+import { resetLoading, setIdentities } from "@/slices/settingsSlice";
 
 function IdentitiesSettings() {
   const { t } = useTranslation();
-  //const { toast } = useContext(ToastContext);
-  const loading = false; //useSelector((state) => state.identities.loading);
-  const error = false; //useSelector((state) => state.identities.error);
-  //const identities = useSelector((state) => state.identities.identities);
+  const { toast } = useContext(ToastContext);
+  const loading = useSelector((state) => state.settings.loading);
+  const error = useSelector((state) => state.settings.error);
+  const identities = useSelector((state) => state.settings.identities);
   const [actions, setActions] = useState({});
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
+  const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setMailboxes);
+    const controller =
+      typeof window.AbortController != "undefined"
+        ? new AbortController()
+        : undefined;
+    const signal = controller ? controller.signal : undefined;
+
+    dispatch(resetLoading());
+    dispatch(setIdentities(signal));
 
     const interval = setInterval(() => {
-      dispatch(setMailboxes);
+      dispatch(setIdentities(signal));
     }, 10000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      controller.abort();
+    };
   }, [dispatch]);
+
+  useEffect(() => {
+    if (refresh) {
+      if (loading) {
+        const controller =
+          typeof window.AbortController != "undefined"
+            ? new AbortController()
+            : undefined;
+        const signal = controller ? controller.signal : undefined;
+
+        dispatch(setIdentities(signal));
+
+        return () => {
+          if (controller) controller.abort();
+        };
+      } else {
+        setRefresh(false);
+      }
+    }
+  }, [refresh, loading, dispatch]);
 
   useEffect(() => {
     document.title = `${t("identities")} - MERNMail`;
@@ -52,36 +78,39 @@ function IdentitiesSettings() {
           className="w-full text-base"
           onSubmit={async (e) => {
             e.preventDefault();
-            /*try {
-                    const res = await fetch(`/api/receive/mailbox`, {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json"
-                      },
-                      body: JSON.stringify({
-                        name: mailboxName
-                      }),
-                      credentials: "include"
-                    });
-                    const data = await res.json();
-                    if (res.status == 200) {
-                      toast(t("addmailboxsuccess"));
-                      dispatch(setMailboxes);
-                    } else {
-                      toast(
-                        t("addmailboxfail", {
-                          error: data.message
-                        })
-                      );
-                    }
-                  } catch (err) {
-                    toast(
-                      t("addmailboxfail", {
-                        error: err.message
-                      })
-                    );
-                  }
-                  setMailboxName("");*/
+            try {
+              const res = await fetch(`/api/settings/identity`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                  identity: name ? `${name} <${address}>` : address
+                }),
+                credentials: "include"
+              });
+              const data = await res.json();
+              if (res.status == 200) {
+                toast(t("addidentitysuccess"));
+                setActions({});
+                dispatch(resetLoading());
+                setRefresh(true);
+              } else {
+                toast(
+                  t("addidentityfail", {
+                    error: data.message
+                  })
+                );
+              }
+            } catch (err) {
+              toast(
+                t("addidentityfail", {
+                  error: err.message
+                })
+              );
+            }
+            setName("");
+            setAddress("");
           }}
         >
           <div className="flex flex-col md:flex-row mb-2">
@@ -141,9 +170,42 @@ function IdentitiesSettings() {
                 >
                   <div className="flex flex-row w-auto">
                     <button
-                      onClick={(e) => {
+                      onClick={async (e) => {
                         e.preventDefault();
-                        alert(`Toggle default ${id}`);
+                        if (!defaultIdentity) {
+                          try {
+                            const res = await fetch(
+                              `/api/settings/identity/${encodeURI(id)}/default`,
+                              {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({}),
+                                credentials: "include"
+                              }
+                            );
+                            const data = await res.json();
+                            if (res.status == 200) {
+                              toast(t("setdefaultidentitysuccess"));
+                              setActions({});
+                              dispatch(resetLoading());
+                              setRefresh(true);
+                            } else {
+                              toast(
+                                t("setdefaultidentityfail", {
+                                  error: data.message
+                                })
+                              );
+                            }
+                          } catch (err) {
+                            toast(
+                              t("setdefaultidentityfail", {
+                                error: err.message
+                              })
+                            );
+                          }
+                        }
                       }}
                       title={t("setdefaultidentity")}
                       className="shrink-0 inline-block align-middle self-center w-6 h-6 mr-2 rtl:mr-0 rtl:ml-2 rounded-sm hover:bg-accent/60 hover:text-accent-foreground transition-colors"
@@ -178,32 +240,33 @@ function IdentitiesSettings() {
                           <button
                             onClick={async (e) => {
                               e.preventDefault();
-                              /*try {
-                                    const res = await fetch(
-                                      `/api/receive/mailbox/${encodeURI(id)}`,
-                                      {
-                                        method: "DELETE",
-                                        credentials: "include"
-                                      }
-                                    );
-                                    const data = await res.json();
-                                    if (res.status == 200) {
-                                      toast(t("deletemailboxsuccess"));
-                                      dispatch(setMailboxes);
-                                    } else {
-                                      toast(
-                                        t("deletemailboxfail", {
-                                          error: data.message
-                                        })
-                                      );
-                                    }
-                                  } catch (err) {
-                                    toast(
-                                      t("deletemailboxfail", {
-                                        error: err.message
-                                      })
-                                    );
-                                  }*/
+                              try {
+                                const res = await fetch(
+                                  `/api/settings/identity/${encodeURI(id)}`,
+                                  {
+                                    method: "DELETE",
+                                    credentials: "include"
+                                  }
+                                );
+                                const data = await res.json();
+                                if (res.status == 200) {
+                                  toast(t("deleteidentitysuccess"));
+                                  dispatch(resetLoading());
+                                  setRefresh(true);
+                                } else {
+                                  toast(
+                                    t("deleteidentityfail", {
+                                      error: data.message
+                                    })
+                                  );
+                                }
+                              } catch (err) {
+                                toast(
+                                  t("deleteidentityfail", {
+                                    error: err.message
+                                  })
+                                );
+                              }
                               setActions({});
                             }}
                             title={t("deleteidentity")}

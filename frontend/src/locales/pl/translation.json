@@ -119,5 +119,11 @@
     "addidentity": "Dodaj tożsamość",
     "deleteidentity": "Usuń tożsamość",
     "reallyremoveidentity": "Czy naprawdę chcesz usunąć tę tożsamość?",
-    "setdefaultidentity": "Ustaw domyślną tożsamość"
+    "setdefaultidentity": "Ustaw domyślną tożsamość",
+    "setdefaultidentitysuccess": "Ustawiono tożsamość jako domyślną pomyślnie",
+    "setdefaultidentityfail": "Nie można ustawić tożsamości jako domyślnej: {{error}}",
+    "deleteidentitysuccess": "Usunięto tożsamość pomyślnie",
+    "deleteidentityfail": "Nie można usunąć tożsamości: {{error}}",
+    "addidentitysuccess": "Dodano tożsamość pomyślnie",
+    "addidentityfail": "Nie można dodać tożsamości: {{error}}"
 }
