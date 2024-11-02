@@ -312,7 +312,12 @@ module.exports = function init(email, password, callback) {
                           if (data.html) {
                             finalAttributes.body = data.html;
                           } else {
-                            finalAttributes.body = `<!DOCTYPE html><html><head></head><body><pre>${String(data.text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre></body></html>`;
+                            finalAttributes.body = `<!DOCTYPE html><html><head></head><body><pre>${String(
+                              data.text || ""
+                            )
+                              .replace(/&/g, "&amp;")
+                              .replace(/</g, "&lt;")
+                              .replace(/>/g, "&gt;")}</pre></body></html>`;
                           }
                         } else if (data.type === "attachment") {
                           let stringifiedHeaders = null;
