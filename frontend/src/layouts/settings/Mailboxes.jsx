@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { setMailboxes } from "@/slices/mailboxesSlice.js";
 import { ToastContext } from "@/contexts/ToastContext.jsx";
+import Loading from "@/components/Loading";
 
 function MailboxesSettings() {
   const { t } = useTranslation();
@@ -49,7 +50,7 @@ function MailboxesSettings() {
   }, [t]);
 
   if (loading) {
-    return <p className="text-center">{t("loading")}</p>;
+    return <Loading />;
   } else if (error) {
     return (
       <p className="text-red-500 block text-center">{t("unexpectederror")}</p>
