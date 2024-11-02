@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const settingsSlice = createSlice({
-  name: "settings",
+export const settingsPageSlice = createSlice({
+  name: "settingsPage",
   initialState: {
     currentCategory: null
   },
@@ -23,6 +23,6 @@ export const settingsSlice = createSlice({
   }
 });
 
-export const { setCurrentCategoryFromURL } = settingsSlice.actions;
+export const { setCurrentCategoryFromURL } = settingsPageSlice.actions;
 
-export default settingsSlice.reducer;
+export default settingsPageSlice.reducer;

@@ -9,7 +9,7 @@ import WelcomeSettings from "@/layouts/settings/Welcome.jsx";
 
 function SettingsContent() {
   const currentCategory = useSelector(
-    (state) => state.settings.currentCategory
+    (state) => state.settingsPage.currentCategory
   );
   if (currentCategory == "theme") {
     return <ThemeSettings />;

@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { hideMenu } from "@/slices/menuSlice.js";
-import { setCurrentCategoryFromURL } from "@/slices/settingsSlice.js";
+import { setCurrentCategoryFromURL } from "@/slices/settingsPageSlice.js";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 
@@ -16,7 +16,7 @@ function SettingsSidebar() {
   const { t } = useTranslation();
   const view = useSelector((state) => state.view.view);
   const currentCategory = useSelector(
-    (state) => state.settings.currentCategory
+    (state) => state.settingsPage.currentCategory
   );
   const dispatch = useDispatch();
 
