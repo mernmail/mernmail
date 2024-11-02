@@ -104,13 +104,30 @@ router.post("/draft", (req, res) => {
             sendDriver.close();
             return;
           } else {
-            res.json({
-              message: "Draft saved successfully",
-              draftsMailbox: draftsMailbox
-            });
-            req.receiveDriver.close();
-            sendDriver.close();
-            return;
+            const finalResponse = () => {
+              res.json({
+                message: "Message sent successfully",
+                draftsMailbox: draftsMailbox
+              });
+              req.receiveDriver.close();
+              sendDriver.close();
+            };
+            if (req.body.draftMailbox && req.body.draftId) {
+              req.receiveDriver.openMailbox(req.body.draftMailbox, (err) => {
+                if (err) {
+                  finalResponse();
+                  return;
+                }
+                req.receiveDriver.permanentlyDeleteMessages(
+                  [req.body.draftId],
+                  () => {
+                    finalResponse();
+                  }
+                );
+              });
+            } else {
+              finalResponse();
+            }
           }
         });
       });
