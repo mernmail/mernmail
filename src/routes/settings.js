@@ -1,4 +1,5 @@
 const identityModel = require("../models/identity.js");
+const signatureModel = require("../models/signature.js");
 const express = require("express");
 const router = express.Router();
 
@@ -193,6 +194,94 @@ router.delete("/identity/:id", (req, res) => {
           res.status(500).json({ message: err.message });
           req.receiveDriver.close();
         });
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
+    });
+});
+
+router.get("/signature", (req, res) => {
+  signatureModel
+    .findOne({ email: req.credentials.email })
+    .then((result) => {
+      if (!result) {
+        signatureModel
+          .create({
+            email: req.credentials.email,
+            signature: "<br><p>Sent with <b>MERNMail</b></p>"
+          })
+          .then(() => {
+            signatureModel
+              .findOne({ email: req.credentials.email })
+              .then((result) => {
+                res.json({
+                  signature: result.signature
+                });
+                req.receiveDriver.close();
+              })
+              .catch((err) => {
+                res.status(500).json({ message: err.message });
+                req.receiveDriver.close();
+              });
+          })
+          .catch((err) => {
+            res.status(500).json({ message: err.message });
+            req.receiveDriver.close();
+          });
+      } else {
+        res.json({
+          signature: result.signature
+        });
+        req.receiveDriver.close();
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
+    });
+});
+
+router.post("/signature", (req, res) => {
+  if (!req.body || !req.body.signature) {
+    res.status(400).json({ message: "You need to provide an signature" });
+    req.receiveDriver.close();
+    return;
+  }
+  signatureModel
+    .findOne({ email: req.credentials.email })
+    .then((result) => {
+      const finalCallback = () => {
+        res.json({ message: "Signature updated successfully" });
+        req.receiveDriver.close();
+      };
+      if (!result) {
+        signatureModel
+          .create({
+            email: req.credentials.email,
+            identity: req.body.identity
+          })
+          .then(finalCallback)
+          .catch((err) => {
+            res.status(500).json({ message: err.message });
+            req.receiveDriver.close();
+          });
+      } else {
+        signatureModel
+          .updateOne(
+            {
+              email: req.credentials.email
+            },
+            {
+              identity: req.body.identity
+            }
+          )
+          .then(finalCallback)
+          .catch((err) => {
+            res.status(500).json({ message: err.message });
+            req.receiveDriver.close();
+          });
+      }
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });
