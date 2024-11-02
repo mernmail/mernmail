@@ -134,7 +134,14 @@ function EmailSidebar() {
                   href={encodeURI(`#mailbox/${id}`)}
                   onClick={(e) => {
                     e.preventDefault();
-                    if (openable) {
+                    let loseComposerChanges = true;
+                    if (
+                      document.location.hash &&
+                      document.location.hash.match(/^#compose(?=$|\/)/)
+                    ) {
+                      loseComposerChanges = confirm(t("exitcomposer"));
+                    }
+                    if (openable && loseComposerChanges) {
                       dispatch(hideMenu());
                       document.location.hash = encodeURI(`#mailbox/${id}`);
                     }

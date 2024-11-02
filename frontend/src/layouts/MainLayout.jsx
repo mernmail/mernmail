@@ -88,8 +88,17 @@ function LoginLayout() {
                   if (
                     document.location.hash &&
                     !document.location.hash.match(/^#mailbox(?=$|\/)/)
-                  )
-                    document.location.hash = encodeURI("#mailbox");
+                  ) {
+                    let loseComposerChanges = true;
+                    if (
+                      document.location.hash &&
+                      document.location.hash.match(/^#compose(?=$|\/)/)
+                    ) {
+                      loseComposerChanges = confirm(t("exitcomposer"));
+                    }
+                    if (loseComposerChanges)
+                      document.location.hash = encodeURI("#mailbox");
+                  }
                 }}
                 className={`inline-block align-middle ${view == "mailbox" || view == "message" || view == "search" || view == "compose" ? "bg-primary-foreground text-primary" : "text-inherit"} px-1 py-1 w-9 h-8 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors`}
               >
@@ -117,7 +126,15 @@ function LoginLayout() {
           className="grow max-w-md bg-accent text-base rounded-md hidden md:flex flex-row flex-nowrap"
           onSubmit={(e) => {
             e.preventDefault();
-            document.location.hash = encodeURI(`#search/${query}`);
+            let loseComposerChanges = true;
+            if (
+              document.location.hash &&
+              document.location.hash.match(/^#compose(?=$|\/)/)
+            ) {
+              loseComposerChanges = confirm(t("exitcomposer"));
+            }
+            if (loseComposerChanges)
+              document.location.hash = encodeURI(`#search/${query}`);
           }}
         >
           <input
@@ -155,8 +172,17 @@ function LoginLayout() {
               if (
                 document.location.hash &&
                 !document.location.hash.match(/^#settings(?=$|\/)/)
-              )
-                document.location.hash = encodeURI("#settings");
+              ) {
+                let loseComposerChanges = true;
+                if (
+                  document.location.hash &&
+                  document.location.hash.match(/^#compose(?=$|\/)/)
+                ) {
+                  loseComposerChanges = confirm(t("exitcomposer"));
+                }
+                if (loseComposerChanges)
+                  document.location.hash = encodeURI("#settings");
+              }
             }}
             className={`inline-block ${view == "settings" ? "bg-primary-foreground text-primary" : "text-inherit"} w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors`}
           >
@@ -168,7 +194,14 @@ function LoginLayout() {
           <button
             onClick={(e) => {
               e.preventDefault();
-              dispatch(logout);
+              let loseComposerChanges = true;
+              if (
+                document.location.hash &&
+                document.location.hash.match(/^#compose(?=$|\/)/)
+              ) {
+                loseComposerChanges = confirm(t("exitcomposer"));
+              }
+              if (loseComposerChanges) dispatch(logout);
             }}
             className="inline-block bg-inherit text-inherit w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
           >
