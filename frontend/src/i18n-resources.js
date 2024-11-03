@@ -1,10 +1,10 @@
-import enUSLang from "@/locales/en-US/translation.json";
+import enLang from "@/locales/en/translation.json";
 import plLang from "@/locales/pl/translation.json";
 
 const resources = {
-  "en-US": {
-    translation: enUSLang,
-    name: "English (United States)"
+  en: {
+    translation: enLang,
+    name: "English"
   },
   pl: {
     translation: plLang,
