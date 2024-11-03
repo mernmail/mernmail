@@ -79,7 +79,7 @@ function LoginLayout() {
             height={35}
             className="inline mr-2 md:mr-3 rtl:mr-0 rtl:ml-2 rtl:md:ml-3 h-6 md:h-8 w-auto"
           />
-          <ul className="inline list-none">
+          <ul className="inline list-none mr-1.5 rtl:mr-0 rtl:ml-1.5">
             <li className="inline">
               <a
                 href="#mailbox"
