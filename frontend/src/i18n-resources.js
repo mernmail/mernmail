@@ -10,6 +10,8 @@ import plLang from "@/locales/pl/translation.json";
 import ptLang from "@/locales/pt/translation.json";
 import ruLang from "@/locales/ru/translation.json";
 import uaLang from "@/locales/ua/translation.json";
+import zhLang from "@/locales/zh/translation.json";
+import zhCNLang from "@/locales/zh-CN/translation.json";
 
 const resources = {
   bn: {
@@ -59,6 +61,14 @@ const resources = {
   ua: {
     translation: uaLang,
     name: "Українська"
+  },
+  zh: {
+    translation: zhLang,
+    name: "中文（繁體）"
+  },
+  "zh-CN": {
+    translation: zhCNLang,
+    name: "中文（简体）"
   }
 };
 
