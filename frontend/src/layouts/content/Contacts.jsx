@@ -192,72 +192,69 @@ function ContactsContent() {
         </ul>
         {contacts.length > 0 ? (
           <ul className="list-none border-border border-t-2">
-            {contacts
-              .slice()
-              .reverse()
-              .map((contact) => {
-                const title = contact.name || contact.email || t("unknown");
-                const email = contact.email || "";
-                const id = contact.id;
-                return (
-                  <li className="block border-border border-b-2" key={id}>
-                    <div
-                      onClick={() => {
-                        document.location.hash = encodeURI(`#contact/${id}`);
-                      }}
-                      className="block bg-background px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5 text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors cursor-pointer"
-                    >
-                      <div className="flex flex-col md:flex-row">
-                        <div className="shrink-0">
-                          <span
-                            className="inline-block shrink-0"
+            {contacts.map((contact) => {
+              const title = contact.name || contact.email || t("unknown");
+              const email = contact.email || "";
+              const id = contact.id;
+              return (
+                <li className="block border-border border-b-2" key={id}>
+                  <div
+                    onClick={() => {
+                      document.location.hash = encodeURI(`#contact/${id}`);
+                    }}
+                    className="block bg-background px-1 md:pl-0.5 rtl:md:pl-1 rtl:md:pr-0.5 text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors cursor-pointer"
+                  >
+                    <div className="flex flex-col md:flex-row">
+                      <div className="shrink-0">
+                        <span
+                          className="inline-block shrink-0"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          <input
+                            type="checkbox"
                             onClick={(e) => {
                               e.stopPropagation();
                             }}
-                          >
-                            <input
-                              type="checkbox"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                              }}
-                              onChange={() => {
-                                const newSelectedContacts = Object.assign(
-                                  {},
-                                  selectedContacts
-                                );
-                                newSelectedContacts[id] = !selectedContacts[id];
-                                setSelectedContacts(newSelectedContacts);
-                              }}
-                              checked={selectedContacts[id] || false}
-                              className="w-6 h-6 mx-1.5 my-1 inline-block align-middle"
-                              title={t("select")}
-                            />
-                          </span>
-                        </div>
-                        <p className="whitespace-nowrap grow font-bold overflow-hidden text-ellipsis md:self-center px-1">
-                          <a
-                            href={encodeURI(`#contact/${id}`)}
-                            className="block whitespace-nowrap text-ellipsis overflow-hidden"
-                            onClick={(e) => {
-                              e.preventDefault();
+                            onChange={() => {
+                              const newSelectedContacts = Object.assign(
+                                {},
+                                selectedContacts
+                              );
+                              newSelectedContacts[id] = !selectedContacts[id];
+                              setSelectedContacts(newSelectedContacts);
                             }}
-                          >
-                            <User
-                              width={24}
-                              height={24}
-                              className="inline w-6 h-6 mr-2 rtl:mr-0 rtl:ml-2 align-top"
-                            />
-                            {title}
-                          </a>
-                        </p>
-                        <p className="whitespace-nowrap text-muted-foreground md:self-center px-1 overflow-hidden text-ellipsis">
-                          {email}
-                        </p>
+                            checked={selectedContacts[id] || false}
+                            className="w-6 h-6 mx-1.5 my-1 inline-block align-middle"
+                            title={t("select")}
+                          />
+                        </span>
                       </div>
+                      <p className="whitespace-nowrap grow font-bold overflow-hidden text-ellipsis md:self-center px-1">
+                        <a
+                          href={encodeURI(`#contact/${id}`)}
+                          className="block whitespace-nowrap text-ellipsis overflow-hidden"
+                          onClick={(e) => {
+                            e.preventDefault();
+                          }}
+                        >
+                          <User
+                            width={24}
+                            height={24}
+                            className="inline w-6 h-6 mr-2 rtl:mr-0 rtl:ml-2 align-top"
+                          />
+                          {title}
+                        </a>
+                      </p>
+                      <p className="whitespace-nowrap text-muted-foreground md:self-center px-1 overflow-hidden text-ellipsis">
+                        {email}
+                      </p>
                     </div>
-                  </li>
-                );
-              })}
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <p className="text-center">{t("nocontacts")}</p>
