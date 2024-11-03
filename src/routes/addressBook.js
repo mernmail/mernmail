@@ -2,7 +2,7 @@ const contactModel = require("../models/contact.js");
 const express = require("express");
 const router = express.Router();
 const isEmail = require("validator/lib/isEmail");
-const isMobilePhone = require("validator/lib/isMobilePhone");
+const isMobilePhone = require("validator/lib/isMobilePhone").default;
 const isURL = require("validator/lib/isURL");
 
 router.get("/contacts", (req, res) => {
@@ -31,7 +31,8 @@ router.post("/contact", (req, res) => {
   if (
     !req.body ||
     (req.body.email && !isEmail(req.body.email)) ||
-    (req.body.phoneNumber && !isMobilePhone(req.body.phoneNumber)) ||
+    (req.body.phoneNumber &&
+      !isMobilePhone(String(req.body.phoneNumber).replace(/ /g, ""))) ||
     (req.body.website &&
       !isURL(req.body.website, { protocols: ["http", "https"] }))
   ) {
@@ -45,7 +46,7 @@ router.post("/contact", (req, res) => {
       name: req.body.name,
       emailAddress: req.body.email,
       address: req.body.address,
-      phoneNumber: req.body.phoneNumber,
+      phoneNumber: String(req.body.phoneNumber).replace(/ /g, ""),
       website: req.body.website
     })
     .then(() => {
@@ -62,7 +63,8 @@ router.post("/contact/:id", (req, res) => {
   if (
     !req.body ||
     (req.body.email && !isEmail(req.body.email)) ||
-    (req.body.phoneNumber && !isMobilePhone(req.body.phoneNumber)) ||
+    (req.body.phoneNumber &&
+      !isMobilePhone(String(req.body.phoneNumber).replace(/ /g, ""))) ||
     (req.body.website &&
       !isURL(req.body.website, { protocols: ["http", "https"] }))
   ) {
@@ -88,7 +90,7 @@ router.post("/contact/:id", (req, res) => {
             name: req.body.name,
             emailAddress: req.body.email,
             address: req.body.address,
-            phoneNumber: req.body.phoneNumber,
+            phoneNumber: String(req.body.phoneNumber).replace(/ /g, ""),
             website: req.body.website
           }
         )
