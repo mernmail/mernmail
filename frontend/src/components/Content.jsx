@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import ComposeContent from "@/layouts/content/Compose.jsx";
+import ContactContent from "@/layouts/content/Contact.jsx";
 import ContactsContent from "@/layouts/content/Contacts.jsx";
 import MailboxContent from "@/layouts/content/Mailbox.jsx";
 import MessageContent from "@/layouts/content/Message.jsx";
@@ -20,6 +21,8 @@ function Content() {
     return <ComposeContent />;
   } else if (view == "contacts") {
     return <ContactsContent />;
+  } else if (view == "contact") {
+    return <ContactContent />;
   }
 }
 

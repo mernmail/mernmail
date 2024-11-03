@@ -137,5 +137,9 @@
     "deletecontactsuccess": "Contact(s) deleted successfully",
     "deletecontactfail": "Can't delete contact(s): {{error}}",
     "nocontacts": "No contacts",
-    "searchcontacts": "Search contacts..."
+    "searchcontacts": "Search contacts...",
+    "contactnotfound": "Contact not found",
+    "phonenumber": "Phone number: {{number}}",
+    "address": "Address: {{address}}",
+    "editcontact": "Edit contact"
 }
