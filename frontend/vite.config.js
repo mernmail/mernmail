@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [
     react(),
     legacy({
-      targets: ['firefox >= 52', 'chrome >= 55', 'safari >= 11', 'edge >= 12'],
+      targets: ['firefox >= 52', 'chrome >= 49', 'safari >= 11', 'edge >= 12'],
       additionalLegacyPolyfills: ["unfetch/polyfill", "abortcontroller-polyfill/dist/polyfill-patch-fetch"]
     })
   ],

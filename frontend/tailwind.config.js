@@ -7,38 +7,38 @@ export default {
   theme: {
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        border: "hsla(var(--border), 1)",
+        input: "hsla(var(--input), 1)",
+        ring: "hsla(var(--ring), 1)",
+        background: "hsla(var(--background), 1)",
+        foreground: "hsla(var(--foreground), 1)",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "hsla(var(--primary), 1)",
+          foreground: "hsla(var(--primary-foreground), 1)",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "hsla(var(--secondary), 1)",
+          foreground: "hsla(var(--secondary-foreground), 1)",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "hsla(var(--destructive), 1)",
+          foreground: "hsla(var(--destructive-foreground), 1)",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "hsla(var(--muted), 1)",
+          foreground: "hsla(var(--muted-foreground), 1)",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "hsla(var(--accent), 1)",
+          foreground: "hsla(var(--accent-foreground), 1)",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: "hsla(var(--popover), 1)",
+          foreground: "hsla(var(--popover-foreground), 1)",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "hsla(var(--card), 1)",
+          foreground: "hsla(var(--card-foreground), 1)",
         }
       },
       borderRadius: {
