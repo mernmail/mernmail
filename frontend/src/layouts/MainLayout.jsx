@@ -58,7 +58,7 @@ function LoginLayout() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (view == "compose") {
+    if (view == "compose" || view == "editcontact") {
       window.addEventListener("beforeunload", onBeforeUnloadHandler);
     }
 
