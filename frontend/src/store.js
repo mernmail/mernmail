@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "@/slices/authSlice.js";
 import capabilitiesSlice from "@/slices/capabilitiesSlice.js";
+import contactsSlice from "@/slices/contactsSlice.js";
 import mailboxesSlice from "@/slices/mailboxesSlice.js";
 import messageSlice from "@/slices/messageSlice.js";
 import messagesSlice from "@/slices/messagesSlice.js";
@@ -14,6 +15,7 @@ export default configureStore({
   reducer: {
     auth: authSlice,
     capabilities: capabilitiesSlice,
+    contacts: contactsSlice,
     mailboxes: mailboxesSlice,
     message: messageSlice,
     messages: messagesSlice,

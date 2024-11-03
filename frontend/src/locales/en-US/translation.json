@@ -128,5 +128,7 @@
     "addidentityfail": "Can't add an identity: {{error}}",
     "savesignature": "Save signature",
     "savesignaturesuccess": "Signature saved successfully",
-    "savesignaturefail": "Can't save signature: {{error}}"
+    "savesignaturefail": "Can't save signature: {{error}}",
+    "unknown": "Unknown",
+    "newcontact": "New contact"
 }

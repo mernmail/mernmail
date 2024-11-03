@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import AddressBookSidebar from "@/layouts/sidebar/AddressBook.jsx";
 import EmailSidebar from "@/layouts/sidebar/Email.jsx";
 import SettingsSidebar from "@/layouts/sidebar/Settings.jsx";
 
@@ -13,6 +14,8 @@ function Sidebar() {
     return <EmailSidebar />;
   } else if (view == "settings") {
     return <SettingsSidebar />;
+  } else if (view == "contacts" || view == "contact") {
+    return <AddressBookSidebar />;
   }
 }
 

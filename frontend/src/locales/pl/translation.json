@@ -128,5 +128,7 @@
     "addidentityfail": "Nie można dodać tożsamości: {{error}}",
     "savesignature": "Zapisz podpis",
     "savesignaturesuccess": "Podpis zapisano pomyślnie",
-    "savesignaturefail": "Nie można zapisać podpisu: {{error}}"
+    "savesignaturefail": "Nie można zapisać podpisu: {{error}}",
+    "unknown": "Nieznane",
+    "newcontact": "Nowy kontakt"
 }
