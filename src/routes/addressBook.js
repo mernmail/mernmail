@@ -138,4 +138,57 @@ router.delete("/contact/:id", (req, res) => {
     });
 });
 
+router.delete("/contacts", (req, res) => {
+  if (
+    !req.body ||
+    !req.body.contacts ||
+    (!Array.isArray(req.body.contacts) &&
+      typeof req.body.contacts != "string") ||
+    req.body.contacts.length === 0
+  ) {
+    res.status(400).json({ message: "You need to provide contacts to delete" });
+    req.receiveDriver.close();
+    return;
+  }
+  const contactsToDelete =
+    typeof req.body.contacts == "string"
+      ? [req.body.contacts]
+      : [...req.body.contacts];
+  const deleteMany = (callback, _id) => {
+    if (!_id) _id = 0;
+    if (_id >= contactsToDelete.length) {
+      callback();
+      return;
+    }
+    contactModel
+      .findOne({ _id: contactsToDelete[_id], email: req.credentials.email })
+      .then((result) => {
+        if (!result) {
+          deleteMany(callback, _id + 1);
+          return;
+        }
+        contactModel
+          .deleteOne({
+            _id: contactsToDelete[_id],
+            email: req.credentials.email
+          })
+          .then(() => {
+            deleteMany(callback, _id + 1);
+          })
+          .catch((err) => {
+            res.status(500).json({ message: err.message });
+            req.receiveDriver.close();
+          });
+      })
+      .catch((err) => {
+        res.status(500).json({ message: err.message });
+        req.receiveDriver.close();
+      });
+  };
+  deleteMany(() => {
+    res.json({ message: "Contacts deleted successfully" });
+    req.receiveDriver.close();
+  });
+});
+
 module.exports = router;
