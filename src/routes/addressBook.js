@@ -1,4 +1,5 @@
 const contactModel = require("../models/contact.js");
+const MiniSearch = require("minisearch");
 const express = require("express");
 const router = express.Router();
 const isEmail = require("validator/lib/isEmail");
@@ -90,7 +91,9 @@ router.post("/contact/:id", (req, res) => {
             name: req.body.name,
             emailAddress: req.body.email,
             address: req.body.address,
-            phoneNumber: String(req.body.phoneNumber).replace(/[ -()]/g, ""),
+            phoneNumber: req.body.phoneNumber
+              ? String(req.body.phoneNumber).replace(/[ -()]/g, "")
+              : req.body.phoneNumber,
             website: req.body.website
           }
         )
@@ -189,6 +192,42 @@ router.delete("/contacts", (req, res) => {
     res.json({ message: "Contacts deleted successfully" });
     req.receiveDriver.close();
   });
+});
+
+router.get("/search/:query*", (req, res) => {
+  const query = req.params.query + req.params[0];
+  contactModel
+    .find({ email: req.credentials.email })
+    .then((results) => {
+      const contacts = results.map((result) => ({
+        id: result.id,
+        name: result.name,
+        email: result.emailAddress,
+        address: result.address,
+        phoneNumber: result.phoneNumber,
+        website: result.website
+      }));
+      var minisearch = new MiniSearch({
+        fields: ["name", "email", "address", "phoneNumber", "website"],
+        storeFields: [
+          "id",
+          "name",
+          "email",
+          "address",
+          "phoneNumber",
+          "website"
+        ]
+      });
+      minisearch.addAll(contacts);
+      res.json({
+        results: minisearch.search(query)
+      });
+      req.receiveDriver.close();
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+      req.receiveDriver.close();
+    });
 });
 
 module.exports = router;
