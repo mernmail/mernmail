@@ -54,7 +54,7 @@ router.post("/", (req, res) => {
                 });
             } else {
               userModel
-                .replaceOne(
+                .updateOne(
                   { email: req.body.email },
                   {
                     email: req.body.email,
