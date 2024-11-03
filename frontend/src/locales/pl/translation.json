@@ -130,5 +130,12 @@
     "savesignaturesuccess": "Podpis zapisano pomyślnie",
     "savesignaturefail": "Nie można zapisać podpisu: {{error}}",
     "unknown": "Nieznane",
-    "newcontact": "Nowy kontakt"
+    "newcontact": "Nowy kontakt",
+    "contacts": "Kontakty",
+    "1contact": "{{count, number}} kontakt",
+    "numcontacts": "{{count, number}} kontaktów",
+    "deletecontactsuccess": "Kontakty usunięte pomyślnie",
+    "deletecontactfail": "Nie można usunąć kontaktów: {{error}}",
+    "nocontacts": "Brak kontaktów",
+    "searchcontacts": "Wyszukaj kontakty..."
 }

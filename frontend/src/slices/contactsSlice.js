@@ -11,6 +11,11 @@ export const ContactsSlice = createSlice({
     currentContactName: null
   },
   reducers: {
+    resetLoading: (state) => {
+      state.loading = true;
+      state.contacts = [];
+      state.error = null;
+    },
     setContacts: (state, action) => {
       if (state.loading) state.loading = false;
       if (action.payload && action.payload.contacts !== undefined)
@@ -45,7 +50,7 @@ export const ContactsSlice = createSlice({
   }
 });
 
-export const { setCurrentContactFromURL } = ContactsSlice.actions;
+export const { resetLoading, setCurrentContactFromURL } = ContactsSlice.actions;
 
 export async function setContacts(dispatch, getState) {
   const state = { error: null };

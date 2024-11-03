@@ -80,7 +80,7 @@ function EmailSidebar() {
         </a>
         <ul className="mt-4">
           {contacts.map((contact) => {
-            let title = contact.name || contact.email || t("unknown");
+            const title = contact.name || contact.email || t("unknown");
             const id = contact.id;
             return (
               <li key={id}>

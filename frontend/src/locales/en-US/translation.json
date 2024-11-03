@@ -130,5 +130,12 @@
     "savesignaturesuccess": "Signature saved successfully",
     "savesignaturefail": "Can't save signature: {{error}}",
     "unknown": "Unknown",
-    "newcontact": "New contact"
+    "newcontact": "New contact",
+    "contacts": "Contacts",
+    "1contact": "{{count, number}} contact",
+    "numcontacts": "{{count, number}} contacts",
+    "deletecontactsuccess": "Contact(s) deleted successfully",
+    "deletecontactfail": "Can't delete contact(s): {{error}}",
+    "nocontacts": "No contacts",
+    "searchcontacts": "Search contacts..."
 }
