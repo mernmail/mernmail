@@ -6,6 +6,7 @@ import EditContactContent from "@/layouts/content/EditContact.jsx";
 import MailboxContent from "@/layouts/content/Mailbox.jsx";
 import MessageContent from "@/layouts/content/Message.jsx";
 import SearchContent from "@/layouts/content/Search.jsx";
+import SearchContactsContent from "@/layouts/content/SearchContacts.jsx";
 import SettingsContent from "@/layouts/content/Settings.jsx";
 
 function Content() {
@@ -26,6 +27,8 @@ function Content() {
     return <ContactContent />;
   } else if (view == "editcontact") {
     return <EditContactContent />;
+  } else if (view == "searchcontacts") {
+    return <SearchContactsContent />;
   }
 }
 

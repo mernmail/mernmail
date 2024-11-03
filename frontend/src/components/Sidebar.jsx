@@ -14,7 +14,12 @@ function Sidebar() {
     return <EmailSidebar />;
   } else if (view == "settings") {
     return <SettingsSidebar />;
-  } else if (view == "contacts" || view == "contact" || view == "editcontact") {
+  } else if (
+    view == "contacts" ||
+    view == "contact" ||
+    view == "editcontact" ||
+    view == "searchcontacts"
+  ) {
     return <AddressBookSidebar />;
   }
 }

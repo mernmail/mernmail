@@ -117,11 +117,10 @@ function ContactsContent() {
           </li>
           <li className="inline-block mx-0.5">
             <a
-              href="#search"
+              href="#searchcontacts"
               onClick={(e) => {
                 e.preventDefault();
-                // document.location.hash = encodeURI("#search");
-                alert("Search pressed");
+                document.location.hash = encodeURI("#searchcontacts");
               }}
               title={t("searchcontacts")}
               className="inline-block align-middle w-8 h-8 p-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
