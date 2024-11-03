@@ -35,6 +35,8 @@ mongoose.Promise = global.Promise;
 
 const app = express();
 
+app.disable("x-powered-by");
+
 app.use(cookieParser());
 
 app.use("/api", bodyParser.json({ limit: "50mb" }));
