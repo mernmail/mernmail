@@ -5,7 +5,10 @@ const { saveAttachment } = require("../utils/attachments.js");
 
 module.exports = function init(email, password, callback) {
   const imap = new Imap({
-    user: email,
+    user:
+      parseInt(process.env.EMAIL_RECV_DISCARDDOMAIN) > 0
+        ? email.replace(/@.*/g, "")
+        : email,
     password: password,
     host: process.env.EMAIL_RECV_HOST,
     port: process.env.EMAIL_RECV_PORT,

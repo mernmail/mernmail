@@ -19,7 +19,12 @@ module.exports = function init(email, password, callback) {
     .connect()
     .then(() => {
       pop3
-        .command("USER", email)
+        .command(
+          "USER",
+          parseInt(process.env.EMAIL_RECV_DISCARDDOMAIN) > 0
+            ? email.replace(/@.*/g, "")
+            : email
+        )
         .then(() => {
           pop3
             .command("PASS", password)

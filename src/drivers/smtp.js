@@ -8,7 +8,10 @@ module.exports = function init(email, password, callback) {
     port: process.env.EMAIL_SEND_PORT,
     secure: parseInt(process.env.EMAIL_SEND_TLS) > 0,
     auth: {
-      user: email,
+      user:
+        parseInt(process.env.EMAIL_SEND_DISCARDDOMAIN) > 0
+          ? email.replace(/@.*/g, "")
+          : email,
       pass: password
     },
     tls: {
