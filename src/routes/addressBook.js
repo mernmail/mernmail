@@ -47,7 +47,9 @@ router.post("/contact", (req, res) => {
       name: req.body.name,
       emailAddress: req.body.email,
       address: req.body.address,
-      phoneNumber: String(req.body.phoneNumber).replace(/[ -()]/g, ""),
+      phoneNumber: req.body.phoneNumber
+        ? String(req.body.phoneNumber).replace(/[ -()]/g, "")
+        : req.body.phoneNumber,
       website: req.body.website
     })
     .then(() => {
