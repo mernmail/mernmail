@@ -88,43 +88,50 @@ function EmailSidebar() {
           <span className="align-middle">{t("newcontact")}</span>
         </a>
         <ul className="mt-4">
-          {contacts.map((contact) => {
-            const title = contact.name || contact.email || t("unknown");
-            const id = contact.id;
-            return (
-              <li key={id}>
-                <a
-                  href={encodeURI(`#contact/${id}`)}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    let loseContactData = true;
-                    if (
-                      document.location.hash &&
-                      document.location.hash.match(/^#editcontact(?=$|\/)/)
-                    ) {
-                      loseContactData = confirm(t("exiteditcontact"));
-                    }
-                    if (loseContactData) {
-                      dispatch(hideMenu());
-                      document.location.hash = encodeURI(`#contact/${id}`);
-                    }
-                  }}
-                  title={title}
-                  className={`${view == "contact" && currentContact == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block my-1 px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}
-                >
-                  <div className="flex flex-row w-auto">
-                    <User
-                      className="shrink-0 inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
-                      size={24}
-                    />
-                    <span className="grow overflow-hidden text-ellipsis whitespace-nowrap self-center">
-                      {title}
-                    </span>
-                  </div>
-                </a>
-              </li>
-            );
-          })}
+          {contacts
+            .slice()
+            .sort((a, b) => {
+              const aTitle = a.name || a.email || t("unknown");
+              const bTitle = b.name || b.email || t("unknown");
+              return aTitle < bTitle ? -1 : aTitle > bTitle ? 1 : 0;
+            })
+            .map((contact) => {
+              const title = contact.name || contact.email || t("unknown");
+              const id = contact.id;
+              return (
+                <li key={id}>
+                  <a
+                    href={encodeURI(`#contact/${id}`)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      let loseContactData = true;
+                      if (
+                        document.location.hash &&
+                        document.location.hash.match(/^#editcontact(?=$|\/)/)
+                      ) {
+                        loseContactData = confirm(t("exiteditcontact"));
+                      }
+                      if (loseContactData) {
+                        dispatch(hideMenu());
+                        document.location.hash = encodeURI(`#contact/${id}`);
+                      }
+                    }}
+                    title={title}
+                    className={`${view == "contact" && currentContact == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block my-1 px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}
+                  >
+                    <div className="flex flex-row w-auto">
+                      <User
+                        className="shrink-0 inline mr-2 rtl:mr-0 rtl:ml-2 align-top"
+                        size={24}
+                      />
+                      <span className="grow overflow-hidden text-ellipsis whitespace-nowrap self-center">
+                        {title}
+                      </span>
+                    </div>
+                  </a>
+                </li>
+              );
+            })}
         </ul>
       </>
     );
