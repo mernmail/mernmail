@@ -539,7 +539,7 @@ function ComposeContent() {
                   },
                   body: JSON.stringify({
                     name: identityValues[i].name,
-                    email: identityValues[i].email
+                    email: identityValues[i].address
                   }),
                   credentials: "include"
                 });
