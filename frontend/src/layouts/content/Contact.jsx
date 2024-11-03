@@ -154,12 +154,14 @@ function ContactContent() {
             <span className="shrink-0 md:px-2 md:py-1 self-top">
               {t("emailaddress2", { address: "" })}
             </span>
-            <a
-              href={`#compose/to/${encodeURI(currentContact.email)}`}
-              className="grow md:px-2 md:py-1 self-top text-primary underline"
-            >
-              {currentContact.email}
-            </a>
+            <span className="grow md:px-2 md:py-1 self-top">
+              <a
+                href={`#compose/to/${encodeURI(currentContact.email)}`}
+                className="text-primary underline"
+              >
+                {currentContact.email}
+              </a>
+            </span>
           </div>
         ) : (
           ""
@@ -169,12 +171,14 @@ function ContactContent() {
             <span className="shrink-0 md:px-2 md:py-1 self-top">
               {t("phonenumber", { number: "" })}
             </span>
-            <a
-              href={`tel:${encodeURI(currentContact.phoneNumber)}`}
-              className="grow md:px-2 md:py-1 self-top text-primary underline"
-            >
-              {currentContact.phoneNumber}
-            </a>
+            <span className="grow md:px-2 md:py-1 self-top">
+              <a
+                href={`tel:${encodeURI(currentContact.phoneNumber)}`}
+                className="text-primary underline"
+              >
+                {currentContact.phoneNumber}
+              </a>
+            </span>
           </div>
         ) : (
           ""
@@ -184,12 +188,14 @@ function ContactContent() {
             <span className="shrink-0 md:px-2 md:py-1 self-top">
               {t("website", { url: "" })}
             </span>
-            <a
-              href={currentContact.website}
-              className="grow md:px-2 md:py-1 self-top text-primary underline"
-            >
-              {currentContact.website}
-            </a>
+            <span className="grow md:px-2 md:py-1 self-top">
+              <a
+                href={currentContact.website}
+                className="text-primary underline"
+              >
+                {currentContact.website}
+              </a>
+            </span>
           </div>
         ) : (
           ""
