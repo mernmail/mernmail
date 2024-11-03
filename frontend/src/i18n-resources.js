@@ -13,6 +13,7 @@ import koLang from "@/locales/ko/translation.json";
 import plLang from "@/locales/pl/translation.json";
 import ptLang from "@/locales/pt/translation.json";
 import ruLang from "@/locales/ru/translation.json";
+import trLang from "@/locales/tr/translation.json";
 import uaLang from "@/locales/ua/translation.json";
 import urLang from "@/locales/ur/translation.json";
 import viLang from "@/locales/vi/translation.json";
@@ -79,6 +80,10 @@ const resources = {
   ru: {
     translation: ruLang,
     name: "Русский"
+  },
+  tr: {
+    translation: trLang,
+    name: "Türkçe"
   },
   ua: {
     translation: uaLang,
