@@ -73,7 +73,7 @@ function ComposeContent() {
 
     const loadComposer = async () => {
       // Reset all variables
-      setContents("");
+      setContents(`<br>${DOMPurify.sanitize(signature)}`);
       setToField("");
       setToValues([]);
       setCcShown(false);
@@ -375,7 +375,22 @@ function ComposeContent() {
           }
         }
       } else {
-        setContents(`<br>${DOMPurify.sanitize(signature)}`);
+        let toEmailAddress = "";
+        try {
+          const toMatch = decodeURI(document.location.hash).match(
+            /^#compose\/(to)\/(.+)/
+          );
+          if (toMatch) {
+            action = toMatch[1];
+            toEmailAddress = toMatch[2];
+          }
+          //eslint-disable-next-line no-unused-vars
+        } catch (err) {
+          // Hash URL parse error, invalid URL
+        }
+        if (action == "to" && toEmailAddress && isEmail(toEmailAddress)) {
+          setToValues([toEmailAddress]);
+        }
       }
       setLoading(false);
     };
