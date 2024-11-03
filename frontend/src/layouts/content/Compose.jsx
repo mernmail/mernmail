@@ -1,5 +1,13 @@
 import { File, Paperclip, Send, X } from "lucide-react";
-import { useState, lazy, Suspense, useEffect, useRef, useContext } from "react";
+import {
+  useState,
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+  useContext,
+  useCallback
+} from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { filesize } from "filesize";
@@ -9,9 +17,13 @@ import { ToastContext } from "@/contexts/ToastContext.jsx";
 import escapeHTML from "validator/lib/escape";
 import DOMPurify from "dompurify";
 import {
-  resetLoading,
+  resetLoading as resetSettingsLoading,
   prepareSettingsForComposer
 } from "@/slices/settingsSlice.js";
+import {
+  resetLoading as resetContactsLoading,
+  setContacts
+} from "@/slices/contactsSlice.js";
 
 // Lazy load Quill WYSIWYG editor due to its bundled script size
 const ReactQuill = lazy(() => import("@/components/ReactQuill.jsx"));
@@ -41,6 +53,9 @@ function ComposeContent() {
   const settingsError = useSelector((state) => state.settings.error);
   const identities = useSelector((state) => state.settings.identities);
   const signature = useSelector((state) => state.settings.signature);
+  const contactsLoading = useSelector((state) => state.contacts.loading);
+  const contactsError = useSelector((state) => state.contacts.error);
+  const contacts = useSelector((state) => state.contacts.contacts);
   const email = useSelector((state) => state.auth.email);
   const defaultIdentity =
     identities.find((identity) => identity.default) || email;
@@ -53,6 +68,11 @@ function ComposeContent() {
   );
   const dispatch = useDispatch();
   const maxAttachmentSize = 26214400;
+
+  const getContactByEmail = useCallback(
+    (inputEmail) => contacts.find((contact) => contact.email == inputEmail),
+    [contacts]
+  );
 
   useEffect(() => {
     const controller =
@@ -389,13 +409,18 @@ function ComposeContent() {
           // Hash URL parse error, invalid URL
         }
         if (action == "to" && toEmailAddress && isEmail(toEmailAddress)) {
-          setToValues([toEmailAddress]);
+          const contact = getContactByEmail(toEmailAddress);
+          setToValues([
+            contact && contact.name
+              ? `${contact.name} <${toEmailAddress}>`
+              : toEmailAddress
+          ]);
         }
       }
       setLoading(false);
     };
 
-    if (!settingsLoading) {
+    if (!settingsLoading && !contactsLoading) {
       loadComposer();
 
       window.addEventListener("popstate", loadComposer);
@@ -404,7 +429,14 @@ function ComposeContent() {
         window.removeEventListener("popstate", loadComposer);
       };
     }
-  }, [email, t, settingsLoading, signature]);
+  }, [
+    email,
+    t,
+    settingsLoading,
+    contactsLoading,
+    signature,
+    getContactByEmail
+  ]);
 
   useEffect(() => {
     const controller =
@@ -413,7 +445,7 @@ function ComposeContent() {
         : undefined;
     const signal = controller ? controller.signal : undefined;
 
-    dispatch(resetLoading());
+    dispatch(resetSettingsLoading());
     dispatch(prepareSettingsForComposer(signal));
 
     return () => {
@@ -422,12 +454,17 @@ function ComposeContent() {
   }, [dispatch]);
 
   useEffect(() => {
+    dispatch(resetContactsLoading());
+    dispatch(setContacts);
+  }, [dispatch]);
+
+  useEffect(() => {
     document.title = `${t("compose")} - MERNMail`;
   }, [t]);
 
   if (loading) {
     return <Loading />;
-  } else if (settingsError) {
+  } else if (settingsError || contactsError) {
     return (
       <p className="text-red-500 block text-center">{t("unexpectederror")}</p>
     );
@@ -456,6 +493,59 @@ function ComposeContent() {
             };
 
             setSending(true);
+
+            try {
+              const getUniqueIdentityValuesArray = (arr) => {
+                let result = [];
+                for (let i = 0; i < arr.length; i++)
+                  if (
+                    !result.find((r) => r.address == arr[i].address) &&
+                    arr[i] !== ""
+                  )
+                    result.push(arr[i]);
+                return result;
+              };
+
+              const identityValues = getUniqueIdentityValuesArray(
+                [...toValues, ...ccValues, ...bccValues]
+                  .map((addressValue) => {
+                    const extIdentityMatch =
+                      addressValue.match(/([^<]+)<([^<>]+)>$/);
+                    if (extIdentityMatch) {
+                      return {
+                        name: extIdentityMatch[0]
+                          .replace(/^ +/, "")
+                          .replace(/ +$/, ""),
+                        address: extIdentityMatch[1]
+                      };
+                    } else {
+                      return { name: addressValue, address: addressValue };
+                    }
+                  })
+                  .filter(
+                    (identity) =>
+                      isEmail(identity.address) &&
+                      !getContactByEmail(identity.address)
+                  )
+              );
+
+              for (let i = 0; i < identityValues.length; i++) {
+                await fetch("/api/addressbook/contact", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({
+                    name: identityValues[i].name,
+                    email: identityValues[i].email
+                  }),
+                  credentials: "include"
+                });
+              }
+              // eslint-disable-next-line no-unused-vars
+            } catch (err) {
+              // Can't save to the address book, continuing anyway...
+            }
 
             try {
               const finalAttachments = [];
@@ -575,7 +665,13 @@ function ComposeContent() {
                   if (e.key == "Enter" || e.key == "," || e.key == " ") {
                     e.preventDefault();
                     if (isEmail(toField)) {
-                      setToValues([...toValues, toField]);
+                      const contact = getContactByEmail(toField);
+                      setToValues([
+                        ...toValues,
+                        contact && contact.name
+                          ? `${contact.name} <${toField}>`
+                          : toField
+                      ]);
                       setToField("");
                     }
                   } else if (e.key == "Backspace" && toField == "") {
@@ -587,7 +683,13 @@ function ComposeContent() {
                 }}
                 onBlur={() => {
                   if (isEmail(toField)) {
-                    setToValues([...toValues, toField]);
+                    const contact = getContactByEmail(toField);
+                    setToValues([
+                      ...toValues,
+                      contact && contact.name
+                        ? `${contact.name} <${toField}>`
+                        : toField
+                    ]);
                     setToField("");
                   }
                 }}
@@ -637,7 +739,13 @@ function ComposeContent() {
                     if (e.key == "Enter" || e.key == "," || e.key == " ") {
                       e.preventDefault();
                       if (isEmail(ccField)) {
-                        setCcValues([...ccValues, ccField]);
+                        const contact = getContactByEmail(ccField);
+                        setCcValues([
+                          ...toValues,
+                          contact && contact.name
+                            ? `${contact.name} <${ccField}>`
+                            : ccField
+                        ]);
                         setCcField("");
                       }
                     } else if (e.key == "Backspace" && ccField == "") {
@@ -649,7 +757,13 @@ function ComposeContent() {
                   }}
                   onBlur={() => {
                     if (isEmail(ccField)) {
-                      setCcValues([...ccValues, ccField]);
+                      const contact = getContactByEmail(ccField);
+                      setCcValues([
+                        ...toValues,
+                        contact && contact.name
+                          ? `${contact.name} <${ccField}>`
+                          : ccField
+                      ]);
                       setCcField("");
                     }
                   }}
@@ -702,7 +816,13 @@ function ComposeContent() {
                     if (e.key == "Enter" || e.key == "," || e.key == " ") {
                       e.preventDefault();
                       if (isEmail(bccField)) {
-                        setBccValues([...bccValues, bccField]);
+                        const contact = getContactByEmail(bccField);
+                        setBccValues([
+                          ...toValues,
+                          contact && contact.name
+                            ? `${contact.name} <${bccField}>`
+                            : bccField
+                        ]);
                         setBccField("");
                       }
                     } else if (e.key == "Backspace" && bccField == "") {
@@ -714,7 +834,13 @@ function ComposeContent() {
                   }}
                   onBlur={() => {
                     if (isEmail(bccField)) {
-                      setBccValues([...bccValues, bccField]);
+                      const contact = getContactByEmail(bccField);
+                      setBccValues([
+                        ...toValues,
+                        contact && contact.name
+                          ? `${contact.name} <${bccField}>`
+                          : bccField
+                      ]);
                       setBccField("");
                     }
                   }}
