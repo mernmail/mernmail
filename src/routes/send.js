@@ -40,12 +40,72 @@ router.post("/send", (req, res) => {
                 messageBody,
                 (err, sentMailbox) => {
                   const finalResponse = () => {
-                    res.json({
-                      message: "Message sent successfully",
-                      sentMailbox: sentMailbox
-                    });
-                    req.receiveDriver.close();
-                    sendDriver.close();
+                    const finalResponse2 = () => {
+                      res.json({
+                        message: "Message sent successfully",
+                        sentMailbox: sentMailbox
+                      });
+                      req.receiveDriver.close();
+                      sendDriver.close();
+                    };
+                    if (req.body.inReplyTo) {
+                      req.receiveDriver.getMailboxes((err, mailboxes) => {
+                        if (err) {
+                          finalResponse2();
+                          return;
+                        }
+                        const mailboxesToOpen = mailboxes.filter(
+                          (mailbox) => mailbox.openable
+                        );
+                        const findOriginalMessage = (_id) => {
+                          if (!_id) _id = 0;
+                          if (_id >= mailboxesToOpen.length) {
+                            finalResponse2();
+                            return;
+                          }
+                          req.receiveDriver.openMailbox(
+                            mailboxesToOpen[_id].id,
+                            (err) => {
+                              if (err) {
+                                finalResponse2();
+                                return;
+                              }
+                              req.receiveDriver.getRealAllMessages(
+                                (err, messages) => {
+                                  if (err) {
+                                    finalResponse2();
+                                    return;
+                                  }
+                                  const foundMessage = messages.find(
+                                    (message) =>
+                                      message.messageId == req.body.inReplyTo
+                                  );
+                                  if (foundMessage) {
+                                    req.receiveDriver.markMessagesAsAnswered(
+                                      [foundMessage.id],
+                                      () => {
+                                        finalResponse2();
+                                      }
+                                    );
+                                  } else {
+                                    req.receiveDriver.closeMailbox((err) => {
+                                      if (err) {
+                                        finalResponse2();
+                                        return;
+                                      }
+                                      findOriginalMessage(_id + 1);
+                                    });
+                                  }
+                                }
+                              );
+                            }
+                          );
+                        };
+                        findOriginalMessage();
+                      });
+                    } else {
+                      finalResponse2();
+                    }
                   };
                   if (req.body.draftMailbox && req.body.draftId) {
                     req.receiveDriver.openMailbox(
@@ -58,7 +118,9 @@ router.post("/send", (req, res) => {
                         req.receiveDriver.permanentlyDeleteMessages(
                           [req.body.draftId],
                           () => {
-                            finalResponse();
+                            req.receiveDriver.closeMailbox(() => {
+                              finalResponse();
+                            });
                           }
                         );
                       }

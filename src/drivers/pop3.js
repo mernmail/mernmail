@@ -563,6 +563,9 @@ module.exports = function init(email, password, callback) {
                   callback(
                     new Error("POP3 doesn't support multiple mailboxes.")
                   );
+                },
+                markMessagesAsAnswered: (messages, callback) => {
+                  callback(new Error("POP3 doesn't support answered flags"));
                 }
               };
               callback(null, receiveObject);

@@ -947,6 +947,15 @@ module.exports = function init(email, password, callback) {
             );
           }
         });
+      },
+      markMessagesAsAnswered: (messages, callback) => {
+        imap.addFlags(messages, ["\\Answered"], (err) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null);
+          }
+        });
       }
     };
     callback(null, receiveObject);
