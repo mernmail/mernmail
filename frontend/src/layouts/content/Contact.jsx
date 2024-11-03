@@ -179,6 +179,21 @@ function ContactContent() {
         ) : (
           ""
         )}
+        {currentContact.website ? (
+          <div className="flex flex-col md:flex-row">
+            <span className="shrink-0 md:px-2 md:py-1 self-top">
+              {t("website", { url: "" })}
+            </span>
+            <a
+              href={currentContact.website}
+              className="grow md:px-2 md:py-1 self-top text-primary underline"
+            >
+              {currentContact.website}
+            </a>
+          </div>
+        ) : (
+          ""
+        )}
         {currentContact.address ? (
           <div className="flex flex-col md:flex-row">
             <span className="shrink-0 md:px-2 md:py-1 self-top">

@@ -96,7 +96,14 @@ function LoginLayout() {
                     ) {
                       loseComposerChanges = confirm(t("exitcomposer"));
                     }
-                    if (loseComposerChanges)
+                    let loseContactData = true;
+                    if (
+                      document.location.hash &&
+                      document.location.hash.match(/^#editcontact(?=$|\/)/)
+                    ) {
+                      loseContactData = confirm(t("exiteditcontact"));
+                    }
+                    if (loseComposerChanges && loseContactData)
                       document.location.hash = encodeURI("#mailbox");
                   }
                 }}
@@ -123,11 +130,18 @@ function LoginLayout() {
                     ) {
                       loseComposerChanges = confirm(t("exitcomposer"));
                     }
-                    if (loseComposerChanges)
+                    let loseContactData = true;
+                    if (
+                      document.location.hash &&
+                      document.location.hash.match(/^#editcontact(?=$|\/)/)
+                    ) {
+                      loseContactData = confirm(t("exiteditcontact"));
+                    }
+                    if (loseComposerChanges && loseContactData)
                       document.location.hash = encodeURI("#contacts");
                   }
                 }}
-                className={`inline-block align-middle ${view == "contacts" || view == "contact" ? "bg-primary-foreground text-primary" : "text-inherit"} px-1 py-1 w-9 h-8 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors`}
+                className={`inline-block align-middle ${view == "contacts" || view == "contact" || view == "editcontact" ? "bg-primary-foreground text-primary" : "text-inherit"} px-1 py-1 w-9 h-8 mx-0.5 rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors`}
               >
                 <BookUser className="inline-block w-full align-top">
                   <title>{t("addressbook")}</title>
@@ -147,7 +161,14 @@ function LoginLayout() {
             ) {
               loseComposerChanges = confirm(t("exitcomposer"));
             }
-            if (loseComposerChanges)
+            let loseContactData = true;
+            if (
+              document.location.hash &&
+              document.location.hash.match(/^#editcontact(?=$|\/)/)
+            ) {
+              loseContactData = confirm(t("exiteditcontact"));
+            }
+            if (loseComposerChanges && loseContactData)
               document.location.hash = encodeURI(`#search/${query}`);
           }}
         >
@@ -194,7 +215,14 @@ function LoginLayout() {
                 ) {
                   loseComposerChanges = confirm(t("exitcomposer"));
                 }
-                if (loseComposerChanges)
+                let loseContactData = true;
+                if (
+                  document.location.hash &&
+                  document.location.hash.match(/^#editcontact(?=$|\/)/)
+                ) {
+                  loseContactData = confirm(t("exiteditcontact"));
+                }
+                if (loseComposerChanges && loseContactData)
                   document.location.hash = encodeURI("#settings");
               }
             }}
@@ -215,7 +243,14 @@ function LoginLayout() {
               ) {
                 loseComposerChanges = confirm(t("exitcomposer"));
               }
-              if (loseComposerChanges) dispatch(logout);
+              let loseContactData = true;
+              if (
+                document.location.hash &&
+                document.location.hash.match(/^#editcontact(?=$|\/)/)
+              ) {
+                loseContactData = confirm(t("exiteditcontact"));
+              }
+              if (loseComposerChanges && loseContactData) dispatch(logout);
             }}
             className="inline-block bg-inherit text-inherit w-8 h-8 py-1 mx-0.5 align-middle rounded-sm hover:bg-primary-foreground/30 hover:text-primary-foreground transition-colors"
           >

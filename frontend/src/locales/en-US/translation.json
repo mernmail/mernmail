@@ -141,5 +141,11 @@
     "contactnotfound": "Contact not found",
     "phonenumber": "Phone number: {{number}}",
     "address": "Address: {{address}}",
-    "editcontact": "Edit contact"
+    "website": "Website: {{url}}",
+    "editcontact": "Edit contact",
+    "exiteditcontact": "Are you sure to cancel creating/editing a contact?",
+    "newcontactsuccess": "Contact created successfully",
+    "newcontactfail": "Can't create a contact: {{error}}",
+    "editcontactsuccess": "Contact edited successfully",
+    "editcontactfail": "Can't edit a contact: {{error}}"
 }

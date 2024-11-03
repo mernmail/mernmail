@@ -9,12 +9,21 @@ function ContactsActionButton() {
       href="#"
       onClick={(e) => {
         e.preventDefault();
-        /*if (
+        if (
           document.location.hash &&
-          !document.location.hash.match(/^#compose(?=$|\/)/)
-        )
-          document.location.hash = encodeURI(`#compose`);*/
-        alert("New contact pressed");
+          !document.location.hash.match(/^#editcontact$/)
+        ) {
+          let loseContactData = true;
+          if (
+            document.location.hash &&
+            document.location.hash.match(/^#editcontact\//)
+          ) {
+            loseContactData = confirm(t("exiteditcontact"));
+          }
+          if (loseContactData) {
+            document.location.hash = encodeURI(`#editcontact`);
+          }
+        }
       }}
       className="inline-block fixed z-10 md:hidden bottom-5 right-5 rtl:right-auto rtl:left-5 bg-primary text-primary-foreground p-4 mt-2 rounded-full hover:bg-primary/75 transition-colors"
     >

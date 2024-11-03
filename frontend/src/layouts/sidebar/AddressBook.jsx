@@ -62,13 +62,22 @@ function EmailSidebar() {
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            dispatch(hideMenu());
-            /*if (
+            if (
               document.location.hash &&
-              !document.location.hash.match(/^#compose(?=$|\/)/)
-            )
-              document.location.hash = encodeURI(`#compose`);*/
-            alert("New contact pressed");
+              !document.location.hash.match(/^#editcontact$/)
+            ) {
+              let loseContactData = true;
+              if (
+                document.location.hash &&
+                document.location.hash.match(/^#editcontact\//)
+              ) {
+                loseContactData = confirm(t("exiteditcontact"));
+              }
+              if (loseContactData) {
+                dispatch(hideMenu());
+                document.location.hash = encodeURI(`#editcontact`);
+              }
+            }
           }}
           className="inline-block text-center w-full bg-primary text-primary-foreground p-2 mt-2 rounded-md hover:bg-primary/75 transition-colors"
         >
@@ -88,8 +97,17 @@ function EmailSidebar() {
                   href={encodeURI(`#contact/${id}`)}
                   onClick={(e) => {
                     e.preventDefault();
-                    dispatch(hideMenu());
-                    document.location.hash = encodeURI(`#contact/${id}`);
+                    let loseContactData = true;
+                    if (
+                      document.location.hash &&
+                      document.location.hash.match(/^#editcontact(?=$|\/)/)
+                    ) {
+                      loseContactData = confirm(t("exiteditcontact"));
+                    }
+                    if (loseContactData) {
+                      dispatch(hideMenu());
+                      document.location.hash = encodeURI(`#contact/${id}`);
+                    }
                   }}
                   title={title}
                   className={`${view == "contact" && currentContact == id ? "bg-accent text-accent-foregound" : "bg-background text-foreground"} block my-1 px-2 py-1 rounded-md hover:bg-accent/60 hover:text-accent-foreground transition-colors`}
