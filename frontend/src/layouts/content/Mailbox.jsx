@@ -48,6 +48,16 @@ function EmailContent() {
   const mailboxType = useSelector(
     (state) => state.mailboxes.currentMailboxType
   );
+  const newMessages = useSelector((state) => {
+    const currentMailboxObject = state.mailboxes.mailboxes.find(
+      (mailbox) => mailbox.id == state.mailboxes.currentMailbox
+    );
+    if (currentMailboxObject) {
+      return currentMailboxObject.new || 0;
+    } else {
+      return 0;
+    }
+  });
   const messages = useSelector((state) => state.messages.messages);
   const loading = useSelector((state) => state.messages.loading);
   const error = useSelector((state) => state.messages.error);
@@ -141,9 +151,10 @@ function EmailContent() {
   }, [refresh, loading, dispatch]);
 
   useEffect(() => {
-    if (!mailboxesLoading) document.title = `${title} - MERNMail`;
+    if (!mailboxesLoading)
+      document.title = `${newMessages > 0 ? "(" + newMessages + ") " : ""}${title} - MERNMail`;
     else document.title = "MERNMail";
-  }, [title, mailboxesLoading]);
+  }, [title, mailboxesLoading, newMessages]);
 
   useEffect(() => {
     setSelectedAll(
