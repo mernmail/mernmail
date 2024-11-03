@@ -46,7 +46,6 @@ function EditContactContent() {
       setPhoneNumber("");
       setWebsite("");
       setAddress("");
-      setLoading(true);
       setContactId(null);
 
       let contactData = {};
@@ -80,15 +79,17 @@ function EditContactContent() {
     };
 
     if (!contactsLoading) {
-      loadEditContact();
+      if (loading) loadEditContact();
 
       window.addEventListener("popstate", loadEditContact);
 
       return () => {
         window.removeEventListener("popstate", loadEditContact);
       };
+    } else {
+      setLoading(true);
     }
-  }, [t, contacts, contactsLoading]);
+  }, [t, contacts, contactsLoading, loading]);
 
   useEffect(() => {
     document.title = `${t(contactId ? "editcontact" : "newcontact")} - MERNMail`;
