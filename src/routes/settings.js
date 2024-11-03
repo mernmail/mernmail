@@ -177,15 +177,10 @@ router.delete("/identity/:id", (req, res) => {
         return;
       }
       identityModel
-        .deleteOne(
-          {
-            _id: req.params.id,
-            email: req.credentials.email
-          },
-          {
-            identity: req.body.identity
-          }
-        )
+        .deleteOne({
+          _id: req.params.id,
+          email: req.credentials.email
+        })
         .then(() => {
           res.json({ message: "Identity deleted successfully" });
           req.receiveDriver.close();
