@@ -11,8 +11,7 @@ router.get("/contacts", (req, res) => {
       res.json({
         contacts: results.map((result) => ({
           id: result.id,
-          firstName: result.firstName,
-          surname: result.surname,
+          name: result.name,
           email: result.emailAddress,
           address: result.address,
           phoneNumber: result.phoneNumber
@@ -39,8 +38,7 @@ router.post("/contact", (req, res) => {
   contactModel
     .create({
       email: req.credentials.email,
-      firstName: req.body.firstName,
-      surname: req.body.surname,
+      name: req.body.name,
       emailAddress: req.body.email,
       address: req.body.address,
       phoneNumber: req.body.phoneNumber
@@ -80,8 +78,7 @@ router.post("/contact/:id", (req, res) => {
             email: req.credentials.email
           },
           {
-            firstName: req.body.firstName,
-            surname: req.body.surname,
+            name: req.body.name,
             emailAddress: req.body.email,
             address: req.body.address,
             phoneNumber: req.body.phoneNumber
