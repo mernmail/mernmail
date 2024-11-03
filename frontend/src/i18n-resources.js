@@ -1,5 +1,6 @@
 import arLang from "@/locales/ar/translation.json";
 import bnLang from "@/locales/bn/translation.json";
+import csLang from "@/locales/cs/translation.json";
 import deLang from "@/locales/de/translation.json";
 import elLang from "@/locales/el/translation.json";
 import enLang from "@/locales/en/translation.json";
@@ -13,6 +14,7 @@ import koLang from "@/locales/ko/translation.json";
 import plLang from "@/locales/pl/translation.json";
 import ptLang from "@/locales/pt/translation.json";
 import ruLang from "@/locales/ru/translation.json";
+import svLang from "@/locales/sv/translation.json";
 import trLang from "@/locales/tr/translation.json";
 import uaLang from "@/locales/ua/translation.json";
 import urLang from "@/locales/ur/translation.json";
@@ -28,6 +30,10 @@ const resources = {
   bn: {
     translation: bnLang,
     name: "বাংলা"
+  },
+  cs: {
+    translation: csLang,
+    name: "Čeština"
   },
   de: {
     translation: deLang,
@@ -80,6 +86,10 @@ const resources = {
   ru: {
     translation: ruLang,
     name: "Русский"
+  },
+  sv: {
+    translation: svLang,
+    name: "Svenska"
   },
   tr: {
     translation: trLang,
