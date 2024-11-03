@@ -16,6 +16,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const serveStatic = require("serve-static");
 const authAndInitReceiveMiddleware = require("./middleware/authAndInitReceive.js");
+const addressBookRoute = require("./routes/addressBook.js");
 const checkRoute = require("./routes/check.js");
 const loginRoute = require("./routes/login.js");
 const logoutRoute = require("./routes/logout.js");
@@ -44,6 +45,7 @@ app.use("/api/check", checkRoute);
 app.use("/api/send", sendRoute);
 app.use("/api/receive", receiveRoute);
 app.use("/api/settings", settingsRoute);
+app.use("/api/addressbook", addressBookRoute);
 app.use("/api", (req, res, next) => {
   if (req.receiveDriver) req.receiveDriver.close();
   next();
