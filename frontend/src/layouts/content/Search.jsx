@@ -1,4 +1,4 @@
-import { Reply, Search } from "lucide-react";
+import { File, Reply, Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
@@ -110,6 +110,7 @@ function SearchContent() {
               const date = new Date(message.date);
               const id = message.id;
               const seen = message.seen;
+              const draft = message.draft;
               const answered = message.answered;
               return (
                 <li className="block border-border border-b-2" key={id}>
@@ -133,6 +134,15 @@ function SearchContent() {
                             e.preventDefault();
                           }}
                         >
+                          {draft ? (
+                            <File
+                              width={24}
+                              height={24}
+                              className="inline w-6 h-6 mr-2 rtl:mr-0 rtl:ml-2 align-top"
+                            />
+                          ) : (
+                            ""
+                          )}
                           {answered ? (
                             <Reply
                               width={24}
