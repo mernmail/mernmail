@@ -7,7 +7,7 @@ function LoginLayout() {
   }, []);
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-screen overflow-hidden">
       <Icon
         width={500}
         height={500}
