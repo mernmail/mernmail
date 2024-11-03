@@ -29,7 +29,7 @@
     "nummessages": "{{count, number}} Nachrichten",
     "cantloadmailbox": "Postfach kann nicht geladen werden: {{error}}",
     "select": "Auswählen",
-    "star": "Stern",
+    "star": "Markiere es",
     "datetime": "{{val, datetime}}",
     "nomessages": "Keine Nachrichten",
     "nospam": "Es gibt keinen Spam, juhuu!",

@@ -29,7 +29,7 @@
     "nummessages": "{{count, number}} повідомлень",
     "cantloadmailbox": "Не вдається завантажити поштову скриньку: {{error}}",
     "select": "Вибрати",
-    "star": "зірка",
+    "star": "Зіркою",
     "datetime": "{{val, datetime}}",
     "nomessages": "Немає повідомлень",
     "nospam": "Спаму немає, ура!",

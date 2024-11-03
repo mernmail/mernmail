@@ -29,7 +29,7 @@
     "nummessages": "{{count, number}} messages",
     "cantloadmailbox": "Impossible de charger une boîte aux lettres: {{error}}",
     "select": "Sélectionner",
-    "star": "Étoile",
+    "star": "Mettez-le en vedette",
     "datetime": "{{val, datetime}}",
     "nomessages": "Aucun message",
     "nospam": "Il n'y a pas de spam, youhou!",

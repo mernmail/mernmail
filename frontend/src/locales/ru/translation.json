@@ -29,7 +29,7 @@
     "nummessages": "{{count, number}} сообщения",
     "cantloadmailbox": "Невозможно загрузить почтовый ящик: {{error}}",
     "select": "Выбрать",
-    "star": "Звезда",
+    "star": "Звезда это",
     "datetime": "{{val, datetime}}",
     "nomessages": "Нет сообщений",
     "nospam": "Нет спама, ура!",

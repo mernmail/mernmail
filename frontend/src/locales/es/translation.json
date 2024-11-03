@@ -29,7 +29,7 @@
     "nummessages": "{{count, number}} mensajes",
     "cantloadmailbox": "No se puede cargar un buzón: {{error}}",
     "select": "Seleccionar",
-    "star": "Destacar",
+    "star": "Estrellalo",
     "datetime": "{{val, datetime}}",
     "nomessages": "No hay mensajes",
     "nospam": "No hay spam, ¡guau!",
