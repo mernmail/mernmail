@@ -435,7 +435,9 @@ function ComposeContent() {
     settingsLoading,
     contactsLoading,
     signature,
-    getContactByEmail
+    getContactByEmail,
+    defaultIdentity.identity,
+    identities
   ]);
 
   useEffect(() => {
