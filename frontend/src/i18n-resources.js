@@ -5,6 +5,7 @@ import elLang from "@/locales/el/translation.json";
 import enLang from "@/locales/en/translation.json";
 import esLang from "@/locales/es/translation.json";
 import frLang from "@/locales/fr/translation.json";
+import heLang from "@/locales/he/translation.json";
 import hiLang from "@/locales/hi/translation.json";
 import itLang from "@/locales/it/translation.json";
 import jaLang from "@/locales/ja/translation.json";
@@ -46,6 +47,10 @@ const resources = {
   fr: {
     translation: frLang,
     name: "Français"
+  },
+  he: {
+    translation: heLang,
+    name: "עִבְרִית"
   },
   hi: {
     translation: hiLang,
