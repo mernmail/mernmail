@@ -255,7 +255,7 @@ function EditContactContent() {
             className="bg-primary text-primary-foreground p-2 mt-2 mr-2 rtl:mr-0 rtl:ml-2 rounded-md hover:bg-primary/75 disabled:bg-primary/50 transition-colors"
             disabled={
               (phoneNumber &&
-                !isMobilePhone(String(phoneNumber).replace(/ /g, ""))) ||
+                !isMobilePhone(String(phoneNumber).replace(/[ -()]/g, ""))) ||
               (email && !isEmail(email)) ||
               (website && !isURL(website, { protocols: ["http", "https"] })) ||
               operating

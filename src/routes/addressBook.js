@@ -32,7 +32,7 @@ router.post("/contact", (req, res) => {
     !req.body ||
     (req.body.email && !isEmail(req.body.email)) ||
     (req.body.phoneNumber &&
-      !isMobilePhone(String(req.body.phoneNumber).replace(/ /g, ""))) ||
+      !isMobilePhone(String(req.body.phoneNumber).replace(/[ -()]/g, ""))) ||
     (req.body.website &&
       !isURL(req.body.website, { protocols: ["http", "https"] }))
   ) {
@@ -46,7 +46,7 @@ router.post("/contact", (req, res) => {
       name: req.body.name,
       emailAddress: req.body.email,
       address: req.body.address,
-      phoneNumber: String(req.body.phoneNumber).replace(/ /g, ""),
+      phoneNumber: String(req.body.phoneNumber).replace(/[ -()]/g, ""),
       website: req.body.website
     })
     .then(() => {
@@ -64,7 +64,7 @@ router.post("/contact/:id", (req, res) => {
     !req.body ||
     (req.body.email && !isEmail(req.body.email)) ||
     (req.body.phoneNumber &&
-      !isMobilePhone(String(req.body.phoneNumber).replace(/ /g, ""))) ||
+      !isMobilePhone(String(req.body.phoneNumber).replace(/[ -()]/g, ""))) ||
     (req.body.website &&
       !isURL(req.body.website, { protocols: ["http", "https"] }))
   ) {
@@ -90,7 +90,7 @@ router.post("/contact/:id", (req, res) => {
             name: req.body.name,
             emailAddress: req.body.email,
             address: req.body.address,
-            phoneNumber: String(req.body.phoneNumber).replace(/ /g, ""),
+            phoneNumber: String(req.body.phoneNumber).replace(/[ -()]/g, ""),
             website: req.body.website
           }
         )
