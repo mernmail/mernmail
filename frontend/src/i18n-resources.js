@@ -1,4 +1,5 @@
 import deLang from "@/locales/de/translation.json";
+import elLang from "@/locales/el/translation.json";
 import enLang from "@/locales/en/translation.json";
 import esLang from "@/locales/es/translation.json";
 import frLang from "@/locales/fr/translation.json";
@@ -12,6 +13,10 @@ const resources = {
   de: {
     translation: deLang,
     name: "Deutsch"
+  },
+  el: {
+    translation: elLang,
+    name: "Ελληνικά"
   },
   en: {
     translation: enLang,
