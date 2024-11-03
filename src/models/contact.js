@@ -16,6 +16,9 @@ const contactSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: String
+  },
+  website: {
+    type: String
   }
 });
 

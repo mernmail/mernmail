@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const isEmail = require("validator/lib/isEmail");
 const isMobilePhone = require("validator/lib/isMobilePhone");
+const isURL = require("validator/lib/isURL");
 
 router.get("/contacts", (req, res) => {
   contactModel
@@ -14,7 +15,8 @@ router.get("/contacts", (req, res) => {
           name: result.name,
           email: result.emailAddress,
           address: result.address,
-          phoneNumber: result.phoneNumber
+          phoneNumber: result.phoneNumber,
+          website: result.website
         }))
       });
       req.receiveDriver.close();
@@ -29,7 +31,9 @@ router.post("/contact", (req, res) => {
   if (
     !req.body ||
     (req.body.email && !isEmail(req.body.email)) ||
-    (req.body.phoneNumber && !isMobilePhone(req.body.phoneNumber))
+    (req.body.phoneNumber && !isMobilePhone(req.body.phoneNumber)) ||
+    (req.body.website &&
+      !isURL(req.body.website, { protocols: ["http", "https"] }))
   ) {
     res.status(400).json({ message: "Invalid contact data" });
     req.receiveDriver.close();
@@ -41,7 +45,8 @@ router.post("/contact", (req, res) => {
       name: req.body.name,
       emailAddress: req.body.email,
       address: req.body.address,
-      phoneNumber: req.body.phoneNumber
+      phoneNumber: req.body.phoneNumber,
+      website: req.body.website
     })
     .then(() => {
       res.json({ message: "Contact created successfully" });
@@ -57,7 +62,9 @@ router.post("/contact/:id", (req, res) => {
   if (
     !req.body ||
     (req.body.email && !isEmail(req.body.email)) ||
-    (req.body.phoneNumber && !isMobilePhone(req.body.phoneNumber))
+    (req.body.phoneNumber && !isMobilePhone(req.body.phoneNumber)) ||
+    (req.body.website &&
+      !isURL(req.body.website, { protocols: ["http", "https"] }))
   ) {
     res.status(400).json({ message: "Invalid contact data" });
     req.receiveDriver.close();
@@ -81,7 +88,8 @@ router.post("/contact/:id", (req, res) => {
             name: req.body.name,
             emailAddress: req.body.email,
             address: req.body.address,
-            phoneNumber: req.body.phoneNumber
+            phoneNumber: req.body.phoneNumber,
+            website: req.body.website
           }
         )
         .then(() => {
