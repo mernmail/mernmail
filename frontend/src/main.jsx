@@ -1,5 +1,6 @@
-import { StrictMode, Suspense, lazy } from "react";
+import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
+import App from "./App.jsx";
 import Loading from "./layouts/Loading.jsx";
 import Error from "./layouts/Error.jsx";
 import { ThemeProvider } from "./contexts/ThemeContext.jsx";
@@ -10,9 +11,6 @@ import store from "./store.js";
 import { Provider } from "react-redux";
 import { ErrorBoundary } from "react-error-boundary";
 import "./i18n.js";
-
-// eslint-disable-next-line react-refresh/only-export-components
-const App = lazy(() => import("./App.jsx"));
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
