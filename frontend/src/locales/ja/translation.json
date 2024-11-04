@@ -108,7 +108,7 @@
     "re": "Re: {{subject}}",
     "fwd": "転送先: {{subject}}",
     "forwardedmessage": "転送されたメッセージ",
-    "replymessage": "{{date}}に、{{senders}}が書き込みました:",
+    "replymessage": "{{date, datetime}}に、{{senders}}が書き込みました:",
     "exitcomposer": "メッセージの作成をキャンセルしてもよろしいですか?",
     "savetodrafts": "下書きを保存しました",
     "savetodraftssuccess": "下書きが正常に保存されました",

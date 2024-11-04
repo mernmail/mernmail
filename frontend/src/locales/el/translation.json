@@ -108,7 +108,7 @@
     "re": "Σχετικά με: {{subject}}",
     "fwd": "Προς τα εμπρός: {{subject}}",
     "forwardedmessage": "Προωθήθηκε μήνυμα",
-    "replymessage": "Στις {{date}}, ο {{senders}} γράφει:",
+    "replymessage": "Στις {{date, datetime}}, ο {{senders}} γράφει:",
     "exitcomposer": "Είστε βέβαιοι ότι θα ακυρώσετε τη σύνταξη του μηνύματος;",
     "savetodrafts": "Αποθήκευση προχείρου",
     "savetodraftssuccess": "Το προσχέδιο αποθηκεύτηκε με επιτυχία",

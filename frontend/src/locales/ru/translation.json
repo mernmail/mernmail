@@ -108,7 +108,7 @@
     "re": "Re: {{subject}}",
     "fwd": "Fwd: {{subject}}",
     "forwardedmessage": "Пересланное сообщение",
-    "replymessage": "{{date}}, {{senders}} пишет:",
+    "replymessage": "{{date, datetime}}, {{senders}} пишет:",
     "exitcomposer": "Вы уверены, что хотите отменить создание сообщения?",
     "savetodrafts": "Сохранить черновик",
     "savetodraftssuccess": "Черновик успешно сохранен",

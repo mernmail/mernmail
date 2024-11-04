@@ -108,7 +108,7 @@
     "re": "Betreff: {{subject}}",
     "fwd": "Weitergeleitete Nachricht",
     "forwardedmessage": "Weitergeleitete Nachricht",
-    "replymessage": "Am {{date}} schreibt {{senders}}:",
+    "replymessage": "Am {{date, datetime}} schreibt {{senders}}:",
     "exitcomposer": "Möchten Sie wirklich abbrechen? Nachricht verfassen?",
     "savetodrafts": "Entwurf speichern",
     "savetodraftssuccess": "Entwurf erfolgreich gespeichert",

@@ -108,7 +108,7 @@
     "re": "Re: {{subject}}",
     "fwd": "Reenvío: {{subject}}",
     "forwardedmessage": "Mensaje reenviado",
-    "replymessage": "El {{date}}, {{senders}} escribe:",
+    "replymessage": "El {{date, datetime}}, {{senders}} escribe:",
     "exitcomposer": "¿Está seguro de cancelar la redacción del mensaje?",
     "savetodrafts": "Guardar borrador",
     "savetodraftssuccess": "Borrador guardado correctamente",

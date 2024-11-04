@@ -108,7 +108,7 @@
     "re": "Re: {{subject}}",
     "fwd": "Fwd: {{subject}}",
     "forwardedmessage": "İletilen mesaj",
-    "replymessage": "{{date}} tarihinde {{senders}} şunu yazdı:",
+    "replymessage": "{{date, datetime}} tarihinde {{senders}} şunu yazdı:",
     "exitcomposer": "Mesajı oluşturmayı iptal etmek istediğinizden emin misiniz?",
     "savetodrafts": "Taslağı kaydet",
     "savetodraftssuccess": "Taslak başarıyla kaydedildi",

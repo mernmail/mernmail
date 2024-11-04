@@ -108,7 +108,7 @@
     "re": "Re: {{subject}}",
     "fwd": "Transféré: {{subject}}",
     "forwardedmessage": "Message transféré",
-    "replymessage": "Le {{date}}, {{senders}} écrit:",
+    "replymessage": "Le {{date, datetime}}, {{senders}} écrit:",
     "exitcomposer": "Êtes-vous sûr de vouloir annuler la rédaction du message?",
     "savetodrafts": "Enregistrer le brouillon",
     "savetodraftssuccess": "Brouillon enregistré avec succès",

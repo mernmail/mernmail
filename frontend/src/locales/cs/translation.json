@@ -108,7 +108,7 @@
     "re": "Re: {{subject}}",
     "fwd": "Fwd: {{subject}}",
     "forwardedmessage": "Přeposlaná zpráva",
-    "replymessage": "Dne {{date}}, {{senders}} píše:",
+    "replymessage": "Dne {{date, datetime}}, {{senders}} píše:",
     "exitcomposer": "Opravdu chcete zrušit psaní zprávy?",
     "savetodrafts": "Uložit koncept",
     "savetodraftssuccess": "Koncept byl úspěšně uložen",

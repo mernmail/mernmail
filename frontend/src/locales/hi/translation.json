@@ -108,7 +108,7 @@
     "re": "Re: {{subject}}",
     "fwd": "Fwd: {{subject}}",
     "forwardedmessage": "अग्रेषित संदेश",
-    "replymessage": "{{date}} को, {{senders}} लिखते हैं:",
+    "replymessage": "{{date, datetime}} को, {{senders}} लिखते हैं:",
     "exitcomposer": "क्या आप संदेश लिखना रद्द करना चाहते हैं?",
     "savetodrafts": "ड्राफ्ट सहेजें",
     "savetodraftssuccess": "ड्राफ्ट सफलतापूर्वक सहेजा गया",

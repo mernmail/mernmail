@@ -108,7 +108,7 @@
     "re": "回覆：{{subject}}",
     "fwd": "转送：{{subject}}",
     "forwardedmessage": "转发的讯息",
-    "replymessage": "在 {{date}}，{{senders}} 写道: ",
+    "replymessage": "在 {{date, datetime}}，{{senders}} 写道: ",
     "exitcomposer": "您确定取消撰写邮件吗？",
     "savetodrafts": "储存草稿",
     "savetodraftssuccess": "草稿保存成功",

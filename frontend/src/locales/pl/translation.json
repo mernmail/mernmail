@@ -108,7 +108,7 @@
     "re": "Odp: {{subject}}",
     "fwd": "Pd: {{subject}}",
     "forwardedmessage": "Przekazana wiadomość",
-    "replymessage": "W {{date}}, {{senders}} pisze:",
+    "replymessage": "W {{date, datetime}}, {{senders}} pisze:",
     "exitcomposer": "Czy jesteś pewien aby anulować tworzenie wiadomości?",
     "savetodrafts": "Zapisz wersję roboczą",
     "savetodraftssuccess": "Wersja robocza zapisana pomyślnie",

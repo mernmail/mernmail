@@ -108,7 +108,7 @@
     "re": "Re: {{subject}}",
     "fwd": "Fwd: {{subject}}",
     "forwardedmessage": "Vidarebefordrat meddelande",
-    "replymessage": "Den {{date}} skriver {{senders}}:",
+    "replymessage": "Den {{date, datetime}} skriver {{senders}}:",
     "exitcomposer": "Är du säker på att du avbryter att skriva meddelandet?",
     "savetodrafts": "Spara utkast",
     "savetodraftssuccess": "Utkastet har sparats",

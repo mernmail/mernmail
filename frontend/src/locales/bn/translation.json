@@ -108,7 +108,7 @@
     "re": "পুনঃ: {{বিষয়}}",
     "fwd": "Fwd: {{বিষয়}}",
     "forwardedmessage": "ফরোয়ার্ড করা বার্তা",
-    "replymessage": "{{date}} তারিখে, {{senders}} লিখেছেন:",
+    "replymessage": "{{date, datetime}} তারিখে, {{senders}} লিখেছেন:",
     "exitcomposer": "আপনি কি বার্তা রচনা বাতিল করার বিষয়ে নিশ্চিত?",
     "savetodrafts": "খসড়া সংরক্ষণ করুন",
     "savetodraftssuccess": "খসড়া সফলভাবে সংরক্ষিত হয়েছে",

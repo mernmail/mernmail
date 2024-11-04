@@ -108,7 +108,7 @@
     "re": "دوبارہ: {{address}}",
     "fwd": "آگے: {{address}}",
     "forwardedmessage": "فارورڈ پیغام",
-    "replymessage": "{{date}} کو، {{senders}} لکھتے ہیں:",
+    "replymessage": "{{date, datetime}} کو، {{senders}} لکھتے ہیں:",
     "exitcomposer": "کیا آپ یقینی طور پر پیغام لکھنا منسوخ کرنا چاہتے ہیں؟",
     "savetodrafts": "مسودہ محفوظ کریں",
     "savetodraftssuccess": "مسودہ کامیابی سے محفوظ ہو گیا",

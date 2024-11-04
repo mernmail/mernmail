@@ -108,7 +108,7 @@
     "re": "Re: {{subject}}",
     "fwd": "Inoltra: {{subject}}",
     "forwardedmessage": "Messaggio inoltrato",
-    "replymessage": "Il {{date}}, {{senders}} scrive:",
+    "replymessage": "Il {{date, datetime}}, {{senders}} scrive:",
     "exitcomposer": "Sei sicuro di voler annullare la composizione del messaggio?",
     "savetodrafts": "Salva bozza",
     "savetodraftssuccess": "Bozza salvata correttamente",

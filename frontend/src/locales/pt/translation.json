@@ -108,7 +108,7 @@
     "re": "Re: {{subject}}",
     "fwd": "Reencaminhamento: {{subject}}",
     "forwardedmessage": "Mensagem reencaminhada",
-    "replymessage": "Em {{date}}, {{senders}} escreve:",
+    "replymessage": "Em {{date, datetime}}, {{senders}} escreve:",
     "exitcomposer": "Tem a certeza que pretende cancelar a composição da mensagem?",
     "savetodrafts": "Guardar rascunho",
     "savetodraftssuccess": "Rascunho guardado com sucesso",

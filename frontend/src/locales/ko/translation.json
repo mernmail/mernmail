@@ -108,7 +108,7 @@
     "re": "Re: {{subject}}",
     "fwd": "전달: {{subject}}",
     "forwardedmessage": "전달된 메시지",
-    "replymessage": "{{date}}에 {{senders}}가 다음과 같이 썼습니다:",
+    "replymessage": "{{date, datetime}}에 {{senders}}가 다음과 같이 썼습니다:",
     "exitcomposer": "메시지 작성을 취소하시겠습니까?",
     "savetodrafts": "임시 저장",
     "savetodraftssuccess": "임시 저장이 성공적으로 완료되었습니다",

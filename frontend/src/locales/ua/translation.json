@@ -108,7 +108,7 @@
     "re": "Відповідь: {{subject}}",
     "fwd": "Надіслано: {{subject}}",
     "forwardedmessage": "Переслане повідомлення",
-    "replymessage": "{{date}} {{senders}} пише:",
+    "replymessage": "{{date, datetime}} {{senders}} пише:",
     "exitcomposer": "Ви впевнені, що скасували створення повідомлення?",
     "savetodrafts": "Зберегти чернетку",
     "savetodraftssuccess": "Чернетку успішно збережено",

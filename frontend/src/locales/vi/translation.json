@@ -108,7 +108,7 @@
     "re": "Re: {{subject}}",
     "fwd": "Fwd: {{subject}}",
     "forwardedmessage": "Tin nhắn đã chuyển tiếp",
-    "replymessage": "Vào ngày {{date}}, {{senders}} viết:",
+    "replymessage": "Vào ngày {{date, datetime}}, {{senders}} viết:",
     "exitcomposer": "Bạn có chắc chắn muốn hủy soạn tin nhắn không?",
     "savetodrafts": "Lưu bản nháp",
     "savetodraftssuccess": "Đã lưu bản nháp thành công",

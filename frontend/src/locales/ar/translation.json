@@ -108,7 +108,7 @@
     "re": "Re: {{subject}}",
     "fwd": "Fwd: {{subject}}",
     "forwardedmessage": "رسالة مُعاد توجيهها",
-    "replymessage": "في {{date}}، يكتب {{senders}}:",
+    "replymessage": "في {{date, datetime}}، يكتب {{senders}}:",
     "exitcomposer": "هل أنت متأكد من إلغاء كتابة الرسالة؟",
     "savetodrafts": "حفظ المسودة",
     "savetodraftssuccess": "تم حفظ المسودة بنجاح",
