@@ -317,7 +317,7 @@ module.exports = function init(email, password, callback) {
                           if (data.html) {
                             finalAttributes.body = data.html;
                           } else {
-                            finalAttributes.body = `<!DOCTYPE html><html><head></head><body><pre>${String(
+                            finalAttributes.body = `<!DOCTYPE html><html><head></head><body><pre style="white-space: pre-wrap">${String(
                               data.text || ""
                             )
                               .replace(/&/g, "&amp;")
