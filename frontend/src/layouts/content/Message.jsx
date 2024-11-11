@@ -844,6 +844,12 @@ function MessageContent() {
                 element.removeAttribute("height");
               }
 
+              if (
+                element.style.position == "fixed" ||
+                element.style.position == "sticky"
+              )
+                element.style.position = "absolute";
+
               const computedStyle = window.getComputedStyle(element);
               if (
                 element.style.font ||
