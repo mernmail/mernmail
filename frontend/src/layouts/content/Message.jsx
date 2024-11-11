@@ -757,8 +757,6 @@ function MessageContent() {
                 aElement.removeAttribute("href");
                 aElement.removeAttribute("target");
                 if (!aElement.style.cursor) aElement.style.cursor = "pointer";
-              } else {
-                aElement.target = "_parent";
               }
             });
 
@@ -786,8 +784,6 @@ function MessageContent() {
                   throw new Error(
                     "Can't render the email message: form's parent node is null!"
                   );
-              } else {
-                formElement.target = "_parent";
               }
             });
 
