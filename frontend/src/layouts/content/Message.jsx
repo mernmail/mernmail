@@ -1041,7 +1041,7 @@ function MessageContent() {
                   </ul>
                 </div>
                 <div
-                  className="prose prose-email w-full max-w-full rounded-lg mb-2"
+                  className="prose prose-email w-full max-w-full overflow-x-auto rounded-lg mb-2"
                   dangerouslySetInnerHTML={{ __html: emailBody }}
                 />
                 {realAttachments && realAttachments.length > 0 ? (
