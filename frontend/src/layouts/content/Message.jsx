@@ -753,11 +753,10 @@ function MessageContent() {
                 aElement.href.slice(0, 1) == "#" ||
                 aElement.href.slice(0, currentHashURL.length) == currentHashURL
               ) {
-                // Prevent changing the URL
-                aElement.addEventListener("click", (e) => {
-                  e.preventDefault();
-                });
-                aElement.target = "_self";
+                // Prevent changing the URL when clicking the link
+                aElement.removeAttribute("href");
+                aElement.removeAttribute("target");
+                if (!aElement.style.cursor) aElement.style.cursor = "pointer";
               } else {
                 aElement.target = "_parent";
               }
@@ -773,11 +772,20 @@ function MessageContent() {
                 formElement.action.slice(0, currentHashURL.length) ==
                   currentHashURL
               ) {
-                // Prevent form submitting
-                formElement.addEventListener("submit", (e) => {
-                  e.preventDefault();
-                });
-                formElement.target = "_self";
+                // Replace the <form> element with a <div> element
+                const newElement = document.createElement("div");
+                const formStyle = formElement.getAttribute("style");
+                if (formStyle !== null)
+                  newElement.setAttribute("style", formStyle);
+                const formId = formElement.getAttribute("id");
+                if (formId !== null) newElement.setAttribute("id", formId);
+                newElement.innerHTML = formElement.innerHTML;
+                if (formElement.parentNode)
+                  formElement.parentNode.replaceChild(newElement, formElement);
+                else
+                  throw new Error(
+                    "Can't render the email message: form's parent node is null!"
+                  );
               } else {
                 formElement.target = "_parent";
               }
