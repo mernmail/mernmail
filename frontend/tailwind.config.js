@@ -71,13 +71,13 @@ export default {
               color: "hsla(var(--primary), 1)"
             },
             strong: {
-              color: "hsla(var(--foreground), 1)"
+              color: "inherit"
             },
             b: {
-              color: "hsla(var(--foreground), 1)"
+              color: "inherit"
             },
             blockquote: {
-              color: "hsla(var(--foreground), 1)"
+              color: "inherit"
             },
             table: {
               textAlign: null
