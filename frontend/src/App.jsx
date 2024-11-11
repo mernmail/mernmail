@@ -25,12 +25,13 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    const getNewMessages = async () => {
+    const getNewMessages = async (signal) => {
       try {
         if (window.Notification.permission == "granted") {
           const res = await fetch("/api/receive/allmessages", {
             method: "GET",
-            credentials: "include"
+            credentials: "include",
+            signal: signal
           });
           const data = await res.json();
           if (res.status == 200) {
@@ -92,13 +93,21 @@ function App() {
     };
 
     if (email !== null) {
-      getNewMessages();
+      const controller =
+        typeof window.AbortController != "undefined"
+          ? new AbortController()
+          : undefined;
+      const signal = controller ? controller.signal : undefined;
+
+      getNewMessages(signal);
 
       const interval = setInterval(async () => {
-        await getNewMessages();
+        await getNewMessages(signal);
       }, 10000);
+
       return () => {
         clearInterval(interval);
+        if (controller) controller.abort();
       };
     } else {
       firstTime = true;
