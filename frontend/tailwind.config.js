@@ -110,7 +110,8 @@ export default {
               },
             },
             pre: {
-              backgroundColor: "inherit"
+              backgroundColor: "inherit",
+              color: "inherit"
             },
             table: {
               borderTopColor: "transparent",
