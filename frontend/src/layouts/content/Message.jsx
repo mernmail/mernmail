@@ -17,7 +17,6 @@ import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "@/contexts/ThemeContext.jsx";
 import { useTranslation } from "react-i18next";
 import DOMPurify from "dompurify";
-import juice from "juice/client";
 import { filesize } from "filesize";
 import { useDispatch, useSelector } from "react-redux";
 import { loadMessage, resetLoading } from "@/slices/messageSlice.js";
@@ -30,6 +29,7 @@ function MessageContent() {
   const { t } = useTranslation();
   const { isDarkMode } = useContext(ThemeContext);
   const { toast } = useContext(ToastContext);
+  const [juice, setJuice] = useState(null);
   const [moveShown, setMoveShown] = useState(false);
   const view = useSelector((state) => state.view.view);
   const hasMoreThanOneMailbox = useSelector(
@@ -206,7 +206,17 @@ function MessageContent() {
     }
   }, [view, dispatch]);
 
-  if (loading) {
+  useEffect(() => {
+    const loadJuice = async () => {
+      const newJuice = (await import("juice/client")).default;
+      // Set juice to be a function. The function which returns the function is passed into setJuice
+      setJuice(() => newJuice);
+    };
+
+    loadJuice();
+  }, []);
+
+  if (loading || !juice) {
     return <Loading />;
   } else if (error) {
     return (
@@ -805,24 +815,26 @@ function MessageContent() {
               }
 
               if (
-                element.tagName == "TABLE" ||
-                element.tagName == "TBODY" ||
-                element.tagName == "TR" ||
-                element.tagName == "TH" ||
-                element.tagName == "TD" ||
-                (element.getAttribute("width") && !element.style.width)
+                (element.tagName == "TABLE" ||
+                  element.tagName == "TBODY" ||
+                  element.tagName == "TR" ||
+                  element.tagName == "TH" ||
+                  element.tagName == "TD") &&
+                element.getAttribute("width") &&
+                !element.style.width
               ) {
                 element.style.width = element.getAttribute("width");
                 element.removeAttribute("width");
               }
 
               if (
-                element.tagName == "TABLE" ||
-                element.tagName == "TBODY" ||
-                element.tagName == "TR" ||
-                element.tagName == "TH" ||
-                element.tagName == "TD" ||
-                (element.getAttribute("height") && !element.style.height)
+                (element.tagName == "TABLE" ||
+                  element.tagName == "TBODY" ||
+                  element.tagName == "TR" ||
+                  element.tagName == "TH" ||
+                  element.tagName == "TD") &&
+                element.getAttribute("height") &&
+                !element.style.height
               ) {
                 element.style.height = element.getAttribute("height");
                 element.removeAttribute("height");

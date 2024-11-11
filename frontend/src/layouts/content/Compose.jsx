@@ -156,8 +156,13 @@ function ComposeContent() {
         }
         if (messageData) {
           const message = messageData.messages[messageData.messages.length - 1];
-          const sanitizedBody = DOMPurify.sanitize(message.body, {
-            WHOLE_DOCUMENT: true
+          const inlinedBody = (await import("juice/client")).default(
+            message.body
+          );
+          const sanitizedBody = DOMPurify.sanitize(inlinedBody, {
+            WHOLE_DOCUMENT: true,
+            FORBID_TAGS: ["style"],
+            FORBID_ATTR: ["class"]
           });
           const parsedBody = new DOMParser().parseFromString(
             sanitizedBody,
@@ -564,7 +569,7 @@ function ComposeContent() {
                 cc: ccValues,
                 bcc: bccValues,
                 subject: subject,
-                content: contents,
+                content: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0" /></head><body>${contents}</body></html>`,
                 inReplyTo: inReplyTo,
                 attachments: finalAttachments,
                 draftMailbox: draftMailbox,
@@ -1077,7 +1082,7 @@ function ComposeContent() {
                     cc: ccValues,
                     bcc: bccValues,
                     subject: subject,
-                    content: contents,
+                    content: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0" /></head><body>${contents}</body></html>`,
                     inReplyTo: inReplyTo,
                     attachments: finalAttachments,
                     draftMailbox: draftMailbox,
