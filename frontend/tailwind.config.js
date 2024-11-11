@@ -141,7 +141,8 @@ export default {
               borderTopColor: "transparent",
               borderBottomColor: "transparent",
               borderLeftColor: "transparent",
-              borderRightColor: "transparent"
+              borderRightColor: "transparent",
+              width: "auto"
             },
             tbody: {
               borderTopColor: "transparent",
