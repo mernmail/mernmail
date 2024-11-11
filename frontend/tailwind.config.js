@@ -1,3 +1,5 @@
+import typography from "@tailwindcss/typography";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ["class"],
@@ -60,9 +62,61 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            color: "hsla(var(--foreground), 1)",
+            a: {
+              color: "hsla(var(--primary), 1)"
+            },
+            strong: {
+              color: "hsla(var(--foreground), 1)"
+            },
+            b: {
+              color: "hsla(var(--foreground), 1)"
+            },
+            blockquote: {
+              color: "hsla(var(--foreground), 1)"
+            },
+            table: {
+              textAlign: null
+            },
+            tbody: {
+              textAlign: null
+            },
+            tr: {
+              textAlign: null
+            },
+            th: {
+              textAlign: null
+            },
+            td: {
+              textAlign: null
+            },
+            "th, td": {
+              textAlign: null
+            }
+          }
+        },
+        email: {
+          css: {
+            code: {
+              "&:before": {
+                content: ""
+              },
+              "&:after": {
+                content: ""
+              },
+            },
+            pre: {
+              backgroundColor: "inherit"
+            },
+          }
+        }
       }
     }
   },
-  plugins: [],
+  plugins: [typography],
 }
 

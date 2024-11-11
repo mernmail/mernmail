@@ -13,10 +13,11 @@ import {
   Trash,
   TriangleAlert
 } from "lucide-react";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import Iframe from "@/components/Iframe.jsx";
+import { useContext, useEffect, useState } from "react";
+import { ThemeContext } from "@/contexts/ThemeContext.jsx";
 import { useTranslation } from "react-i18next";
 import DOMPurify from "dompurify";
+import juice from "juice/client";
 import { filesize } from "filesize";
 import { useDispatch, useSelector } from "react-redux";
 import { loadMessage, resetLoading } from "@/slices/messageSlice.js";
@@ -26,9 +27,8 @@ import Loading from "@/components/Loading.jsx";
 import download from "downloadjs";
 
 function MessageContent() {
-  const iframeRef = useRef({});
-  const [iframeHeights, setIframeHeights] = useState({});
   const { t } = useTranslation();
+  const { isDarkMode } = useContext(ThemeContext);
   const { toast } = useContext(ToastContext);
   const [moveShown, setMoveShown] = useState(false);
   const view = useSelector((state) => state.view.view);
@@ -99,93 +99,69 @@ function MessageContent() {
     }
   }, [refresh, loading, dispatch]);
 
-  const replaceCIDsOnIframeLoad = (iframeRefContents, id, attachments) => {
-    return () => {
-      const srcElements =
-        iframeRefContents.contentWindow.document.querySelectorAll("[src]");
-      srcElements.forEach((srcElement) => {
-        if (srcElement.src) {
-          const cidMatch = srcElement.src.match(/^cid:(.+)/);
-          if (cidMatch) {
-            const cid = cidMatch[1];
-            const attachment = attachments.find((attachment) => {
-              return attachment.contentId == cid;
-            });
-            if (attachment) {
-              srcElement.src = `/api/receive/attachment/${attachment.id}`;
-              // Add onload event listener to images with CIDs, so that iframe heights are not broken
-              srcElement.addEventListener("load", () => {
-                resizeOnIframeLoad(iframeRefContents, id)();
-              });
-            }
-          }
-        }
-      });
-    };
+  const isLightOrDark = (rgbColor) => {
+    let [r, g, b] = rgbColor;
+    let hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
+    return hsp > 127.5 ? "light" : "dark";
   };
 
-  const processLinksAndFormsOnIframeLoad = (iframeRefContents) => {
-    return () => {
-      const aElements =
-        iframeRefContents.contentWindow.document.querySelectorAll("a");
-      aElements.forEach((aElement) => {
-        const currentHashURL =
-          document.location.origin + document.location.pathname + "#";
-        if (
-          !aElement.href ||
-          aElement.href.slice(0, 1) == "#" ||
-          aElement.href.slice(0, currentHashURL.length) == currentHashURL
-        ) {
-          // Prevent changing the URL
-          aElement.addEventListener("click", (e) => {
-            e.preventDefault();
-          });
-          aElement.target = "_self";
-        } else {
-          aElement.target = "_parent";
-        }
-      });
+  const flipLightness = (rgb) => {
+    // Convert RGB to HSL
+    let r = rgb[0] / 255;
+    let g = rgb[1] / 255;
+    let b = rgb[2] / 255;
 
-      const formElements =
-        iframeRefContents.contentWindow.document.querySelectorAll("form");
-      formElements.forEach((formElement) => {
-        const currentHashURL =
-          document.location.origin + document.location.pathname + "#";
-        if (
-          !formElement.action ||
-          formElement.action.slice(0, 1) == "#" ||
-          formElement.action.slice(0, currentHashURL.length) == currentHashURL
-        ) {
-          // Prevent form submitting
-          formElement.addEventListener("submit", (e) => {
-            e.preventDefault();
-          });
-          formElement.target = "_self";
-        } else {
-          formElement.target = "_parent";
-        }
-      });
-    };
+    let max = Math.max(r, g, b);
+    let min = Math.min(r, g, b);
+    let h,
+      s,
+      l = (max + min) / 2;
+
+    if (max === min) {
+      h = s = 0; // achromatic
+    } else {
+      let d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r:
+          h = (g - b) / d + (g < b ? 6 : 0);
+          break;
+        case g:
+          h = (b - r) / d + 2;
+          break;
+        case b:
+          h = (r - g) / d + 4;
+          break;
+      }
+      h /= 6;
+    }
+
+    // Flip lightness
+    l = 1 - l;
+
+    // Convert HSL back to RGB
+    if (s === 0) {
+      r = g = b = l; // achromatic
+    } else {
+      let hue2rgb = function hue2rgb(p, q, t) {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+        return p;
+      };
+
+      let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      let p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1 / 3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1 / 3);
+    }
+
+    // Return RGB
+    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
   };
-
-  const resizeOnIframeLoad = useCallback((iframeRefContents, id) => {
-    return () => {
-      const body = iframeRefContents.contentWindow.document.body;
-      const html = iframeRefContents.contentWindow.document.documentElement;
-      const newHeight = Math.max(
-        html.scrollHeight > parseInt(iframeRefContents.height)
-          ? html.scrollHeight
-          : 0,
-        body.offsetHeight,
-        html.offsetHeight
-      );
-      setIframeHeights((iframeHeightsO) => {
-        const newIframeHeights = { ...iframeHeightsO };
-        newIframeHeights[id] = newHeight;
-        return newIframeHeights;
-      });
-    };
-  }, []);
 
   const getMessageIds = () => {
     return messagesToRender
@@ -193,20 +169,6 @@ function MessageContent() {
       .reverse()
       .map((message) => message.id);
   };
-
-  useEffect(() => {
-    const resizeOnIframeLoadAllRefs = () => {
-      Object.keys(iframeRef.current).forEach((refKey) => {
-        resizeOnIframeLoad(iframeRef.current[refKey], refKey)();
-      });
-    };
-
-    window.addEventListener("resize", resizeOnIframeLoadAllRefs);
-
-    return () => {
-      window.removeEventListener("resize", resizeOnIframeLoadAllRefs);
-    };
-  }, [resizeOnIframeLoad]);
 
   useEffect(() => {
     if (!loading && messageData && messageData.messages.length > 0)
@@ -762,6 +724,154 @@ function MessageContent() {
               address: "unknown@example.com"
             };
             const firstFromAddress = firstFrom.address || "unknown@example.com";
+            const inlinedBody = juice(body);
+            const sanitizedBody = DOMPurify.sanitize(inlinedBody, {
+              WHOLE_DOCUMENT: true,
+              FORBID_TAGS: ["style"],
+              FORBID_ATTR: ["class"]
+            });
+            const parsedDocument = new DOMParser().parseFromString(
+              sanitizedBody,
+              "text/html"
+            );
+            const aElements = parsedDocument.querySelectorAll("a");
+            aElements.forEach((aElement) => {
+              const currentHashURL =
+                document.location.origin + document.location.pathname + "#";
+              if (
+                !aElement.href ||
+                aElement.href.slice(0, 1) == "#" ||
+                aElement.href.slice(0, currentHashURL.length) == currentHashURL
+              ) {
+                // Prevent changing the URL
+                aElement.addEventListener("click", (e) => {
+                  e.preventDefault();
+                });
+                aElement.target = "_self";
+              } else {
+                aElement.target = "_parent";
+              }
+            });
+
+            const formElements = parsedDocument.querySelectorAll("form");
+            formElements.forEach((formElement) => {
+              const currentHashURL =
+                document.location.origin + document.location.pathname + "#";
+              if (
+                !formElement.action ||
+                formElement.action.slice(0, 1) == "#" ||
+                formElement.action.slice(0, currentHashURL.length) ==
+                  currentHashURL
+              ) {
+                // Prevent form submitting
+                formElement.addEventListener("submit", (e) => {
+                  e.preventDefault();
+                });
+                formElement.target = "_self";
+              } else {
+                formElement.target = "_parent";
+              }
+            });
+
+            const srcElements = parsedDocument.querySelectorAll("[src]");
+            srcElements.forEach((srcElement) => {
+              if (srcElement.src) {
+                const cidMatch = srcElement.src.match(/^cid:(.+)/);
+                if (cidMatch) {
+                  const cid = cidMatch[1];
+                  const attachment = attachments.find((attachment) => {
+                    return attachment.contentId == cid;
+                  });
+                  if (attachment) {
+                    srcElement.src = `/api/receive/attachment/${attachment.id}`;
+                  }
+                }
+              }
+            });
+
+            const allBodyElements = parsedDocument.querySelectorAll("body *");
+            allBodyElements.forEach((element) => {
+              if (element.getAttribute("color") && !element.style.color) {
+                element.style.color = element.getAttribute("color");
+                element.removeAttribute("color");
+              }
+
+              if (
+                element.getAttribute("bgcolor") &&
+                !element.style.backgroundColor
+              ) {
+                element.style.backgroundColor = element.getAttribute("bgcolor");
+                element.removeAttribute("bgcolor");
+              }
+
+              if (
+                element.tagName == "TABLE" ||
+                element.tagName == "TBODY" ||
+                element.tagName == "TR" ||
+                element.tagName == "TH" ||
+                element.tagName == "TD" ||
+                (element.getAttribute("width") && !element.style.width)
+              ) {
+                element.style.width = element.getAttribute("width");
+                element.removeAttribute("width");
+              }
+
+              if (
+                element.tagName == "TABLE" ||
+                element.tagName == "TBODY" ||
+                element.tagName == "TR" ||
+                element.tagName == "TH" ||
+                element.tagName == "TD" ||
+                (element.getAttribute("height") && !element.style.height)
+              ) {
+                element.style.height = element.getAttribute("height");
+                element.removeAttribute("height");
+              }
+
+              const computedStyle = window.getComputedStyle(element);
+              if (
+                element.style.font ||
+                element.style.color ||
+                element.getAttribute("color")
+              ) {
+                const parsedColorMatch = computedStyle.color.match(
+                  /rgba?\((\d{1,3}), (\d{1,3}), (\d{1,3})(?:, (\d{1,3}))?\)/
+                );
+                if (parsedColorMatch) {
+                  const r = parseInt(parsedColorMatch[1]);
+                  const g = parseInt(parsedColorMatch[2]);
+                  const b = parseInt(parsedColorMatch[3]);
+                  if (
+                    isLightOrDark([r, g, b]) == (isDarkMode ? "dark" : "light")
+                  ) {
+                    const newColors = flipLightness([r, g, b]);
+                    element.style.color = `rgba(${newColors[0]}, ${newColors[1]}, ${newColors[2]}, ${parsedColorMatch[4] ? parsedColorMatch[4] : 255})`;
+                  }
+                }
+              }
+              if (
+                element.style.background ||
+                element.style.backgroundColor ||
+                element.getAttribute("bgcolor")
+              ) {
+                const parsedColorMatch = computedStyle.backgroundColor.match(
+                  /rgba?\((\d{1,3}), (\d{1,3}), (\d{1,3})(?:, (\d{1,3}))?\)/
+                );
+                if (parsedColorMatch) {
+                  const r = parseInt(parsedColorMatch[1]);
+                  const g = parseInt(parsedColorMatch[2]);
+                  const b = parseInt(parsedColorMatch[3]);
+                  if (
+                    isLightOrDark([r, g, b]) == (isDarkMode ? "light" : "dark")
+                  ) {
+                    const newColors = flipLightness([r, g, b]);
+                    element.style.backgroundColor = `rgba(${newColors[0]}, ${newColors[1]}, ${newColors[2]}, ${parsedColorMatch[4] ? parsedColorMatch[4] : 255})`;
+                  }
+                }
+              }
+            });
+
+            const emailBody = parsedDocument.body.innerHTML;
 
             return (
               <div className="border-b-2 border-border" key={id}>
@@ -918,28 +1028,9 @@ function MessageContent() {
                     </li>
                   </ul>
                 </div>
-                <Iframe
-                  ref={(el) => (iframeRef.current[id] = el)}
-                  onLoad={() => {
-                    setTimeout(() => {
-                      replaceCIDsOnIframeLoad(
-                        iframeRef.current[id],
-                        id,
-                        attachments
-                      )();
-                      processLinksAndFormsOnIframeLoad(iframeRef.current[id])();
-                      resizeOnIframeLoad(iframeRef.current[id], id)();
-                    }, 0);
-                  }}
-                  className="bg-white w-full rounded-lg mb-2 overflow-x-auto overflow-y-hidden"
-                  srcDoc={DOMPurify.sanitize(body, {
-                    WHOLE_DOCUMENT: true
-                  })}
-                  height={
-                    typeof iframeHeights[id] == "undefined"
-                      ? 500
-                      : iframeHeights[id]
-                  }
+                <div
+                  className="prose prose-email w-full max-w-full rounded-lg mb-2"
+                  dangerouslySetInnerHTML={{ __html: emailBody }}
                 />
                 {realAttachments && realAttachments.length > 0 ? (
                   <>

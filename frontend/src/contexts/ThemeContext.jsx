@@ -46,7 +46,7 @@ const ThemeProvider = ({ children }) => {
 
   return (
     <ThemeContext.Provider
-      value={{ currentTheme, setTheme, areThemesSupported }}
+      value={{ currentTheme, setTheme, areThemesSupported, isDarkMode }}
     >
       {children}
     </ThemeContext.Provider>
