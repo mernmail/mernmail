@@ -70,6 +70,30 @@ export default {
             a: {
               color: "hsla(var(--primary), 1)"
             },
+            h1: {
+              color: "inherit",
+              fontWeight: "bold"
+            },
+            h2: {
+              color: "inherit",
+              fontWeight: "bold"
+            },
+            h3: {
+              color: "inherit",
+              fontWeight: "bold"
+            },
+            h4: {
+              color: "inherit",
+              fontWeight: "bold"
+            },
+            h5: {
+              color: "inherit",
+              fontWeight: "bold"
+            },
+            h6: {
+              color: "inherit",
+              fontWeight: "bold"
+            },
             strong: {
               color: "inherit"
             },
