@@ -112,6 +112,48 @@ export default {
             pre: {
               backgroundColor: "inherit"
             },
+            table: {
+              borderTopColor: "transparent",
+              borderBottomColor: "transparent",
+              borderLeftColor: "transparent",
+              borderRightColor: "transparent"
+            },
+            tbody: {
+              borderTopColor: "transparent",
+              borderBottomColor: "transparent",
+              borderLeftColor: "transparent",
+              borderRightColor: "transparent"
+            },
+            tr: {
+              borderTopColor: "transparent",
+              borderBottomColor: "transparent",
+              borderLeftColor: "transparent",
+              borderRightColor: "transparent"
+            },
+            th: {
+              borderTopColor: "transparent",
+              borderBottomColor: "transparent",
+              borderLeftColor: "transparent",
+              borderRightColor: "transparent"
+            },
+            td: {
+              borderTopColor: "transparent",
+              borderBottomColor: "transparent",
+              borderLeftColor: "transparent",
+              borderRightColor: "transparent"
+            },
+            "tbody tr": {
+              borderTopColor: "transparent",
+              borderBottomColor: "transparent",
+              borderLeftColor: "transparent",
+              borderRightColor: "transparent"
+            },
+            "tbody th": {
+              borderTopColor: "transparent",
+              borderBottomColor: "transparent",
+              borderLeftColor: "transparent",
+              borderRightColor: "transparent"
+            },
           }
         }
       }
