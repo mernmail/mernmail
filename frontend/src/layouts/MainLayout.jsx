@@ -281,7 +281,7 @@ function LoginLayout() {
               e.preventDefault();
               dispatch(hideMenu());
             }}
-            className="inline-block md:hidden float-right"
+            className="inline-block md:hidden float-right bg-inherit"
           >
             <X className="inline-block w-8 h-8 py-1 rounded-sm bg-background text-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors">
               <title>{t("close")}</title>
