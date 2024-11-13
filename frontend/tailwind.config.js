@@ -180,6 +180,9 @@ export default {
               borderLeftColor: "transparent",
               borderRightColor: "transparent"
             },
+            img: {
+              display: "inline"
+            }
           }
         }
       }
