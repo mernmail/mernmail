@@ -14,7 +14,7 @@ if (!process.env.ATTACHMENTS_PATH) {
 }
 const express = require("express");
 const mongoose = require("mongoose");
-const serveStatic = require("serve-static");
+const svrjsCore = require("svrjs-core");
 const authAndInitReceiveMiddleware = require("./middleware/authAndInitReceive.js");
 const addressBookRoute = require("./routes/addressBook.js");
 const checkRoute = require("./routes/check.js");
@@ -52,6 +52,13 @@ app.use("/api", (req, res, next) => {
   if (req.receiveDriver) req.receiveDriver.close();
   next();
 });
-app.use(serveStatic(path.join(__dirname, "../frontend/dist")));
+app.use(
+  svrjsCore({
+    wwwroot: path.join(__dirname, "../frontend/dist"),
+    exposeServerVersion: false,
+    enableDirectoryListing: false,
+    enableCompression: false
+  })
+);
 
 module.exports = app;
