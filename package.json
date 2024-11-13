@@ -32,7 +32,7 @@
     "mongoose": "^8.7.1",
     "node-pop3": "^0.9.0",
     "nodemailer": "^6.9.15",
-    "svrjs-core": "^4.2.0",
+    "svrjs-core": "^4.2.0-updateddocs",
     "validator": "^13.12.0"
   },
   "devDependencies": {
