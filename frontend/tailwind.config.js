@@ -127,10 +127,12 @@ export default {
           css: {
             code: {
               "&:before": {
-                content: ""
+                content: "none",
+                display: "none"
               },
               "&:after": {
-                content: ""
+                content: "none",
+                display: "none"
               },
             },
             pre: {

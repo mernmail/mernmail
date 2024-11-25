@@ -8,6 +8,7 @@ export default {
     autoprefixer: {},
     "postcss-css-variables": {
       preserve: true
-    }
+    },
+    "cssnano": {}
   },
 }
