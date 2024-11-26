@@ -11,7 +11,7 @@ function ErrorLayout() {
   }, [t]);
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center min-h-screen">
       <div className="block w-full max-w-lg p-4">
         <span className="sr-only">MERNMail logo</span>
         <Logo
