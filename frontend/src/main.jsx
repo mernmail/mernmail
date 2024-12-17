@@ -6,6 +6,7 @@ import Error from "./layouts/Error.jsx";
 import { ThemeProvider } from "./contexts/ThemeContext.jsx";
 import { ToastProvider } from "./contexts/ToastContext.jsx";
 import "@fontsource/inter";
+import "@fontsource/inter/700.css";
 import "./index.css";
 import store from "./store.js";
 import { Provider } from "react-redux";
