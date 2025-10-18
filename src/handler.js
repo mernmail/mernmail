@@ -52,6 +52,11 @@ app.use("/api", (req, res, next) => {
   if (req.receiveDriver) req.receiveDriver.close();
   next();
 });
-app.use(serveStatic(path.join(__dirname, "../frontend/dist")));
+app.use(
+  serveStatic(path.join(__dirname, "../frontend/dist"), {
+    cacheControl: true,
+    maxAge: "15m"
+  })
+);
 
 module.exports = app;
