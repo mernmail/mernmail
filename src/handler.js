@@ -55,7 +55,10 @@ app.use("/api", (req, res, next) => {
 app.use(
   serveStatic(path.join(__dirname, "../frontend/dist"), {
     cacheControl: true,
-    maxAge: "15m"
+    maxAge: "15m",
+    setHeaders: (res) => {
+      res.setHeader("Vary", "If-Match, If-None-Match, Range");
+    }
   })
 );
 
